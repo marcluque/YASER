@@ -5,12 +5,18 @@
 #ifndef YASER_WATCHED_LITERALS_H
 #define YASER_WATCHED_LITERALS_H
 
-struct my_struct {
-    int id;                    /* key */
-    char name[10];
-    UT_hash_handle hh;         /* makes this structure hashable */
-};
+#include "global.h"
+#include "formula.h"
 
-#include "external/uthash.h"
+typedef struct {
+    int watched_literal;
+    size_t clause_number;
+    UT_hash_handle hh;
+} Watched_Literal_Item;
+
+Watched_Literal_Item* watched_literal_map = NULL;
+Watched_Literal_Item* clause_map = NULL;
+
+void watched_literals_init();
 
 #endif //YASER_WATCHED_LITERALS_H

@@ -12,4 +12,7 @@
 #include <assert.h>
 #include <string.h>
 
+
+#include "external/uthash.h"
+
 #endif //YASER_GLOBAL_H

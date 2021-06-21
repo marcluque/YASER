@@ -24,7 +24,8 @@ void dimacs_parse_file(const char* restrict file_path) {
                 case ' ': continue;
                 case 'c': break;
                 case 'p':
-                    formula_init(line[i + 6], line[i + 8]);
+                    formula_init(line[i + 6] - '0', line[i + 8] - '0');
+                    assignment_stack_init((line[i + 6] - '0') * 2);
                     done_reading_header = true;
                     break;
                 default: break;
@@ -40,6 +41,7 @@ void dimacs_parse_file(const char* restrict file_path) {
         char* token = strtok(line, delim);
         while(token != 0 && token[0] != '0') {
             formula[literal_pointer++] = (int) strtol(token, (char**) 0, 10);
+            //formula_add_map_item(formula[literal_pointer - 1], last_clause_pointer);
             token = strtok((char*) 0, delim);
         }
 
@@ -47,6 +49,7 @@ void dimacs_parse_file(const char* restrict file_path) {
         last_clause_pointer = literal_pointer;
     }
 
+    clauses[clause_pointer] = last_clause_pointer;
     free(line);
     fclose(file);
 }

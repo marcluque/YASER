@@ -5,9 +5,9 @@
 #include "../include/formula.h"
 
 int* formula = 0;
-size_t num_variables;
+size_t num_variables = 0;
 size_t* clauses = 0;
-size_t num_clauses;
+size_t num_clauses = 0;
 
 void formula_init(const size_t num_variables_param, const size_t num_clauses_param) {
     num_variables = num_variables_param;

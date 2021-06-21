@@ -8,7 +8,9 @@
 #include "global.h"
 
 extern int* formula;
+extern size_t num_variables;
 extern size_t* clauses;
+extern size_t num_clauses;
 
 void formula_init(size_t num_variables_param, size_t num_clauses_param);
 
