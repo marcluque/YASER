@@ -7,7 +7,7 @@
 
 #include "global.h"
 #include "formula.h"
-#include "assignment_stack.h"
+#include "assignment.h"
 
 void dimacs_parse_file(const char* restrict file_path);
 

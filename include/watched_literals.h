@@ -7,15 +7,19 @@
 
 #include "global.h"
 #include "formula.h"
+#include "assignment.h"
 
 typedef struct {
     int watched_literal;
     size_t clause_number;
     UT_hash_handle hh;
-} Watched_Literal_Item;
+} Literal_Clause_Item;
 
-Watched_Literal_Item* watched_literal_map = NULL;
-Watched_Literal_Item* clause_map = NULL;
+typedef struct {
+    size_t clause_number;
+    int watched_literals[2];
+    UT_hash_handle hh;
+} Clause_Literal_Item;
 
 void watched_literals_init();
 

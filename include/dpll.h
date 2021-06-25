@@ -6,6 +6,6 @@
 #define YASER_DPLL_H
 
 #include "global.h"
-#include "assignment_stack.h"
+#include "assignment.h"
 
 #endif //YASER_DPLL_H

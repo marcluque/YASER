@@ -9,8 +9,8 @@ add_executable(YASER
         src/resolution.c
         src/dpll.c
         include/dpll.h
-        src/assignment_stack.c
-        include/assignment_stack.h
+        src/assignment.c
+        include/assignment.h
         include/global.h
         src/vsids_heuristic.c
         include/vsids_heuristic.h

@@ -1,5 +1,5 @@
 #include "../include/dimacs_parser.h"
-#include "../include/assignment_stack.h"
+#include "../include/assignment.h"
 #include "../include/watched_literals.h"
 
 // #define NDEBUG
