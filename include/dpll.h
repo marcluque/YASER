@@ -8,6 +8,6 @@
 #include "global.h"
 #include "assignment.h"
 
-
+void dpll_register_assignment_callback(void (*callback)(size_t));
 
 #endif //YASER_DPLL_H

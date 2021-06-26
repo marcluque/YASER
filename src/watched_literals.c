@@ -4,8 +4,20 @@
 
 #include "../include/watched_literals.h"
 
+
+//// Watched Literal Hash Map
+/////////////////////////////
 Literal_Clause_Item* watched_literal_map = NULL;
-Clause_Literal_Item* clause_map = NULL;
+
+void watched_literals_clear() {
+    Literal_Clause_Item* current;
+    Literal_Clause_Item* tmp;
+
+    HASH_ITER(hh, watched_literal_map, current, tmp) {
+        HASH_DEL(watched_literal_map, current);
+        free(current);
+    }
+}
 
 static void add_watched_literal(const size_t literal_pos, const size_t clause_number) {
     Literal_Clause_Item* item = malloc(sizeof(Literal_Clause_Item));
@@ -29,13 +41,18 @@ static Literal_Clause_Item* find_clause_number(const size_t watched_literal_pos)
     return item;
 }
 
-static void find_watched_literal_partner(const size_t clause_number, const size_t literal_pos, size_t* restrict partner_literal_pos) {
-    Clause_Literal_Item* item;
-    HASH_FIND(hh, clause_map, &clause_number, sizeof(size_t), item);
-    if (item == NULL) {
-        partner_literal_pos = NULL;
-    } else {
-        *partner_literal_pos = item->watched_literals[0] == formula[literal_pos] ? item->watched_literals[1] : item->watched_literals[0];
+
+//// Clause Hash Map
+////////////////////
+Clause_Literal_Item* clause_map = NULL;
+
+void clauses_clear() {
+    Clause_Literal_Item* current;
+    Clause_Literal_Item* tmp;
+
+    HASH_ITER(hh, clause_map, current, tmp) {
+        HASH_DEL(clause_map, current);
+        free(current);
     }
 }
 
@@ -52,6 +69,16 @@ static void delete_clause(const size_t clause_number) {
     assert(item != NULL);
     HASH_DEL(clause_map, item);
     free(item);
+}
+
+static void find_watched_literal_partner(const size_t clause_number, const size_t literal_pos, size_t* restrict partner_literal_pos) {
+    Clause_Literal_Item* item;
+    HASH_FIND(hh, clause_map, &clause_number, sizeof(size_t), item);
+    if (item == NULL) {
+        partner_literal_pos = NULL;
+    } else {
+        *partner_literal_pos = item->watched_literals[0] == formula[literal_pos] ? item->watched_literals[1] : item->watched_literals[0];
+    }
 }
 
 static size_t find_new_literal(const size_t clause_number) {
@@ -71,6 +98,9 @@ static size_t find_new_literal(const size_t clause_number) {
     return -1;
 }
 
+
+//// Watched Literals
+/////////////////////
 void watched_literals_init() {
     for (size_t i = 0; i < num_clauses; ++i) {
         add_watched_literal(formula[clauses[i]], i);

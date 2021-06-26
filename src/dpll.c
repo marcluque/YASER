@@ -6,21 +6,24 @@
 
 void (*assignment_true_callback)(size_t);
 
-void register_assignment_callback(void (*callback)(size_t)) {
+void dpll_register_assignment_callback(void (*callback)(size_t)) {
     assignment_true_callback = callback;
+}
+
+static void update_assignment(const size_t literal_pos, const int value) {
+    // Trail -> entries (x, v, b): assigning value to literal_pos, b == true <=> !v has been processed
+    assignment_stack_push(literal_pos, value, true);
+    assignment_map_add(literal_pos, value);
+
+    // Call callback for satisfying assignments
+    assignment_true_callback(literal_pos);
 }
 
 static bool bcp() {
     while(!assignment_unit_clause_stack_empty()) {
-        Unit_Clause_Item* item = assignment_unit_clause_stack_pop();
-        int variable = formula[item->literal_pos];
-        int value = variable < 0 ? 0 : 1;
-
-        // Trail -> entries (x, v, b): assigning value to variable, b == true <=> !v has been processed
-        assignment_stack_push(variable, value, true);
-
-        // Call callback for satisfying assignments
-        assignment_true_callback(variable);
+        size_t literal_pos = assignment_unit_clause_stack_pop();
+        int value = literal_pos < 0 ? 0 : 1;
+        update_assignment(literal_pos, value);
     }
 
     return exists_unsat_clauses();
@@ -28,14 +31,10 @@ static bool bcp() {
 
 static bool decide() {
     if (assignment_stack_full()) return false;
-    // TODO: choose unassigned variable x heuristically
-    int variable = -1;
-    int value = variable < 0 ? 0 : 1;
-    assignment_stack_push(variable, value, false);
-
-    // Call callback for satisfying assignments
-    assignment_true_callback(variable);
-
+    // TODO: choose unassigned literal_pos x heuristically
+    int literal_pos = -1;
+    int value = literal_pos < 0 ? 0 : 1;
+    update_assignment(literal_pos, value);
     return true;
 }
 

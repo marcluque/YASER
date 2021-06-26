@@ -9,18 +9,30 @@
 #include "formula.h"
 #include "assignment.h"
 
+//// Watched Literals Hash Map
+//////////////////////////////
 typedef struct {
     size_t watched_literal;
     size_t clause_number;
     UT_hash_handle hh;
 } Literal_Clause_Item;
 
+void watched_literals_clear();
+
+
+//// Clause Hash Map
+////////////////////
 typedef struct {
     size_t clause_number;
     size_t watched_literals[2];
     UT_hash_handle hh;
 } Clause_Literal_Item;
 
+void clauses_clear();
+
+
+//// Watched Literals
+/////////////////////
 void watched_literals_init();
 
 void watched_literal_check(size_t literal_pos);
