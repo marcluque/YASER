@@ -9,6 +9,7 @@ int main() {
     watched_literals_init();
 
     assignment_stack_clear();
+    assignment_unit_clause_stack_clear();
     formula_clear();
     return EXIT_SUCCESS;
 }

@@ -10,14 +10,14 @@
 #include "assignment.h"
 
 typedef struct {
-    int watched_literal;
+    size_t watched_literal;
     size_t clause_number;
     UT_hash_handle hh;
 } Literal_Clause_Item;
 
 typedef struct {
     size_t clause_number;
-    int watched_literals[2];
+    size_t watched_literals[2];
     UT_hash_handle hh;
 } Clause_Literal_Item;
 

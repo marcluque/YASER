@@ -26,6 +26,7 @@ void dimacs_parse_file(const char* restrict file_path) {
                 case 'p':
                     formula_init(line[i + 6] - '0', line[i + 8] - '0');
                     assignment_stack_init((line[i + 6] - '0') * 2);
+                    assignment_unit_clause_stack_init(line[i + 8] - '0');
                     done_reading_header = true;
                     break;
                 default: break;

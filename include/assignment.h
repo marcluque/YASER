@@ -13,6 +13,7 @@
 typedef struct {
     int variable;
     int value; // 0 or 1
+    bool satisfied;
     bool visited; // true <=> visited negated variable
 } Assignment;
 
@@ -37,7 +38,7 @@ typedef struct {
     UT_hash_handle hh;
 } Assignment_Item;
 
-void assignment_map_get_value(int literal, int* restrict value);
+void assignment_map_get_value(size_t literal_pos, size_t* restrict value);
 
 
 //// Satisfied Clauses Hash Set
@@ -48,5 +49,20 @@ typedef struct {
 } Clause_Item;
 
 void assignment_sat_clauses_add_clause(size_t clause_number);
+
+//// Unit Clauses Stack
+///////////////////////
+void assignment_unit_clause_stack_init(size_t size);
+
+void assignment_unit_clause_stack_clear();
+
+void assignment_unit_clause_stack_reset();
+
+bool assignment_unit_clause_stack_empty();
+
+void assignment_unit_clause_stack_push(size_t clause_number);
+
+size_t assignment_unit_clause_stack_pop();
+
 
 #endif //YASER_ASSIGNMENT_H
