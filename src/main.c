@@ -1,5 +1,8 @@
+//
+// Created with <3 by marcluque, June 2021
+//
+
 #include "../include/dimacs_parser.h"
-#include "../include/assignment.h"
 #include "../include/watched_literals.h"
 
 // #define NDEBUG

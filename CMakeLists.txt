@@ -6,7 +6,6 @@ set(CMAKE_C_STANDARD 11)
 add_executable(YASER
         include/external/uthash.h
         src/main.c
-        src/resolution.c
         src/dpll.c
         include/dpll.h
         src/assignment.c

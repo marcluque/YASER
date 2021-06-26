@@ -1,5 +1,5 @@
 //
-// Created by marcluque on 20.06.2021.
+// Created with <3 by marcluque, June 2021
 //
 
 #ifndef YASER_WATCHED_LITERALS_H
@@ -22,5 +22,7 @@ typedef struct {
 } Clause_Literal_Item;
 
 void watched_literals_init();
+
+void watched_literal_check(size_t literal_pos);
 
 #endif //YASER_WATCHED_LITERALS_H

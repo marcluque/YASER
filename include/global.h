@@ -1,5 +1,5 @@
 //
-// Created by marcluque on 20.06.2021.
+// Created with <3 by marcluque, June 2021
 //
 
 #ifndef YASER_GLOBAL_H

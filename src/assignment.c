@@ -1,10 +1,8 @@
 //
-// Created by marcluque on 20.06.2021.
+// Created with <3 by marcluque, June 2021
 //
 
 #include "../include/assignment.h"
-
-void (*assignment_true_callback)(int);
 
 //// Assignment Stack
 /////////////////////
