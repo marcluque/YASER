@@ -4,6 +4,12 @@
 
 #include "../include/dimacs_parser.h"
 
+void (*init_callback)(size_t, size_t);
+
+void dimacs_parser_register_init_callback(void (*callback)(size_t, size_t)) {
+    init_callback = callback;
+}
+
 void dimacs_parse_file(const char* restrict file_path) {
     FILE* file;
     char* line = 0;
@@ -24,9 +30,7 @@ void dimacs_parse_file(const char* restrict file_path) {
                 case ' ': continue;
                 case 'c': break;
                 case 'p':
-                    formula_init(line[i + 6] - '0', line[i + 8] - '0');
-                    assignment_stack_init((line[i + 6] - '0') * 2);
-                    assignment_unit_clause_stack_init(line[i + 8] - '0');
+                    init_callback(line[i + 6] - '0', line[i + 8] - '0');
                     done_reading_header = true;
                     break;
                 default: break;

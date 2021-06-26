@@ -8,10 +8,17 @@
 
 // #define NDEBUG
 
+void init_callback(const size_t init_num_variables, const size_t init_num_clauses) {
+    formula_init(init_num_variables, init_num_clauses);
+    assignment_stack_init(init_num_variables * 2);
+    assignment_unit_clause_stack_init(init_num_clauses);
+}
+
 int main() {
     dimacs_parse_file(NULL);
     watched_literals_init();
     dpll_register_assignment_callback(watched_literal_check);
+    dimacs_parser_register_init_callback(init_callback);
 
     // assignment
     assignment_stack_clear();

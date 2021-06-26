@@ -94,13 +94,13 @@ void assignment_sat_clauses_add_clause() {
 
 //// Unit Clauses Stack
 ///////////////////////
-Unit_Clause_Item* unit_clause_stack;
+size_t* unit_clause_stack;
 size_t unit_clause_stack_initial_size;
 size_t unit_clause_sp;
 
 void assignment_unit_clause_stack_init(const size_t size) {
     unit_clause_stack_initial_size = size;
-    unit_clause_stack = malloc(sizeof(Unit_Clause_Item) * size);
+    unit_clause_stack = malloc(sizeof(size_t) * size);
     unit_clause_sp = 0;
 }
 
