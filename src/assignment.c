@@ -67,6 +67,10 @@ void assignment_map_get_value(const size_t literal_pos, size_t* restrict value) 
 Clause_Item* sat_clause_set = NULL;
 size_t sat_clause_set_count = 0;
 
+bool exists_unsat_clauses() {
+    return sat_clause_set_count != num_clauses;
+}
+
 void assignment_sat_clauses_add_clause(const size_t clause_number) {
     // TODO: Hash set necessary, or just counter?
     Clause_Item* item = malloc(sizeof(Clause_Item));
@@ -82,13 +86,13 @@ void assignment_sat_clauses_get_value() {
 
 //// Unit Clauses Stack
 ///////////////////////
-size_t* unit_clause_stack;
+Unit_Clause_Item* unit_clause_stack;
 size_t unit_clause_stack_initial_size;
 size_t unit_clause_sp;
 
 void assignment_unit_clause_stack_init(size_t size) {
     unit_clause_stack_initial_size = size;
-    unit_clause_stack = malloc(sizeof(size_t) * size);
+    unit_clause_stack = malloc(sizeof(Unit_Clause_Item) * size);
     unit_clause_sp = 0;
 }
 
@@ -100,15 +104,15 @@ bool assignment_unit_clause_stack_empty() {
     return unit_clause_sp == 0;
 }
 
-void assignment_unit_clause_stack_push(size_t clause_number) {
+void assignment_unit_clause_stack_push(const size_t literal_pos) {
     assert(unit_clause_sp != unit_clause_stack_initial_size);
 
-    unit_clause_stack[unit_clause_sp] = clause_number;
+    unit_clause_stack[unit_clause_sp].literal_pos = literal_pos;
     ++unit_clause_sp;
 }
 
-size_t assignment_unit_clause_stack_pop() {
+Unit_Clause_Item* assignment_unit_clause_stack_pop() {
     assert(unit_clause_sp > 0);
 
-    return unit_clause_stack[--unit_clause_sp];
+    return &(unit_clause_stack[--unit_clause_sp]);
 }

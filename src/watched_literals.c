@@ -105,7 +105,7 @@ void watched_literal_check(const size_t literal_pos) {
         add_watched_literal(new_literal_pos, item->clause_number);
     } else if (partner_literal_assignment == -1) {
         // clause is unit, partner_literal is unassigned
-        assignment_unit_clause_stack_push(item->clause_number);
+        assignment_unit_clause_stack_push(partner_literal_pos);
     } else if (partner_literal_assignment == 0) {
         // Conflicting clause -> resolve
     }

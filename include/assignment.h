@@ -1,11 +1,12 @@
 //
-// Created by marcluque on 20.06.2021.
+// Created with <3 by marcluque, June 2021
 //
 
 #ifndef YASER_ASSIGNMENT_H
 #define YASER_ASSIGNMENT_H
 
 #include "global.h"
+#include "formula.h"
 
 
 //// Assignment Stack
@@ -48,21 +49,25 @@ typedef struct {
     UT_hash_handle hh;
 } Clause_Item;
 
+bool exists_unsat_clauses();
+
 void assignment_sat_clauses_add_clause(size_t clause_number);
 
 //// Unit Clauses Stack
 ///////////////////////
+typedef struct {
+    size_t literal_pos;
+} Unit_Clause_Item;
+
 void assignment_unit_clause_stack_init(size_t size);
 
 void assignment_unit_clause_stack_clear();
 
-void assignment_unit_clause_stack_reset();
-
 bool assignment_unit_clause_stack_empty();
 
-void assignment_unit_clause_stack_push(size_t clause_number);
+void assignment_unit_clause_stack_push(size_t literal_pos);
 
-size_t assignment_unit_clause_stack_pop();
+Unit_Clause_Item* assignment_unit_clause_stack_pop();
 
 
 #endif //YASER_ASSIGNMENT_H
