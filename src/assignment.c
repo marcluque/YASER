@@ -28,6 +28,13 @@ void assignment_stack_reset() {
     assignment_sp = 0;
 }
 
+bool assignment_stack_empty() {
+    assert(assignment_sp > 0);
+    assert(assignment_sp < assignment_stack_initial_size);
+
+    return assignment_sp == 0;
+}
+
 bool assignment_stack_full() {
     assert(assignment_sp > 0);
     assert(assignment_sp < assignment_stack_initial_size);
@@ -131,15 +138,16 @@ bool assignment_unit_clause_stack_empty() {
 }
 
 void assignment_unit_clause_stack_push(const size_t literal_pos) {
-    assert(unit_clause_sp != unit_clause_stack_initial_size);
+    assert(unit_clause_sp > 0);
+    assert(unit_clause_sp < unit_clause_stack_initial_size);
     assert(literal_pos < num_variables);
 
-    unit_clause_stack[unit_clause_sp] = literal_pos;
-    ++unit_clause_sp;
+    unit_clause_stack[unit_clause_sp++] = literal_pos;
 }
 
 size_t assignment_unit_clause_stack_pop() {
     assert(unit_clause_sp > 0);
+    assert(unit_clause_sp < unit_clause_stack_initial_size);
 
     return unit_clause_stack[--unit_clause_sp];
 }

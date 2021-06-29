@@ -138,6 +138,9 @@ void watched_literal_check(const size_t literal_pos) {
         assignment_unit_clause_stack_push(partner_literal_pos);
     } else if (partner_literal_assignment == 0) {
         // item->clause_number is conflicting -> resolve
+        conflict_present = true;
+        // get variable from assignment stack
+        Assignment* assignment = assignment_stack_pop();
 
     }
 }

@@ -24,6 +24,8 @@ void assignment_stack_clear();
 
 void assignment_stack_reset();
 
+bool assignment_stack_empty();
+
 bool assignment_stack_full();
 
 void assignment_stack_push(size_t literal_pos, int value, bool visited);

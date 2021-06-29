@@ -8,6 +8,7 @@
 #include "global.h"
 #include "formula.h"
 #include "assignment.h"
+#include "conflict_resolution.h"
 
 //// Watched Literals Hash Map
 //////////////////////////////
