@@ -4,7 +4,7 @@
 
 #include "../include/formula.h"
 
-int* formula = 0;
+Variable* formula = 0;
 size_t num_variables = 0;
 size_t* clauses = 0;
 size_t num_clauses = 0;

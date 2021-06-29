@@ -12,6 +12,7 @@
 #include <assert.h>
 #include <string.h>
 
+#define Variable int
 
 #include "external/uthash.h"
 

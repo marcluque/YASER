@@ -18,4 +18,4 @@ add_executable(YASER
         src/formula.c
         include/formula.h
         src/dimacs_parser.c
-        include/dimacs_parser.h)
+        include/dimacs_parser.h src/conflict_resolution.c include/conflict_resolution.h src/clause_resolution.c include/clause_resolution.h)

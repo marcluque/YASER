@@ -7,7 +7,7 @@
 
 #include "global.h"
 
-extern int* formula;
+extern Variable* formula;
 extern size_t num_variables;
 extern size_t* clauses;
 extern size_t num_clauses;

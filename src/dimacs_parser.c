@@ -44,7 +44,7 @@ void dimacs_parse_file(const char* restrict file_path) {
     char* delim = " ";
     while (getline(&line, &len, file) != -1) {
         char* token = strtok(line, delim);
-        while(token != 0 && token[0] != '0') {
+        while (token != 0 && token[0] != '0') {
             formula[literal_pointer++] = (int) strtol(token, (char**) 0, 10);
             //formula_add_map_item(formula[literal_pointer - 1], last_clause_pointer);
             token = strtok((char*) 0, delim);

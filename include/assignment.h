@@ -35,7 +35,7 @@ Assignment* assignment_stack_pop();
 ////////////////////////
 typedef struct {
     size_t literal_pos;
-    int value;
+    int value; // -1 = false, 1 = true
     UT_hash_handle hh;
 } Assignment_Item;
 

@@ -38,16 +38,13 @@ static bool decide() {
     return true;
 }
 
-static bool resolve_conflict() {
-
-}
-
 bool dpll() {
     assignment_stack_reset();
     if (!bcp()) return false;
     while (1) {
         if (!decide()) return true;
         while (!bcp())
+            // TODO: Tell the method which clause and variable is affected
             if (!resolve_conflict()) return false;
     }
 }
