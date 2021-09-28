@@ -26,7 +26,7 @@ static bool bcp() {
         update_assignment(literal_pos, value);
     }
 
-    return exists_unsat_clauses();
+    return assignment_exists_unsat_clause();
 }
 
 static bool decide() {

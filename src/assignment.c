@@ -104,7 +104,7 @@ void assignment_map_clear() {
 ///////////////////////////////
 size_t sat_clause_set_count = 0;
 
-bool exists_unsat_clauses() {
+bool assignment_exists_unsat_clause() {
     return sat_clause_set_count != num_clauses;
 }
 

@@ -12,7 +12,10 @@
 #include <assert.h>
 #include <string.h>
 
-#define Variable int
+// Represents the index of the either positive or negative literal. E.g. literal x_i will be stored with i.
+// A negated literal ¬x_j will be stored with -j
+// We use a #define to make sure that the range of indices may be changed at any time
+#define Literal int
 
 #include "external/uthash.h"
 

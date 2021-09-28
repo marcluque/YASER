@@ -1,19 +1,19 @@
 //
-// Created with <3 by marcluque, Juni 2021
+// Created with <3 by marcluque, June 2021
 //
 
 #include "../include/clause_resolution.h"
 
 Resolvent_Item* resolvent_variable_table = NULL;
 
-static void resolvent_variable_table_add(const Variable variable) {
+static void resolvent_literal_table_add(const Literal variable) {
     Resolvent_Item* item;
 
-    HASH_FIND(hh, resolvent_variable_table, &variable, sizeof(Variable), item);
+    HASH_FIND(hh, resolvent_variable_table, &variable, sizeof(Literal), item);
     if (item == NULL) {
         item = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
-        item->variable = variable;
-        HASH_ADD(hh, resolvent_variable_table, variable, sizeof(Variable), item);
+        item->literal = variable;
+        HASH_ADD(hh, resolvent_variable_table, literal, sizeof(Literal), item);
     }
 }
 
@@ -26,19 +26,19 @@ static void resolvent_variable_table_clear() {
     }
 }
 
-int* build_resolvent(const size_t clause_number_1, const size_t clause_number_2, const Variable variable) {
+int* build_resolvent(const size_t clause_number_1, const size_t clause_number_2, const Literal literal) {
     size_t end_clause_number_1 = clauses[clause_number_1 + 1];
     size_t end_clause_number_2 = clauses[clause_number_2 + 1];
 
     // Adding the variables into a hash table removes duplicate variables
     for (size_t i = clauses[clause_number_1], j = i; i < end_clause_number_1; ++i, ++j) {
-        if (variable == formula[i]) --j;
-        else resolvent_variable_table_add(variable);
+        if (literal == formula[i]) --j;
+        else resolvent_literal_table_add(literal);
     }
 
     for (size_t i = clauses[clause_number_2], j = i; i < end_clause_number_2; ++i, ++j) {
-        if (variable == formula[i]) --j;
-        else resolvent_variable_table_add(variable);
+        if (literal == formula[i]) --j;
+        else resolvent_literal_table_add(literal);
     }
 
     size_t counter = 0;

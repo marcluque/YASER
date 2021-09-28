@@ -1,5 +1,5 @@
 //
-// Created with <3 by marcluque, Juni 2021
+// Created with <3 by marcluque, June 2021
 //
 
 #ifndef YASER_CLAUSE_RESOLUTION_H
@@ -9,7 +9,7 @@
 #include "formula.h"
 
 typedef struct {
-    int variable;
+    Literal literal;
     UT_hash_handle hh;
 } Resolvent_Item;
 

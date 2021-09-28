@@ -14,12 +14,7 @@ void init_callback(const size_t init_num_variables, const size_t init_num_clause
     assignment_unit_clause_stack_init(init_num_clauses);
 }
 
-int main() {
-    dimacs_parse_file(NULL);
-    watched_literals_init();
-    dpll_register_assignment_callback(watched_literal_check);
-    dimacs_parser_register_init_callback(init_callback);
-
+void clean_up() {
     // assignment
     assignment_stack_clear();
     assignment_unit_clause_stack_clear();
@@ -31,5 +26,17 @@ int main() {
 
     // formula
     formula_clear();
+}
+
+int main() {
+    dimacs_parse_file(NULL);
+    watched_literals_init();
+    dpll_register_assignment_callback(watched_literal_check);
+    dimacs_parser_register_init_callback(init_callback);
+
+    dpll();
+
+    clean_up();
+
     return EXIT_SUCCESS;
 }

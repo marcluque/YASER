@@ -50,7 +50,7 @@ void assignment_map_clear();
 
 //// Satisfied Clauses Hash Set
 ///////////////////////////////
-bool exists_unsat_clauses();
+bool assignment_exists_unsat_clause();
 
 void assignment_sat_clauses_add_clause();
 

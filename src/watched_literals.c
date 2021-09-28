@@ -59,7 +59,8 @@ void clauses_clear() {
 static void add_clause(const size_t clause_number, const size_t* restrict watched_literals) {
     Clause_Literal_Item* item = malloc(sizeof(Clause_Literal_Item));
     item->clause_number = clause_number;
-    memcpy(item->watched_literals, watched_literals, 2 * sizeof(size_t));
+    item->watched_literals[0] = watched_literals[0];
+    item->watched_literals[1] = watched_literals[1];
     HASH_ADD(hh, clause_map, clause_number, sizeof(size_t), item);
 }
 
