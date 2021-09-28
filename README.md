@@ -3,11 +3,15 @@
 
 CURRENTLY UNDER CONSTRUCTION.
 
-## TODO
-- [ ] Conflict resolution
+## Roadmap
+- [X] [DIMACS](https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html) Parser
+- [ ] DIMACS Parser Tests
 - [ ] Clause resolution
-- [ ] VSIDS
-- [X] Watched Literals
+- [ ] Conflict resolution
+- [ ] VSIDS heuristic
+- [ ] Watched Literals
+- [ ] Stats printing
+- [ ] Check correctness with [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
 
 ## License
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
