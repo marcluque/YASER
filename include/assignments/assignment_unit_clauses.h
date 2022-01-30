@@ -7,8 +7,8 @@
 #ifndef YASER_ASSIGNMENT_UNIT_CLAUSES_H
 #define YASER_ASSIGNMENT_UNIT_CLAUSES_H
 
-#include "defines.h"
-#include "attributes.h"
+#include "global/defines.h"
+#include "global/attributes.h"
 #include <stddef.h>
 #include <stdbool.h>
 

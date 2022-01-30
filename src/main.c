@@ -2,15 +2,15 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "dimacs_parser.h"
-#include "watched_literals.h"
-#include "dpll.h"
-#include "formula.h"
-#include "assignment_stack.h"
-#include "assignment_unit_clauses.h"
-#include "assignment_map.h"
-#include "clause_literal_map.h"
-#include "literal_clause_map.h"
+#include "parsing/dimacs_parser.h"
+#include "watched-literals/watched_literals.h"
+#include "conflicts/dpll.h"
+#include "global/formula.h"
+#include "assignments/assignment_stack.h"
+#include "assignments/assignment_unit_clauses.h"
+#include "assignments/assignment_map.h"
+#include "watched-literals/clause_literal_map.h"
+#include "watched-literals/literal_clause_map.h"
 
 // #define NDEBUG
 

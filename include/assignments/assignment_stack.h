@@ -7,8 +7,8 @@
 #ifndef YASER_ASSIGNMENT_STACK_H
 #define YASER_ASSIGNMENT_STACK_H
 
-#include "defines.h"
-#include "attributes.h"
+#include "global/defines.h"
+#include "global/attributes.h"
 #include <stdbool.h>
 #include <stddef.h>
 

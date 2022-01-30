@@ -2,12 +2,12 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "dpll.h"
-#include "conflict_resolution.h"
-#include "assignment_stack.h"
-#include "assignment_map.h"
-#include "assignment_unit_clauses.h"
-#include "assignment_sat_clauses.h"
+#include "conflicts/dpll.h"
+#include "conflicts/conflict_resolution.h"
+#include "assignments/assignment_stack.h"
+#include "assignments/assignment_map.h"
+#include "assignments/assignment_unit_clauses.h"
+#include "assignments/assignment_sat_clauses.h"
 
 void (*assignment_true_callback)(formula_pos);
 

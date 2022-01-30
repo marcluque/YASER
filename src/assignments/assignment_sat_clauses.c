@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "assignment_sat_clauses.h"
-#include "formula.h"
+#include "assignments/assignment_sat_clauses.h"
+#include "global/formula.h"
 #include <stddef.h>
 #include <stdbool.h>
 

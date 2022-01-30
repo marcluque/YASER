@@ -3,13 +3,14 @@
 //
 
 #include <assert.h>
-#include "assignment_map.h"
-#include "formula.h"
+#include "assignments/assignment_map.h"
+#include "global/formula.h"
 
 static AssignmentMapItem* assignment_map = NULL;
 
 void assignment_map_add(const formula_pos literal_pos, const value v) {
     assert(literal_pos < num_literals);
+    assert(v != VALUE_INVALID);
 
     AssignmentMapItem* item = malloc(sizeof(AssignmentMapItem));
     item->literal_pos       = literal_pos;

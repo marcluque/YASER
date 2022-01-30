@@ -2,9 +2,9 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "dimacs_parser.h"
-#include "defines.h"
-#include "formula.h"
+#include "parsing/dimacs_parser.h"
+#include "global/defines.h"
+#include "global/formula.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

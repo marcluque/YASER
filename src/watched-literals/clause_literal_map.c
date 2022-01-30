@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "clause_literal_map.h"
-#include "formula.h"
+#include "watched-literals/clause_literal_map.h"
+#include "global/formula.h"
 #include <assert.h>
 
 static ClauseLiteralItem* clause_map = NULL;

@@ -7,14 +7,9 @@
 #ifndef YASER_CLAUSE_RESOLUTION_H
 #define YASER_CLAUSE_RESOLUTION_H
 
-#include "defines.h"
+#include "global/defines.h"
 #include "external/uthash.h"
 
-typedef struct {
-    literal l;
-    UT_hash_handle hh;
-} Resolvent_Item;
-
-int* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l);
+literal* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l);
 
 #endif // YASER_CLAUSE_RESOLUTION_H

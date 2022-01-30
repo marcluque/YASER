@@ -2,7 +2,7 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "literal_clause_map.h"
+#include "watched-literals/literal_clause_map.h"
 #include <assert.h>
 
 static LiteralClauseItem* watched_literal_map = NULL;

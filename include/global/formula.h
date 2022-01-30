@@ -1,3 +1,5 @@
+/** @file */
+
 //
 // Created with <3 by marcluque, June 2021
 //
@@ -5,7 +7,7 @@
 #ifndef YASER_FORMULA_H
 #define YASER_FORMULA_H
 
-#include "defines.h"
+#include "global/defines.h"
 #include <stddef.h>
 
 /**

@@ -7,7 +7,7 @@
 #ifndef YASER_ASSIGNMENT_SAT_CLAUSES_H
 #define YASER_ASSIGNMENT_SAT_CLAUSES_H
 
-#include "attributes.h"
+#include "global/attributes.h"
 #include <stdbool.h>
 
 ATTR_PURE bool assignment_exists_unsat_clause(void);

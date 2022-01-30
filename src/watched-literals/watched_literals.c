@@ -2,14 +2,14 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "watched_literals.h"
-#include "formula.h"
-#include "conflict_resolution.h"
-#include "assignment_map.h"
-#include "assignment_sat_clauses.h"
-#include "assignment_unit_clauses.h"
-#include "literal_clause_map.h"
-#include "clause_literal_map.h"
+#include "watched-literals/watched_literals.h"
+#include "global/formula.h"
+#include "conflicts/conflict_resolution.h"
+#include "assignments/assignment_map.h"
+#include "assignments/assignment_sat_clauses.h"
+#include "assignments/assignment_unit_clauses.h"
+#include "watched-literals/literal_clause_map.h"
+#include "watched-literals/clause_literal_map.h"
 #include <assert.h>
 
 ATTR_PURE static formula_pos find_new_literal(const clause_index clause) {

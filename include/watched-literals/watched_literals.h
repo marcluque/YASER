@@ -7,7 +7,7 @@
 #ifndef YASER_WATCHED_LITERALS_H
 #define YASER_WATCHED_LITERALS_H
 
-#include "defines.h"
+#include "global/defines.h"
 
 void watched_literals_init(void);
 

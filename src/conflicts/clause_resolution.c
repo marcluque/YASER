@@ -2,32 +2,37 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "clause_resolution.h"
-#include "formula.h"
+#include "conflicts/clause_resolution.h"
+#include "global/formula.h"
 
-static Resolvent_Item* resolvent_variable_table = NULL;
+typedef struct {
+    literal l;
+    UT_hash_handle hh;
+} ResolventItem;
+
+static ResolventItem* resolvent_variable_table = NULL;
 
 static void resolvent_literal_table_add(const literal l) {
-    Resolvent_Item* item;
+    ResolventItem* item;
 
     HASH_FIND(hh, resolvent_variable_table, &l, sizeof(literal), item);
     if (item == NULL) {
-        item    = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
+        item    = (ResolventItem*) malloc(sizeof(ResolventItem));
         item->l = l;
         HASH_ADD(hh, resolvent_variable_table, l, sizeof(literal), item);
     }
 }
 
 static void resolvent_variable_table_clear(void) {
-    Resolvent_Item* current_user;
-    Resolvent_Item* tmp;
+    ResolventItem* current_user;
+    ResolventItem* tmp;
     HASH_ITER(hh, resolvent_variable_table, current_user, tmp) {
         HASH_DEL(resolvent_variable_table, current_user);
         free(current_user);
     }
 }
 
-int* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l) {
+literal* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l) {
     formula_pos end_clause_number_1 = clauses[clause_1 + 1];
     formula_pos end_clause_number_2 = clauses[clause_2 + 1];
 
@@ -49,8 +54,8 @@ int* clause_resolution_build_resolvent(clause_index clause_1, clause_index claus
     }
 
     size_t counter = 0;
-    int* resolvent = (int*) malloc(HASH_COUNT(resolvent_variable_table) * sizeof(int));
-    for (Resolvent_Item* item = resolvent_variable_table; item != NULL; item = (Resolvent_Item*) (item->hh.next)) {
+    literal* resolvent = (literal*) malloc(HASH_COUNT(resolvent_variable_table) * sizeof(int));
+    for (ResolventItem* item = resolvent_variable_table; item != NULL; item = (ResolventItem*) (item->hh.next)) {
         resolvent[counter] = item->l;
         ++counter;
     }

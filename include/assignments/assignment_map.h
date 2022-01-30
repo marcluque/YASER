@@ -7,8 +7,8 @@
 #ifndef YASER_ASSIGNMENT_MAP_H
 #define YASER_ASSIGNMENT_MAP_H
 
-#include "defines.h"
-#include "attributes.h"
+#include "global/defines.h"
+#include "global/attributes.h"
 #include "external/uthash.h"
 
 typedef struct {

@@ -7,7 +7,7 @@
 #ifndef YASER_CONFLICT_RESOLUTION_H
 #define YASER_CONFLICT_RESOLUTION_H
 
-#include "defines.h"
+#include "global/defines.h"
 #include <stdbool.h>
 
 extern bool conflict_present;

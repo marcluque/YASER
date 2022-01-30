@@ -7,7 +7,7 @@
 #ifndef YASER_DPLL_H
 #define YASER_DPLL_H
 
-#include "defines.h"
+#include "global/defines.h"
 #include <stddef.h>
 #include <stdbool.h>
 

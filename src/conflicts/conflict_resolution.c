@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "conflict_resolution.h"
-#include "assignment_stack.h"
+#include "conflicts/conflict_resolution.h"
+#include "assignments/assignment_stack.h"
 
 bool conflict_present = false;
 

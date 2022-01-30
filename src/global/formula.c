@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, June 2021
 //
 
+#include "global/formula.h"
 #include <malloc.h>
-#include "formula.h"
 
 literal* formula     = NULL;
 size_t num_literals  = 0;

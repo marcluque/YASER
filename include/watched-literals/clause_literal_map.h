@@ -7,9 +7,9 @@
 #ifndef YASER_CLAUSE_LITERAL_MAP_H
 #define YASER_CLAUSE_LITERAL_MAP_H
 
-#include "defines.h"
+#include "global/defines.h"
 #include "external/uthash.h"
-#include "attributes.h"
+#include "global/attributes.h"
 
 typedef struct {
     /**

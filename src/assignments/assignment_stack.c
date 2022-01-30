@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "assignment_stack.h"
-#include "formula.h"
+#include "assignments/assignment_stack.h"
+#include "global/formula.h"
 #include <sys/types.h>
 #include <malloc.h>
 #include <assert.h>
