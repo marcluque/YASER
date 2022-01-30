@@ -2,43 +2,46 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "../include/dpll.h"
+#include "dpll.h"
+#include "assignment.h"
+#include "conflict_resolution.h"
 
-void (*assignment_true_callback)(size_t);
+void (*assignment_true_callback)(formula_pos);
 
-void dpll_register_assignment_callback(void (*callback)(size_t)) {
+void dpll_register_assignment_callback(void (*callback)(formula_pos)) {
     assignment_true_callback = callback;
 }
 
-static void update_assignment(const size_t literal_pos, const int value) {
-    // Trail -> entries (x, v, b): assigning value to literal_pos, b == true <=> !v has been processed
-    assignment_stack_push(literal_pos, value, true);
-    assignment_map_add(literal_pos, value);
+static void update_assignment(const formula_pos literal_pos, const value v) {
+    // Trail -> entries (x, v, b): assigning v to literal_pos, b == true <=> !v has been processed
+    assignment_stack_push(literal_pos, v, true);
+    assignment_map_add(literal_pos, v);
 
     // Call callback for satisfying assignments
     assignment_true_callback(literal_pos);
 }
 
-static bool bcp() {
+static bool bcp(void) {
     while(!assignment_unit_clause_stack_empty()) {
-        size_t literal_pos = assignment_unit_clause_stack_pop();
-        int value = literal_pos < 0 ? 0 : 1;
-        update_assignment(literal_pos, value);
+        formula_pos literal_pos = assignment_unit_clause_stack_pop();
+        // TODO: This won't work
+        value v = literal_pos < 0 ? 0 : 1;
+        update_assignment(literal_pos, v);
     }
 
     return assignment_exists_unsat_clause();
 }
 
-static bool decide() {
+static bool decide(void) {
     if (assignment_stack_full()) return false;
     // TODO: choose unassigned literal_pos x heuristically
-    int literal_pos = -1;
-    int value = literal_pos < 0 ? 0 : 1;
-    update_assignment(literal_pos, value);
+    formula_pos literal_pos = -1;
+    value v = literal_pos < 0 ? 0 : 1;
+    update_assignment(literal_pos, v);
     return true;
 }
 
-bool dpll() {
+bool dpll(void) {
     assignment_stack_reset();
     if (!bcp()) return false;
     while (1) {
