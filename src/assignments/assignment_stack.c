@@ -25,30 +25,23 @@ void assignment_stack_clear(void) {
 }
 
 void assignment_stack_reset(void) {
-    assert(assignment_sp > 0);
-    assert((size_t) assignment_sp < assignment_stack_initial_size);
-
     assignment_sp = 0;
 }
 
 bool assignment_stack_empty(void) {
-    assert(assignment_sp > 0);
-    assert((size_t) assignment_sp < assignment_stack_initial_size);
-
     return assignment_sp == 0;
 }
 
 bool assignment_stack_full(void) {
-    assert(assignment_sp > 0);
-    assert((size_t) assignment_sp < assignment_stack_initial_size);
-
     return (size_t) assignment_sp == assignment_stack_initial_size;
 }
 
 void assignment_stack_push(const formula_pos literal_pos, const value v, const bool visited) {
     assert(assignment_stack != NULL);
     assert(!assignment_stack_full());
+    assert(literal_pos < NOT_FOUND);
     assert(literal_pos < num_literals);
+    assert(v != VALUE_INVALID);
 
     assignment_stack[assignment_sp].literal_pos = literal_pos;
     assignment_stack[assignment_sp].value       = v;
@@ -60,7 +53,7 @@ void assignment_stack_push(const formula_pos literal_pos, const value v, const b
 
 AssignmentStackItem* assignment_stack_pop(void) {
     assert(assignment_stack != NULL);
-    assert(assignment_sp > 0);
+    assert(!assignment_stack_empty());
 
     return &(assignment_stack[--assignment_sp]);
 }

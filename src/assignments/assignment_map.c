@@ -10,6 +10,7 @@ static AssignmentMapItem* assignment_map = NULL;
 
 void assignment_map_add(const formula_pos literal_pos, const value v) {
     assert(literal_pos < num_literals);
+    assert(literal_pos < NOT_FOUND);
     assert(v != VALUE_INVALID);
 
     AssignmentMapItem* item = malloc(sizeof(AssignmentMapItem));
@@ -20,6 +21,7 @@ void assignment_map_add(const formula_pos literal_pos, const value v) {
 
 value assignment_map_get_value(const formula_pos literal_pos) {
     assert(literal_pos < num_literals);
+    assert(literal_pos < NOT_FOUND);
 
     AssignmentMapItem* assignment_item;
     HASH_FIND(hh, assignment_map, &literal_pos, sizeof(formula_pos), assignment_item);

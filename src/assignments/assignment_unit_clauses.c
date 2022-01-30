@@ -26,16 +26,17 @@ void assignment_unit_clause_stack_clear(void) {
 }
 
 bool assignment_unit_clause_stack_empty(void) {
-    assert(unit_clause_sp > 0);
-    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
-
     return unit_clause_sp == 0;
+}
+
+static bool assignment_unit_clause_stack_full(void) {
+    return (size_t) unit_clause_sp == unit_clause_stack_initial_size;
 }
 
 void assignment_unit_clause_stack_push(const formula_pos literal_pos) {
     assert(unit_clause_stack != NULL);
-    assert(unit_clause_sp > 0);
-    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
+    assert(!assignment_unit_clause_stack_full());
+    assert(literal_pos < NOT_FOUND);
     assert(literal_pos < num_literals);
 
     unit_clause_stack[unit_clause_sp++] = literal_pos;
@@ -43,8 +44,7 @@ void assignment_unit_clause_stack_push(const formula_pos literal_pos) {
 
 formula_pos assignment_unit_clause_stack_pop(void) {
     assert(unit_clause_stack != NULL);
-    assert(unit_clause_sp > 0);
-    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
+    assert(!assignment_unit_clause_stack_empty());
 
     return unit_clause_stack[--unit_clause_sp];
 }
