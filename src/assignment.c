@@ -2,8 +2,10 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "../include/assignment.h"
-
+#include "assignment.h"
+#include "formula.h"
+#include <assert.h>
+#include <sys/types.h>
 
 //// Assignment Stack
 /////////////////////
@@ -11,9 +13,9 @@ Assignment* assignment_stack;
 size_t assignment_stack_initial_size;
 ssize_t assignment_sp;
 
-void assignment_stack_init(const size_t size) {
-    assignment_stack_initial_size = size;
-    assignment_stack = malloc(sizeof(Assignment) * size);
+void assignment_stack_init(const size_t stack_size) {
+    assignment_stack_initial_size = stack_size;
+    assignment_stack = malloc(sizeof(Assignment) * stack_size);
     assignment_sp = 0;
 }
 
@@ -23,34 +25,32 @@ void assignment_stack_clear(void) {
 
 void assignment_stack_reset(void) {
     assert(assignment_sp > 0);
-    assert(assignment_sp < assignment_stack_initial_size);
+    assert((size_t) assignment_sp < assignment_stack_initial_size);
 
     assignment_sp = 0;
 }
 
 bool assignment_stack_empty(void) {
     assert(assignment_sp > 0);
-    assert(assignment_sp < assignment_stack_initial_size);
+    assert((size_t) assignment_sp < assignment_stack_initial_size);
 
     return assignment_sp == 0;
 }
 
 bool assignment_stack_full(void) {
     assert(assignment_sp > 0);
-    assert(assignment_sp < assignment_stack_initial_size);
+    assert((size_t) assignment_sp < assignment_stack_initial_size);
 
-    return assignment_sp == assignment_stack_initial_size;
+    return (size_t)  assignment_sp == assignment_stack_initial_size;
 }
 
-void assignment_stack_push(const size_t literal_pos, const int value, const bool visited) {
+void assignment_stack_push(const formula_pos literal_pos, const value v, const bool visited) {
     assert(!assignment_stack_full());
-    assert(literal_pos < num_variables);
-    assert(value == -1 || value == 1);
+    assert(literal_pos < num_literals);
 
     assignment_stack[assignment_sp].literal_pos = literal_pos;
-    assignment_stack[assignment_sp].value = value;
-    assignment_stack[assignment_sp].satisfied = (formula[literal_pos] > 0 && value == 1)
-                                                || (formula[literal_pos] < 0 && value == 0);
+    assignment_stack[assignment_sp].value = v;
+    assignment_stack[assignment_sp].satisfied = (formula[literal_pos] > 0 && v == 1) || (formula[literal_pos] < 0 && v == 0);
     assignment_stack[assignment_sp].visited = visited;
     ++assignment_sp;
 }
@@ -66,26 +66,24 @@ Assignment* assignment_stack_pop(void) {
 ////////////////////////
 AssignmentItem* assignment_map = NULL;
 
-void assignment_map_add(const size_t literal_pos, const int value) {
-    assert(value == 1 || value == -1);
-    assert(literal_pos < num_variables);
+void assignment_map_add(const formula_pos literal_pos, const value v) {
+    assert(literal_pos < num_literals);
 
     AssignmentItem* item = malloc(sizeof(AssignmentItem));
     item->literal_pos = literal_pos;
-    item->value = value;
+    item->value = v;
     HASH_ADD(hh, assignment_map, literal_pos, sizeof(size_t), item);
 }
 
-void assignment_map_get_value(const size_t literal_pos, size_t* restrict value) {
-    assert(literal_pos < num_variables);
+value assignment_map_get_value(const formula_pos literal_pos) {
+    assert(literal_pos < num_literals);
 
     AssignmentItem* assignment_item;
-    HASH_FIND(hh, assignment_map, &literal_pos, sizeof(size_t), assignment_item);
+    HASH_FIND(hh, assignment_map, &literal_pos, sizeof(formula_pos), assignment_item);
     if (assignment_item == NULL) {
-        value = NULL;
+        return VALUE_INVALID;
     } else {
-        *value = assignment_item->value;
-        assert(*value == -1 || *value == 1);
+        return assignment_item->value;
     }
 }
 
@@ -116,13 +114,13 @@ void assignment_sat_clauses_add_clause(void) {
 
 //// Unit Clauses Stack
 ///////////////////////
-size_t* unit_clause_stack;
+formula_pos* unit_clause_stack;
 size_t unit_clause_stack_initial_size;
 ssize_t unit_clause_sp;
 
-void assignment_unit_clause_stack_init(const size_t size) {
-    unit_clause_stack_initial_size = size;
-    unit_clause_stack = malloc(sizeof(size_t) * size);
+void assignment_unit_clause_stack_init(const size_t stack_size) {
+    unit_clause_stack_initial_size = stack_size;
+    unit_clause_stack = malloc(sizeof(formula_pos) * stack_size);
     unit_clause_sp = 0;
 }
 
@@ -132,22 +130,22 @@ void assignment_unit_clause_stack_clear(void) {
 
 bool assignment_unit_clause_stack_empty(void) {
     assert(unit_clause_sp > 0);
-    assert(unit_clause_sp < unit_clause_stack_initial_size);
+    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
 
     return unit_clause_sp == 0;
 }
 
-void assignment_unit_clause_stack_push(const size_t literal_pos) {
+void assignment_unit_clause_stack_push(const formula_pos literal_pos) {
     assert(unit_clause_sp > 0);
-    assert(unit_clause_sp < unit_clause_stack_initial_size);
-    assert(literal_pos < num_variables);
+    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
+    assert(literal_pos < num_literals);
 
     unit_clause_stack[unit_clause_sp++] = literal_pos;
 }
 
-size_t assignment_unit_clause_stack_pop(void) {
+formula_pos assignment_unit_clause_stack_pop(void) {
     assert(unit_clause_sp > 0);
-    assert(unit_clause_sp < unit_clause_stack_initial_size);
+    assert((size_t) unit_clause_sp < unit_clause_stack_initial_size);
 
     return unit_clause_stack[--unit_clause_sp];
 }
