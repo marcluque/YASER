@@ -27,7 +27,7 @@ typedef struct {
 
 void clause_literal_map_clear(void);
 
-void clause_literal_map_add(clause_index clause, const formula_pos* watched_literals);
+ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const formula_pos* watched_literals);
 
 void clause_literal_map_delete(clause_index clause);
 

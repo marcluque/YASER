@@ -13,6 +13,7 @@
 #include <assert.h>
 
 ATTR_PURE static formula_pos find_new_literal(const clause_index clause) {
+    assert(clause < NOT_FOUND);
     assert(clause <= num_clauses);
 
     for (formula_pos i = 0; i < clauses[clause + 1]; ++i) {
@@ -36,6 +37,7 @@ void watched_literals_init(void) {
 }
 
 void watched_literals_check(const formula_pos watched_literal_pos) {
+    assert(watched_literal_pos < NOT_FOUND);
     assert(watched_literal_pos < num_literals);
 
     // Find clause of negated watched_literal_pos

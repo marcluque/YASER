@@ -19,6 +19,13 @@ void clause_literal_map_clear(void) {
 }
 
 void clause_literal_map_add(const clause_index clause, const formula_pos* const watched_literals) {
+    assert(watched_literals[0] < NOT_FOUND);
+    assert(watched_literals[0] < num_literals);
+    assert(watched_literals[1] < NOT_FOUND);
+    assert(watched_literals[1] < num_literals);
+    assert(clause < NOT_FOUND);
+    assert(clause < num_clauses);
+
     ClauseLiteralItem* item   = malloc(sizeof(ClauseLiteralItem));
     item->clause              = clause;
     item->watched_literals[0] = watched_literals[0];
@@ -27,6 +34,9 @@ void clause_literal_map_add(const clause_index clause, const formula_pos* const 
 }
 
 void clause_literal_map_delete(const clause_index clause) {
+    assert(clause < NOT_FOUND);
+    assert(clause < num_clauses);
+
     ClauseLiteralItem* item;
     HASH_FIND(hh, clause_map, &clause, sizeof(clause_index), item);
     assert(item != NULL);
@@ -35,6 +45,11 @@ void clause_literal_map_delete(const clause_index clause) {
 }
 
 ATTR_PURE formula_pos clause_literal_map_find(const clause_index clause, const formula_pos literal_pos) {
+    assert(literal_pos < NOT_FOUND);
+    assert(literal_pos < num_literals);
+    assert(clause < NOT_FOUND);
+    assert(clause < num_clauses);
+
     ClauseLiteralItem* item;
     HASH_FIND(hh, clause_map, &clause, sizeof(clause_index), item);
     return item == NULL                               ? NOT_FOUND

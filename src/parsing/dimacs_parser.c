@@ -17,6 +17,8 @@ void dimacs_parser_register_init_callback(void (*callback)(size_t, size_t)) {
 }
 
 void dimacs_parse_file(const char* const restrict file_path) {
+    // TODO: Make sure that input is not longer than ULLONG_MAX
+
     FILE* file;
     char* line = 0;
 
