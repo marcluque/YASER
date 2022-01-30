@@ -1,5 +1,5 @@
 # Compilation files
-cmake-build-debug
+*build*
 
 # CLion
 .idea
