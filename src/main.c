@@ -9,6 +9,8 @@
 #include "assignment_stack.h"
 #include "assignment_unit_clauses.h"
 #include "assignment_map.h"
+#include "clause_literal_map.h"
+#include "literal_clause_map.h"
 
 // #define NDEBUG
 
@@ -25,8 +27,8 @@ static void clean_up(void) {
     assignment_map_clear();
 
     // watched literals
-    clauses_clear();
-    watched_literals_clear();
+    clause_literal_map_clear();
+    literal_clause_map_clear();
 
     // formula
     formula_clear();
@@ -35,7 +37,7 @@ static void clean_up(void) {
 int main(void) {
     dimacs_parse_file(NULL);
     watched_literals_init();
-    dpll_register_assignment_callback(watched_literal_check);
+    dpll_register_assignment_callback(watched_literals_check);
     dimacs_parser_register_init_callback(init_callback);
 
     dpll();
