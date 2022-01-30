@@ -11,6 +11,6 @@
 
 void dpll_register_assignment_callback(void (*callback)(size_t));
 
-bool dpll();
+bool dpll(void);
 
 #endif //YASER_DPLL_H

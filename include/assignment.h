@@ -20,17 +20,17 @@ typedef struct {
 
 void assignment_stack_init(size_t size);
 
-void assignment_stack_clear();
+void assignment_stack_clear(void);
 
-void assignment_stack_reset();
+void assignment_stack_reset(void);
 
-bool assignment_stack_empty();
+bool assignment_stack_empty(void);
 
-bool assignment_stack_full();
+bool assignment_stack_full(void);
 
 void assignment_stack_push(size_t literal_pos, int value, bool visited);
 
-Assignment* assignment_stack_pop();
+Assignment* assignment_stack_pop(void);
 
 
 //// Assignment Hash Map
@@ -45,26 +45,26 @@ void assignment_map_add(size_t literal_pos, int value);
 
 void assignment_map_get_value(size_t literal_pos, size_t* restrict value);
 
-void assignment_map_clear();
+void assignment_map_clear(void);
 
 
 //// Satisfied Clauses Hash Set
 ///////////////////////////////
-bool assignment_exists_unsat_clause();
+bool assignment_exists_unsat_clause(void);
 
-void assignment_sat_clauses_add_clause();
+void assignment_sat_clauses_add_clause(void);
 
 
 //// Unit Clauses Stack
 ///////////////////////
 void assignment_unit_clause_stack_init(size_t size);
 
-void assignment_unit_clause_stack_clear();
+void assignment_unit_clause_stack_clear(void);
 
-bool assignment_unit_clause_stack_empty();
+bool assignment_unit_clause_stack_empty(void);
 
 void assignment_unit_clause_stack_push(size_t literal_pos);
 
-size_t assignment_unit_clause_stack_pop();
+size_t assignment_unit_clause_stack_pop(void);
 
 #endif //YASER_ASSIGNMENT_H

@@ -17,25 +17,25 @@ void assignment_stack_init(const size_t size) {
     assignment_sp = 0;
 }
 
-void assignment_stack_clear() {
+void assignment_stack_clear(void) {
     free(assignment_stack);
 }
 
-void assignment_stack_reset() {
+void assignment_stack_reset(void) {
     assert(assignment_sp > 0);
     assert(assignment_sp < assignment_stack_initial_size);
 
     assignment_sp = 0;
 }
 
-bool assignment_stack_empty() {
+bool assignment_stack_empty(void) {
     assert(assignment_sp > 0);
     assert(assignment_sp < assignment_stack_initial_size);
 
     return assignment_sp == 0;
 }
 
-bool assignment_stack_full() {
+bool assignment_stack_full(void) {
     assert(assignment_sp > 0);
     assert(assignment_sp < assignment_stack_initial_size);
 
@@ -55,7 +55,7 @@ void assignment_stack_push(const size_t literal_pos, const int value, const bool
     ++assignment_sp;
 }
 
-Assignment* assignment_stack_pop() {
+Assignment* assignment_stack_pop(void) {
     assert(assignment_sp > 0);
 
     return &(assignment_stack[--assignment_sp]);
@@ -89,7 +89,7 @@ void assignment_map_get_value(const size_t literal_pos, size_t* restrict value) 
     }
 }
 
-void assignment_map_clear() {
+void assignment_map_clear(void) {
     Assignment_Item* current;
     Assignment_Item* tmp;
 
@@ -104,12 +104,12 @@ void assignment_map_clear() {
 ///////////////////////////////
 size_t sat_clause_set_count = 0;
 
-bool assignment_exists_unsat_clause() {
+bool assignment_exists_unsat_clause(void) {
     return sat_clause_set_count != num_clauses;
 }
 
 // TODO: Hash set necessary, or just counter?
-void assignment_sat_clauses_add_clause() {
+void assignment_sat_clauses_add_clause(void) {
     ++sat_clause_set_count;
 }
 
@@ -126,11 +126,11 @@ void assignment_unit_clause_stack_init(const size_t size) {
     unit_clause_sp = 0;
 }
 
-void assignment_unit_clause_stack_clear() {
+void assignment_unit_clause_stack_clear(void) {
     free(unit_clause_stack);
 }
 
-bool assignment_unit_clause_stack_empty() {
+bool assignment_unit_clause_stack_empty(void) {
     assert(unit_clause_sp > 0);
     assert(unit_clause_sp < unit_clause_stack_initial_size);
 
@@ -145,7 +145,7 @@ void assignment_unit_clause_stack_push(const size_t literal_pos) {
     unit_clause_stack[unit_clause_sp++] = literal_pos;
 }
 
-size_t assignment_unit_clause_stack_pop() {
+size_t assignment_unit_clause_stack_pop(void) {
     assert(unit_clause_sp > 0);
     assert(unit_clause_sp < unit_clause_stack_initial_size);
 

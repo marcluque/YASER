@@ -20,6 +20,6 @@ extern size_t num_clauses;
 
 void formula_init(size_t num_variables_param, size_t num_clauses_param);
 
-void formula_clear();
+void formula_clear(void);
 
 #endif //YASER_FORMULA_H

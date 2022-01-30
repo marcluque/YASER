@@ -22,7 +22,7 @@ typedef struct {
     UT_hash_handle hh;
 } Literal_Clause_Item;
 
-void watched_literals_clear();
+void watched_literals_clear(void);
 
 
 //// Clause Hash Map
@@ -37,12 +37,12 @@ typedef struct {
     UT_hash_handle hh;
 } Clause_Literal_Item;
 
-void clauses_clear();
+void clauses_clear(void);
 
 
 //// Watched Literals
 /////////////////////
-void watched_literals_init();
+void watched_literals_init(void);
 
 void watched_literal_check(size_t literal_pos);
 

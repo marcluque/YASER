@@ -16,7 +16,7 @@ void formula_init(const size_t num_variables_param, const size_t num_clauses_par
     clauses = malloc(sizeof(size_t) * num_clauses);
 }
 
-void formula_clear() {
+void formula_clear(void) {
     free(formula);
     free(clauses);
 }

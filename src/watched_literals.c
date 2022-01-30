@@ -9,7 +9,7 @@
 /////////////////////////////
 Literal_Clause_Item* watched_literal_map = NULL;
 
-void watched_literals_clear() {
+void watched_literals_clear(void) {
     Literal_Clause_Item* current;
     Literal_Clause_Item* tmp;
 
@@ -46,7 +46,7 @@ static Literal_Clause_Item* find_clause_number(const size_t watched_literal_pos)
 ////////////////////
 Clause_Literal_Item* clause_map = NULL;
 
-void clauses_clear() {
+void clauses_clear(void) {
     Clause_Literal_Item* current;
     Clause_Literal_Item* tmp;
 
@@ -96,16 +96,16 @@ static size_t find_new_literal(const size_t clause_number) {
         }
     }
 
-    return -1;
+    return (size_t) -1;
 }
 
 
 //// Watched Literals
 /////////////////////
-void watched_literals_init() {
+void watched_literals_init(void) {
     for (size_t i = 0; i < num_clauses; ++i) {
-        add_watched_literal(formula[clauses[i]], i);
-        add_watched_literal(formula[clauses[i + 1]], i);
+        add_watched_literal((size_t) formula[clauses[i]], i);
+        add_watched_literal((size_t) formula[clauses[i + 1]], i);
     }
 }
 
@@ -125,7 +125,7 @@ void watched_literal_check(const size_t literal_pos) {
     size_t new_literal_pos;
     if (partner_literal_assignment == 1) {
         // clause satisfied
-        assignment_sat_clauses_add_clause(item->clause_number);
+        assignment_sat_clauses_add_clause();
     } else if ((new_literal_pos = find_new_literal(item->clause_number)) != -1) {
         // Update clause_map
         delete_clause(item->clause_number);

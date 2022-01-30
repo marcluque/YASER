@@ -6,7 +6,7 @@
 
 bool conflict_present = false;
 
-bool resolve_conflict() {
+bool resolve_conflict(void) {
     if (assignment_stack_empty()) return false;
     else if (!conflict_present) return true;
 

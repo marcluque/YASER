@@ -14,6 +14,6 @@ extern Literal conflict_variable;
 extern size_t conflict_clause_1;
 extern size_t conflict_clause_2;
 
-bool resolve_conflict();
+bool resolve_conflict(void);
 
 #endif //YASER_CONFLICT_RESOLUTION_H
