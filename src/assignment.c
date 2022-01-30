@@ -64,13 +64,13 @@ Assignment* assignment_stack_pop(void) {
 
 //// Assignment Hash Map
 ////////////////////////
-Assignment_Item* assignment_map = NULL;
+AssignmentItem* assignment_map = NULL;
 
 void assignment_map_add(const size_t literal_pos, const int value) {
     assert(value == 1 || value == -1);
     assert(literal_pos < num_variables);
 
-    Assignment_Item* item = malloc(sizeof(Assignment_Item));
+    AssignmentItem* item = malloc(sizeof(AssignmentItem));
     item->literal_pos = literal_pos;
     item->value = value;
     HASH_ADD(hh, assignment_map, literal_pos, sizeof(size_t), item);
@@ -79,7 +79,7 @@ void assignment_map_add(const size_t literal_pos, const int value) {
 void assignment_map_get_value(const size_t literal_pos, size_t* restrict value) {
     assert(literal_pos < num_variables);
 
-    Assignment_Item* assignment_item;
+    AssignmentItem* assignment_item;
     HASH_FIND(hh, assignment_map, &literal_pos, sizeof(size_t), assignment_item);
     if (assignment_item == NULL) {
         value = NULL;
@@ -90,8 +90,8 @@ void assignment_map_get_value(const size_t literal_pos, size_t* restrict value) 
 }
 
 void assignment_map_clear(void) {
-    Assignment_Item* current;
-    Assignment_Item* tmp;
+    AssignmentItem* current;
+    AssignmentItem* tmp;
 
     HASH_ITER(hh, assignment_map, current, tmp) {
         HASH_DEL(assignment_map, current);

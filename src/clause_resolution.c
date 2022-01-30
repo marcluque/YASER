@@ -4,20 +4,20 @@
 
 #include "../include/clause_resolution.h"
 
-Resolvent_Item* resolvent_variable_table = NULL;
+static Resolvent_Item* resolvent_variable_table = NULL;
 
-static void resolvent_literal_table_add(const Literal variable) {
+static void resolvent_literal_table_add(const literal literal) {
     Resolvent_Item* item;
 
-    HASH_FIND(hh, resolvent_variable_table, &variable, sizeof(Literal), item);
+    HASH_FIND(hh, resolvent_variable_table, &literal, sizeof(literal), item);
     if (item == NULL) {
         item = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
-        item->literal = variable;
-        HASH_ADD(hh, resolvent_variable_table, literal, sizeof(Literal), item);
+        item->l = literal;
+        HASH_ADD(hh, resolvent_variable_table, literal, sizeof(literal), item);
     }
 }
 
-static void resolvent_variable_table_clear() {
+static void resolvent_variable_table_clear(void) {
     Resolvent_Item* current_user;
     Resolvent_Item* tmp;
     HASH_ITER(hh, resolvent_variable_table, current_user, tmp) {

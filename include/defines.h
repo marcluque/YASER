@@ -1,22 +1,27 @@
+/** @file */
+
 //
 // Created with <3 by marcluque, June 2021
 //
 
-#ifndef YASER_GLOBAL_H
-#define YASER_GLOBAL_H
+#ifndef YASER_DEFINES_H
+#define YASER_DEFINES_H
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <stddef.h>
-#include <malloc.h>
-#include <assert.h>
-#include <string.h>
+/**
+ * Represents the index of the either positive or negative l. E.g. l x_i will be stored with i.
+ * A negated l ¬x_j will be stored with -j
+ * We use a #define to make sure that the range of indices may be changed at any time
+ */
+typedef int literal;
 
-// Represents the index of the either positive or negative literal. E.g. literal x_i will be stored with i.
-// A negated literal ¬x_j will be stored with -j
-// We use a #define to make sure that the range of indices may be changed at any time
-#define Literal int
+/**
+ *
+ */
+typedef long long formula_pos;
 
-#include "external/uthash.h"
+/**
+ *
+ */
+typedef long long clause_index;
 
-#endif //YASER_GLOBAL_H
+#endif // YASER_DEFINES_H

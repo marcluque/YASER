@@ -7,15 +7,14 @@
 #ifndef YASER_CONFLICT_RESOLUTION_H
 #define YASER_CONFLICT_RESOLUTION_H
 
-#include "global.h"
-#include "formula.h"
-#include "assignment.h"
+#include "defines.h"
+#include <stdbool.h>
 
 extern bool conflict_present;
-extern Literal conflict_variable;
-extern size_t conflict_clause_1;
-extern size_t conflict_clause_2;
+extern literal conflict_variable;
+extern clause_index conflict_clause_1;
+extern clause_index conflict_clause_2;
 
 bool resolve_conflict(void);
 
-#endif //YASER_CONFLICT_RESOLUTION_H
+#endif // YASER_CONFLICT_RESOLUTION_H

@@ -38,10 +38,10 @@ void dimacs_parse_file(const char* restrict file_path) {
         }
     }
 
-    size_t clause_pointer = 0;
-    size_t last_clause_pointer = 0;
-    size_t literal_pointer = 0;
-    char* delim = " ";
+    clause_index clause_pointer = 0;
+    formula_pos last_clause_pointer = 0;
+    formula_pos literal_pointer = 0;
+    const char* delim = " ";
     while (getline(&line, &len, file) != -1) {
         char* token = strtok(line, delim);
         while (token != 0 && token[0] != '0') {
