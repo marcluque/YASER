@@ -12,7 +12,7 @@ static void resolvent_literal_table_add(const literal l) {
 
     HASH_FIND(hh, resolvent_variable_table, &l, sizeof(literal), item);
     if (item == NULL) {
-        item = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
+        item    = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
         item->l = l;
         HASH_ADD(hh, resolvent_variable_table, l, sizeof(literal), item);
     }

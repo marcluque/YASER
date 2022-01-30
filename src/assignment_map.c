@@ -12,8 +12,8 @@ void assignment_map_add(const formula_pos literal_pos, const value v) {
     assert(literal_pos < num_literals);
 
     AssignmentMapItem* item = malloc(sizeof(AssignmentMapItem));
-    item->literal_pos = literal_pos;
-    item->v = v;
+    item->literal_pos       = literal_pos;
+    item->v                 = v;
     HASH_ADD(hh, assignment_map, literal_pos, sizeof(size_t), item);
 }
 

@@ -8,13 +8,13 @@
 #include <malloc.h>
 #include <assert.h>
 
-static formula_pos* unit_clause_stack = NULL;
+static formula_pos* unit_clause_stack        = NULL;
 static size_t unit_clause_stack_initial_size = 0;
-static ssize_t unit_clause_sp = -1;
+static ssize_t unit_clause_sp                = -1;
 
 void assignment_unit_clause_stack_init(const size_t stack_size) {
     unit_clause_stack_initial_size = stack_size;
-    unit_clause_stack = malloc(sizeof(formula_pos) * stack_size);
+    unit_clause_stack              = malloc(sizeof(formula_pos) * stack_size);
     assert(unit_clause_stack != NULL);
     unit_clause_sp = 0;
 }

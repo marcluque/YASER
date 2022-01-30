@@ -25,10 +25,10 @@ static void update_assignment(const formula_pos literal_pos, const value v) {
 }
 
 static bool bcp(void) {
-    while(!assignment_unit_clause_stack_empty()) {
+    while (!assignment_unit_clause_stack_empty()) {
         formula_pos literal_pos = assignment_unit_clause_stack_pop();
         // TODO: This won't work
-        //value v = literal_pos < 0 ? 0 : 1;
+        // value v = literal_pos < 0 ? 0 : 1;
         update_assignment(literal_pos, VALUE_INVALID);
     }
 
@@ -36,22 +36,33 @@ static bool bcp(void) {
 }
 
 static bool decide(void) {
-    if (assignment_stack_full()) return false;
+    if (assignment_stack_full()) {
+        return false;
+    }
     // TODO: choose unassigned literal_pos x heuristically
     formula_pos literal_pos = 0;
     // TODO: This won't work
-    //value v = literal_pos < 0 ? 0 : 1;
+    // value v = literal_pos < 0 ? 0 : 1;
     update_assignment(literal_pos, VALUE_INVALID);
     return true;
 }
 
 bool dpll(void) {
     assignment_stack_reset();
-    if (!bcp()) return false;
+    if (!bcp()) {
+        return false;
+    }
+
     while (1) {
-        if (!decide()) return true;
-        while (!bcp())
+        if (!decide()) {
+            return true;
+        }
+
+        while (!bcp()) {
             // TODO: Tell the method which clause and variable is affected
-            if (!resolve_conflict()) return false;
+            if (!resolve_conflict()) {
+                return false;
+            }
+        }
     }
 }
