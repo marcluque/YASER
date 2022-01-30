@@ -28,7 +28,6 @@ typedef struct {
 
 void watched_literals_clear(void);
 
-
 //// Clause Hash Map
 ////////////////////
 typedef struct {
@@ -46,7 +45,6 @@ typedef struct {
 } ClauseLiteralItem;
 
 void clauses_clear(void);
-
 
 //// Watched Literals
 /////////////////////

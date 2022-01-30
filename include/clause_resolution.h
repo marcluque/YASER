@@ -17,4 +17,4 @@ typedef struct {
 
 int* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l);
 
-#endif //YASER_CLAUSE_RESOLUTION_H
+#endif // YASER_CLAUSE_RESOLUTION_H
