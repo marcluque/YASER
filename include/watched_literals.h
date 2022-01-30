@@ -15,16 +15,16 @@
 //////////////////////////////
 typedef struct {
     /**
-     * Each watched l has a corresponding clause. The clause is represented by clause_number
+     * Each watched l has a corresponding clause. The clause is represented by clause
      */
     formula_pos watched_literal;
     /**
-     * ´clause_number´ is the index in the ´clauses´ array at which the clause's starting position is stored.
+     * ´clause´ is the index in the ´clauses´ array at which the clause's starting position is stored.
      * It is also the 'unique representation' of a clause.
      */
-    clause_index clause_number;
+    clause_index clause;
     UT_hash_handle hh;
-} Literal_Clause_Item;
+} LiteralClauseItem;
 
 void watched_literals_clear(void);
 
@@ -34,16 +34,16 @@ void watched_literals_clear(void);
 typedef struct {
     /**
      * Each clause points to its two literals that are the watched literals.
-     * ´clause_number´ is the index in the ´clauses´ array at which the clause's starting position is stored
+     * ´clause´ is the index in the ´clauses´ array at which the clause's starting position is stored
      * It is also the 'unique representation' of a clause.
      */
-    clause_index clause_number;
+    clause_index clause;
     /**
      * The array stores the two POSITIONS of the literals in the formula
      */
     formula_pos watched_literals[2];
     UT_hash_handle hh;
-} Clause_Literal_Item;
+} ClauseLiteralItem;
 
 void clauses_clear(void);
 

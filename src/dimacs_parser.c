@@ -2,8 +2,13 @@
 // Created with <3 by marcluque, June 2021
 //
 
+#include "dimacs_parser.h"
+#include "defines.h"
+#include "formula.h"
 #include <stdio.h>
-#include "../include/dimacs_parser.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 void (*init_callback)(size_t, size_t);
 
@@ -31,7 +36,7 @@ void dimacs_parse_file(const char* const restrict file_path) {
                 case ' ': continue;
                 case 'c': break;
                 case 'p':
-                    init_callback(line[i + 6] - '0', line[i + 8] - '0');
+                    init_callback((size_t) (line[i + 6] - '0'), (size_t) (line[i + 8] - '0'));
                     done_reading_header = true;
                     break;
                 default: break;
