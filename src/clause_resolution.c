@@ -2,7 +2,7 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "../include/clause_resolution.h"
+#include "clause_resolution.h"
 #include "formula.h"
 
 static Resolvent_Item* resolvent_variable_table = NULL;

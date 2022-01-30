@@ -3,7 +3,7 @@
 //
 
 #include <malloc.h>
-#include "../include/formula.h"
+#include "formula.h"
 
 literal* formula = NULL;
 size_t num_literals = 0;

@@ -7,6 +7,8 @@
 #ifndef YASER_DIMACS_PARSER_H
 #define YASER_DIMACS_PARSER_H
 
+#include <stddef.h>
+
 void dimacs_parser_register_init_callback(void (*init_callback)(size_t, size_t));
 
 void dimacs_parse_file(const char* restrict file_path);

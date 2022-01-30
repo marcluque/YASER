@@ -6,7 +6,9 @@
 #include "watched_literals.h"
 #include "dpll.h"
 #include "formula.h"
-#include "assignment.h"
+#include "assignment_stack.h"
+#include "assignment_unit_clauses.h"
+#include "assignment_map.h"
 
 // #define NDEBUG
 

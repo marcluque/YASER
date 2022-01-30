@@ -7,6 +7,8 @@
 #ifndef YASER_DEFINES_H
 #define YASER_DEFINES_H
 
+#include <limits.h>
+
 /**
  * Represents the index of the either positive or negative l. E.g. l x_i will be stored with i.
  * A negated l ¬x_j will be stored with -j
@@ -17,13 +19,17 @@ typedef int literal;
 /**
  *
  */
-typedef long long formula_pos;
-#define NOT_FOUND (-1)
+typedef unsigned long long formula_pos;
 
 /**
  *
  */
-typedef long long clause_index;
+#define NOT_FOUND (ULLONG_MAX)
+
+/**
+ *
+ */
+typedef unsigned long long clause_index;
 
 /**
  *
