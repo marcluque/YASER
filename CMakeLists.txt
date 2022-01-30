@@ -22,7 +22,6 @@ add_compile_options(
         -Wdouble-promotion
         -Wstack-protector
         -Wredundant-decls
-        -Wpadded
         -Wpacked
         -Wmissing-declarations
         -Wmissing-prototypes
