@@ -3,8 +3,11 @@
 //
 
 #include "dpll.h"
-#include "assignment.h"
 #include "conflict_resolution.h"
+#include "assignment_stack.h"
+#include "assignment_map.h"
+#include "assignment_unit_clauses.h"
+#include "assignment_sat_clauses.h"
 
 void (*assignment_true_callback)(formula_pos);
 
@@ -25,8 +28,8 @@ static bool bcp(void) {
     while(!assignment_unit_clause_stack_empty()) {
         formula_pos literal_pos = assignment_unit_clause_stack_pop();
         // TODO: This won't work
-        value v = literal_pos < 0 ? 0 : 1;
-        update_assignment(literal_pos, v);
+        //value v = literal_pos < 0 ? 0 : 1;
+        update_assignment(literal_pos, VALUE_INVALID);
     }
 
     return assignment_exists_unsat_clause();
@@ -35,9 +38,10 @@ static bool bcp(void) {
 static bool decide(void) {
     if (assignment_stack_full()) return false;
     // TODO: choose unassigned literal_pos x heuristically
-    formula_pos literal_pos = -1;
-    value v = literal_pos < 0 ? 0 : 1;
-    update_assignment(literal_pos, v);
+    formula_pos literal_pos = 0;
+    // TODO: This won't work
+    //value v = literal_pos < 0 ? 0 : 1;
+    update_assignment(literal_pos, VALUE_INVALID);
     return true;
 }
 
