@@ -2,11 +2,14 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include <assert.h>
-#include "../include/watched_literals.h"
+#include "watched_literals.h"
 #include "formula.h"
-#include "assignment.h"
 #include "conflict_resolution.h"
+#include "assignment_map.h"
+#include "assignment_sat_clauses.h"
+#include "assignment_unit_clauses.h"
+#include "assignment_stack.h"
+#include <assert.h>
 
 
 //// Watched literal Hash Map
@@ -38,7 +41,7 @@ static void delete_watched_literal(const formula_pos watched_literal_pos) {
     free(item);
 }
 
-static LiteralClauseItem* find_clause_number(const formula_pos watched_literal_pos) {
+ATTR_PURE static LiteralClauseItem* find_clause_index(const formula_pos watched_literal_pos) {
     LiteralClauseItem* item;
     HASH_FIND(hh, watched_literal_map, &watched_literal_pos, sizeof(formula_pos), item);
     // HASH_FIND writes NULL into item if key wasn't found
@@ -76,13 +79,13 @@ static void delete_clause(const clause_index clause) {
     free(item);
 }
 
-static formula_pos find_watched_literal_partner(const clause_index clause, const formula_pos literal_pos, formula_pos* partner_literal_pos) {
+ATTR_PURE static formula_pos find_watched_literal_partner(const clause_index clause, const formula_pos literal_pos) {
     ClauseLiteralItem* item;
     HASH_FIND(hh, clause_map, &clause, sizeof(clause_index), item);
-    return item == NULL ? NOT_FOUND : item->watched_literals[0] == formula[literal_pos] ? item->watched_literals[1] : item->watched_literals[0];
+    return item == NULL ? NOT_FOUND : item->watched_literals[0] == literal_pos ? item->watched_literals[1] : item->watched_literals[0];
 }
 
-static formula_pos find_new_literal(const clause_index clause) {
+ATTR_PURE static formula_pos find_new_literal(const clause_index clause) {
     assert(clause <= num_clauses);
 
     for (size_t i = 0; i < clauses[clause + 1]; ++i) {
@@ -110,10 +113,10 @@ void watched_literals_init(void) {
 
 void watched_literal_check(const formula_pos literal_pos) {
     // Find clause of negated literal_pos
-    LiteralClauseItem* item = find_clause_number(-formula[literal_pos]);
+    LiteralClauseItem* item = find_clause_index(literal_pos);
     if (item == NULL) return;
 
-    formula_pos partner_literal_pos = find_watched_literal_partner(item->clause, literal_pos, &partner_literal_pos);
+    formula_pos partner_literal_pos = find_watched_literal_partner(item->clause, literal_pos);
     assert(partner_literal_pos != NOT_FOUND);
 
     value partner_literal_assignment = assignment_map_get_value(partner_literal_pos);
@@ -137,7 +140,7 @@ void watched_literal_check(const formula_pos literal_pos) {
         // item->clause is conflicting -> resolve
         conflict_present = true;
         // get variable from assignment stack
-        Assignment* assignment = assignment_stack_pop();
+        //AssignmentStackItem* assignment = assignment_stack_pop();
 
     }
 }
