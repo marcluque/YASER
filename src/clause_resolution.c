@@ -3,17 +3,18 @@
 //
 
 #include "../include/clause_resolution.h"
+#include "formula.h"
 
 static Resolvent_Item* resolvent_variable_table = NULL;
 
-static void resolvent_literal_table_add(const literal literal) {
+static void resolvent_literal_table_add(const literal l) {
     Resolvent_Item* item;
 
-    HASH_FIND(hh, resolvent_variable_table, &literal, sizeof(literal), item);
+    HASH_FIND(hh, resolvent_variable_table, &l, sizeof(literal), item);
     if (item == NULL) {
         item = (Resolvent_Item*) malloc(sizeof(Resolvent_Item));
-        item->l = literal;
-        HASH_ADD(hh, resolvent_variable_table, literal, sizeof(literal), item);
+        item->l = l;
+        HASH_ADD(hh, resolvent_variable_table, l, sizeof(literal), item);
     }
 }
 
@@ -26,25 +27,33 @@ static void resolvent_variable_table_clear(void) {
     }
 }
 
-int* build_resolvent(const size_t clause_number_1, const size_t clause_number_2, const Literal literal) {
-    size_t end_clause_number_1 = clauses[clause_number_1 + 1];
-    size_t end_clause_number_2 = clauses[clause_number_2 + 1];
+int* build_resolvent(const clause_index clause_1, const clause_index clause_2, const literal l) {
+    formula_pos end_clause_number_1 = clauses[clause_1 + 1];
+    formula_pos end_clause_number_2 = clauses[clause_2 + 1];
 
     // Adding the variables into a hash table removes duplicate variables
-    for (size_t i = clauses[clause_number_1], j = i; i < end_clause_number_1; ++i, ++j) {
-        if (literal == formula[i]) --j;
-        else resolvent_literal_table_add(literal);
+    for (formula_pos i = clauses[clause_1], j = i; i < end_clause_number_1; ++i, ++j) {
+        if (l == formula[i]) {
+            --j;
+        } else {
+            resolvent_literal_table_add(l);
+        }
     }
 
-    for (size_t i = clauses[clause_number_2], j = i; i < end_clause_number_2; ++i, ++j) {
-        if (literal == formula[i]) --j;
-        else resolvent_literal_table_add(literal);
+    for (formula_pos i = clauses[clause_2], j = i; i < end_clause_number_2; ++i, ++j) {
+        if (l == formula[i]) {
+            --j;
+        } else {
+            resolvent_literal_table_add(l);
+        }
     }
 
     size_t counter = 0;
     int* resolvent = (int*) malloc(HASH_COUNT(resolvent_variable_table) * sizeof(int));
-    for (Resolvent_Item* item = resolvent_variable_table; item != NULL; item = (Resolvent_Item*) (item->hh.next))
-        resolvent[counter++] = item->variable;
+    for (Resolvent_Item* item = resolvent_variable_table; item != NULL; item = (Resolvent_Item*) (item->hh.next)) {
+        resolvent[counter] = item->l;
+        ++counter;
+    }
 
     resolvent_variable_table_clear();
 
