@@ -15,6 +15,6 @@ typedef struct {
     UT_hash_handle hh;
 } Resolvent_Item;
 
-int* build_resolvent(clause_index clause_1, clause_index clause_2, literal l);
+int* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l);
 
 #endif //YASER_CLAUSE_RESOLUTION_H

@@ -2,23 +2,25 @@
 // Created with <3 by marcluque, January 2022
 //
 
+#include "assignment_stack.h"
+#include "formula.h"
 #include <sys/types.h>
 #include <malloc.h>
 #include <assert.h>
-#include "assignment_stack.h"
-#include "formula.h"
 
-static AssignmentStackItem* assignment_stack;
-static size_t assignment_stack_initial_size;
-static ssize_t assignment_sp;
+static AssignmentStackItem* assignment_stack = NULL;
+static size_t assignment_stack_initial_size = 0;
+static ssize_t assignment_sp = -1;
 
 void assignment_stack_init(const size_t stack_size) {
     assignment_stack_initial_size = stack_size;
     assignment_stack = malloc(sizeof(AssignmentStackItem) * stack_size);
+    assert(assignment_stack != NULL);
     assignment_sp = 0;
 }
 
 void assignment_stack_clear(void) {
+    assert(assignment_stack != NULL);
     free(assignment_stack);
 }
 
@@ -44,6 +46,7 @@ bool assignment_stack_full(void) {
 }
 
 void assignment_stack_push(const formula_pos literal_pos, const value v, const bool visited) {
+    assert(assignment_stack != NULL);
     assert(!assignment_stack_full());
     assert(literal_pos < num_literals);
 
@@ -55,6 +58,7 @@ void assignment_stack_push(const formula_pos literal_pos, const value v, const b
 }
 
 AssignmentStackItem* assignment_stack_pop(void) {
+    assert(assignment_stack != NULL);
     assert(assignment_sp > 0);
 
     return &(assignment_stack[--assignment_sp]);

@@ -7,7 +7,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-size_t sat_clause_set_count = 0;
+static size_t sat_clause_set_count = 0;
 
 bool assignment_exists_unsat_clause(void) {
     return sat_clause_set_count != num_clauses;

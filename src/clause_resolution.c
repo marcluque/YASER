@@ -27,7 +27,7 @@ static void resolvent_variable_table_clear(void) {
     }
 }
 
-int* build_resolvent(const clause_index clause_1, const clause_index clause_2, const literal l) {
+int* clause_resolution_build_resolvent(clause_index clause_1, clause_index clause_2, literal l) {
     formula_pos end_clause_number_1 = clauses[clause_1 + 1];
     formula_pos end_clause_number_2 = clauses[clause_2 + 1];
 
