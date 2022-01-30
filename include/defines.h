@@ -18,10 +18,20 @@ typedef int literal;
  *
  */
 typedef long long formula_pos;
+#define NOT_FOUND (-1)
 
 /**
  *
  */
 typedef long long clause_index;
+
+/**
+ *
+ */
+typedef enum {
+    VALUE_INVALID = -1,
+    VALUE_FALSE = 0,
+    VALUE_TRUE = 1,
+} value;
 
 #endif // YASER_DEFINES_H

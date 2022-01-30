@@ -7,10 +7,11 @@
 #ifndef YASER_DPLL_H
 #define YASER_DPLL_H
 
+#include "defines.h"
 #include <stddef.h>
 #include <stdbool.h>
 
-void dpll_register_assignment_callback(void (*callback)(size_t));
+void dpll_register_assignment_callback(void (*callback)(formula_pos));
 
 bool dpll(void);
 

@@ -2,19 +2,21 @@
 // Created with <3 by marcluque, June 2021
 //
 
-#include "../include/dimacs_parser.h"
-#include "../include/watched_literals.h"
-#include "../include/dpll.h"
+#include "dimacs_parser.h"
+#include "watched_literals.h"
+#include "dpll.h"
+#include "formula.h"
+#include "assignment.h"
 
 // #define NDEBUG
 
-void init_callback(const size_t init_num_variables, const size_t init_num_clauses) {
+static void init_callback(const size_t init_num_variables, const size_t init_num_clauses) {
     formula_init(init_num_variables, init_num_clauses);
     assignment_stack_init(init_num_variables * 2);
     assignment_unit_clause_stack_init(init_num_clauses);
 }
 
-void clean_up() {
+static void clean_up(void) {
     // assignment
     assignment_stack_clear();
     assignment_unit_clause_stack_clear();
@@ -28,7 +30,7 @@ void clean_up() {
     formula_clear();
 }
 
-int main() {
+int main(void) {
     dimacs_parse_file(NULL);
     watched_literals_init();
     dpll_register_assignment_callback(watched_literal_check);
