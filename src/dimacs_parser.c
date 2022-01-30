@@ -2,6 +2,7 @@
 // Created with <3 by marcluque, June 2021
 //
 
+#include <stdio.h>
 #include "../include/dimacs_parser.h"
 
 void (*init_callback)(size_t, size_t);
@@ -10,7 +11,7 @@ void dimacs_parser_register_init_callback(void (*callback)(size_t, size_t)) {
     init_callback = callback;
 }
 
-void dimacs_parse_file(const char* restrict file_path) {
+void dimacs_parse_file(const char* const restrict file_path) {
     FILE* file;
     char* line = 0;
 

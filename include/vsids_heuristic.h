@@ -7,6 +7,4 @@
 #ifndef YASER_VSIDS_HEURISTIC_H
 #define YASER_VSIDS_HEURISTIC_H
 
-#include "global.h"
-
-#endif //YASER_VSIDS_HEURISTIC_H
+#endif // YASER_VSIDS_HEURISTIC_H
