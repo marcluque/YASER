@@ -18,6 +18,8 @@ void assignment_unit_clause_stack_clear(void);
 
 ATTR_PURE bool assignment_unit_clause_stack_empty(void);
 
+ATTR_PURE bool assignment_unit_clause_stack_full(void);
+
 void assignment_unit_clause_stack_push(formula_pos literal_pos);
 
 formula_pos assignment_unit_clause_stack_pop(void);

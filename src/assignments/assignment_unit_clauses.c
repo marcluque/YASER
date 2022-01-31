@@ -29,7 +29,7 @@ bool assignment_unit_clause_stack_empty(void) {
     return unit_clause_sp == 0;
 }
 
-static bool assignment_unit_clause_stack_full(void) {
+bool assignment_unit_clause_stack_full(void) {
     return (size_t) unit_clause_sp == unit_clause_stack_initial_size;
 }
 

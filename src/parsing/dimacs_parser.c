@@ -24,7 +24,7 @@ void dimacs_parse_file(const char* const restrict file_path) {
 
     file = fopen(file_path, "r");
     if (file == 0) {
-        fprintf(stderr, "Couldn't open file %s", file_path);
+        fprintf(stderr, "Couldn't open file with path: %s\n", file_path);
         fflush(stderr);
         exit(EXIT_FAILURE);
     }
