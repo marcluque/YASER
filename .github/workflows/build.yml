@@ -1,0 +1,41 @@
+name: CMake build
+
+on: [ push ]
+
+env:
+  BUILD_TYPE: Debug
+
+jobs:
+  clang-build:
+    strategy:
+      matrix:
+        clang: [clang-10, clang-11, clang-12]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt install google-perftools libgoogle-perftools-dev -y
+
+      - name: Build
+        run: |
+          cmake -DCMAKE_C_COMPILER=${{ matrix.clang }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          make -j 2
+
+  gcc-build:
+    strategy:
+      matrix:
+        gcc: [gcc-9, gcc-10]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt install google-perftools libgoogle-perftools-dev -y
+
+      - name: Build
+        run: |
+          cmake -DCMAKE_C_COMPILER=${{ matrix.clang }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          make -j 2
