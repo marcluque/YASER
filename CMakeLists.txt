@@ -77,7 +77,6 @@ else()
     endif()
 
     include_directories(include)
-    include_directories(external/Unity/src)
     file(GLOB_RECURSE SRC_FILES "src/*.c")
 
     add_executable(${PRODUCT_NAME} ${SRC_FILES})
