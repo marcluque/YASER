@@ -10,6 +10,7 @@ jobs:
     strategy:
       matrix:
         clang: [clang-10, clang-11, clang-12]
+    continue-on-error: true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -37,5 +38,5 @@ jobs:
 
       - name: Build
         run: |
-          cmake -DCMAKE_C_COMPILER=${{ matrix.clang }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          cmake -DCMAKE_C_COMPILER=${{ matrix.gcc }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
           make -j 2
