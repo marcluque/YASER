@@ -21,7 +21,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake -DCMAKE_C_COMPILER=${{ matrix.clang }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          cmake -DCMAKE_C_COMPILER=${{ matrix.clang }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} .
           make -j 2
 
   gcc-build:
@@ -38,5 +38,5 @@ jobs:
 
       - name: Build
         run: |
-          cmake -DCMAKE_C_COMPILER=${{ matrix.gcc }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          cmake -DCMAKE_C_COMPILER=${{ matrix.gcc }} -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} .
           make -j 2
