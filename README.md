@@ -13,26 +13,24 @@ CURRENTLY UNDER CONSTRUCTION.
 - [ ] VSIDS heuristic
 - [ ] Watched Literals
 - [ ] Stats printing
-- [ ] 100% Unittests coverage: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
 
 ### CI
-- [ ] Check correctness with [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
-- [ ] 100% Unittests coverage: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
+- [ ] DOCS: Check correctness with [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
+- [ ] DOCS: 100% Unittests coverage: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
 - [ ] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
-- [ ] Sphinx & Doxygen docu
+- [ ] DOCS: Sphinx & Doxygen docu
 - [ ] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
-- [ ] AddressSanitizer
-- [ ] MemorySanitizer
-- [ ] UBSan
-- [ ] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
-- [ ] clang-format
+- [ ] DOCS: AddressSanitizer -> clang build with options
+- [ ] DOCS: MemorySanitizer -> clang build with options
+- [ ] DOCS: UBSan -> clang build with options
+- [ ] DOCS: [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
+- [ ] clang-format -> source code
 - [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
-- [ ] [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
-- [ ] Sonarcloud
-- [ ] Clang compilation
+- [ ] DOCS: [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
+- [ ] Sonarcloud -> source code
+- [X] Clang compilation
 - [ ] MSVC compilation
-- [ ] clang-tidy
-- [ ] GNU Complexity
+- [ ] DOCS: GNU Complexity -> source code
 - [ ] Benchmarks with and without profiling data
 
 ## License
