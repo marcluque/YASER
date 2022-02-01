@@ -38,7 +38,7 @@
 - [X] [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer)
 - [X] [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [X] [Thread-caching malloc](https://gperftools.github.io/gperftools/tcmalloc.html)
-- [ ] [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
+- [X] [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
 - [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
 - [ ] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
 - [ ] [Google's Heap Profiler](https://gperftools.github.io/gperftools/heapprofile.html)

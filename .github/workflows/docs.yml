@@ -155,13 +155,13 @@ jobs:
       - name: Build tests
         run: |
           cd test
-          find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
+          find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
           ./main_assignments_test
           lcov -c --directory . --output-file main_assignments_test.info
           lcov --remove main_assignments_test.info -o main_assignments_test.info '*/unity.c' '*/test/*'
           genhtml main_assignments_test.info --output-directory gcov-report
 
-      - name: Upload complexity report
+      - name: Upload gcov report
         uses: actions/upload-artifact@v2
         with:
           name: gcov-report
