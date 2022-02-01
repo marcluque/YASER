@@ -4,6 +4,9 @@ on:
   push:
     branches: [ master ]
 
+env:
+  BUILD_TYPE: Debug
+
 jobs:
   run-unit-tests:
     runs-on: ubuntu-latest
@@ -11,10 +14,12 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Build repo
         run: |
-          cmake -DTARGET_GROUP=test .
+          cmake -DTARGET_GROUP=test -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} .
           make -j 2
 
       - name: Run tests
@@ -37,7 +42,7 @@ jobs:
 
       - name: Run address sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I include -Wno-unknown-warning-option -g
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I include -DNDEBUG=1 -Wno-unknown-warning-option -g
           ./a.out > address-sanitizer-report.txt
           cat address-sanitizer-report.txt
 
@@ -75,7 +80,7 @@ jobs:
 
       - name: Run UB sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I include -Wno-unknown-warning-option 
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I include -DNDEBUG=1 -Wno-unknown-warning-option 
           ./a.out > ub-sanitizer-report.txt
           cat ub-sanitizer-report.txt
 
