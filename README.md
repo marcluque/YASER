@@ -25,9 +25,9 @@
 
 - [X] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
 - [X] [Clang](https://clang.llvm.org/) compilation
-- [ ] Benchmarks with and without profiling data
+- [X] [Sonarcloud](https://sonarcloud.io/)
 - [ ] [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
-- [ ] [Sonarcloud](https://sonarcloud.io/)
+- [ ] Benchmarks with and without profiling data
 
 #### Documentation of code & analysis results
 
