@@ -13,24 +13,29 @@ CURRENTLY UNDER CONSTRUCTION.
 - [ ] VSIDS heuristic
 - [ ] Watched Literals
 - [ ] Stats printing
+- [ ] 100% Code Coverage
 
 ### CI
-- [ ] DOCS: Check correctness with [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
-- [ ] DOCS: 100% Unittests coverage: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
-- [ ] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
+- [ ] DOCS: Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
+- [ ] DOCS: [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
+- [X] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
 - [X] [Sphinx](https://www.sphinx-doc.org/en/master/) + [Doxygen](https://www.doxygen.nl/index.html) + [RTD](https://github.com/readthedocs/sphinx_rtd_theme) Docs
 - [X] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
 - [X] [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
 - [X] [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer)
 - [X] [UBSan](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
+- [X] [Thread-caching malloc](https://gperftools.github.io/gperftools/tcmalloc.html)
 - [ ] DOCS: [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
-- [ ] clang-format -> source code
+- [ ] Benchmarks with and without profiling data
+- [ ] DOCS: [Google's Heap Profiler](https://gperftools.github.io/gperftools/heapprofile.html)
+- [ ] DOCS: [Google's Heap Checker](https://gperftools.github.io/gperftools/heap_checker.html)
+- [ ] DOCS: [Google's CPU Profiler](https://gperftools.github.io/gperftools/cpuprofile.html)
+- [ ] clang-format
 - [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
 - [ ] DOCS: [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
-- [ ] Sonarcloud -> source code
+- [ ] Sonarcloud
 - [X] Clang compilation
-- [ ] DOCS: GNU Complexity -> source code
-- [ ] Benchmarks with and without profiling data
+- [X] GNU Complexity
 
 ## License
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
