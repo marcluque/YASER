@@ -27,7 +27,11 @@ void dimacs_parse_file(const char* const restrict file_path) {
     if (file == 0) {
         fprintf(stderr, "Couldn't open file with path: %s\n", file_path);
         fflush(stderr);
+#ifdef NDEBUG
+        exit(0);
+#else
         exit(EXIT_FAILURE);
+#endif
     }
 
     bool done_reading_header = false;

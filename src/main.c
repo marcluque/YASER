@@ -12,8 +12,6 @@
 #include "watched-literals/clause_literal_map.h"
 #include "watched-literals/literal_clause_map.h"
 
-// #define NDEBUG
-
 static void init_callback(const size_t init_num_variables, const size_t init_num_clauses) {
     formula_init(init_num_variables, init_num_clauses);
     assignment_stack_init(init_num_variables * 2);

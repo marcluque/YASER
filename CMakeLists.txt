@@ -4,6 +4,10 @@ project(YASER C)
 set(PRODUCT_NAME yaser)
 set(CMAKE_C_STANDARD 11)
 
+if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
+    add_definitions(-DNDEBUG)
+endif()
+
 if(TARGET_GROUP STREQUAL test)
     include(CTest)
 
