@@ -61,7 +61,7 @@ jobs:
 
       - name: Run memory sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I include -Wno-unknown-warning-option
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I include -DNDEBUG=1 -Wno-unknown-warning-option
           ./a.out > memory-sanitizer-report.txt
           cat memory-sanitizer-report.txt
 
