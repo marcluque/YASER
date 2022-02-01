@@ -1,4 +1,5 @@
 # Compilation files
+_build
 build
 cmake-*
 *.out
