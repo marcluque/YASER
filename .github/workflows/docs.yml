@@ -8,7 +8,7 @@ env:
   BUILD_TYPE: Debug
 
 jobs:
-  run-unit-tests:
+  unit-tests:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -19,7 +19,7 @@ jobs:
 
       - name: Build repo
         run: |
-          cmake -DTARGET_GROUP=test -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} .
+          cmake -DTARGET_GROUP=test -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTIMIZE=1 .
           make -j 2
 
       - name: Run tests
@@ -33,7 +33,7 @@ jobs:
           name: unit-test-report
           path: ./unit-test-report.txt
 
-  run-address-sanitizer:
+  address-sanitizer:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -52,7 +52,7 @@ jobs:
           name: address-sanitizer-report
           path: address-sanitizer-report.txt
 
-  run-memory-sanitizer:
+  memory-sanitizer:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -71,7 +71,7 @@ jobs:
           name: memory-sanitizer-report
           path: memory-sanitizer-report.txt
 
-  run-UB-sanitizer:
+  UB-sanitizer:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -90,7 +90,7 @@ jobs:
           name: ub-sanitizer-report
           path: ub-sanitizer-report.txt
 
-  run-valgrind:
+  valgrind:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
@@ -118,7 +118,7 @@ jobs:
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [run-unit-tests, run-address-sanitizer, run-memory-sanitizer, run-UB-sanitizer]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
