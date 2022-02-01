@@ -106,7 +106,7 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DDONT_LINK_TCMALLOC=1 .
           make -j 2
-          valgrind --leak-check=yes ./yaser > valgrind-report.txt
+          valgrind --leak-check=yes ./yaser &> valgrind-report.txt
           cat valgrind-report.txt
 
       - name: Upload valgrind report
