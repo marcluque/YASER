@@ -58,12 +58,13 @@ else()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         add_compile_options(
+                -Weverything
                 -Wno-unknown-warning-option
         )
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         add_compile_options(
                 ### WARNINGS
-                # Standrad GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+                # Standard GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
                 -Werror
                 -Wlogical-op
                 -Wjump-misses-init
@@ -84,5 +85,8 @@ else()
     file(GLOB_RECURSE SRC_FILES "src/*.c")
 
     add_executable(${PRODUCT_NAME} ${SRC_FILES})
-    target_link_libraries(${PRODUCT_NAME} PUBLIC -ltcmalloc)
+
+    if (NOT DEFINED DONT_LINK_TCMALLOC)
+        target_link_libraries(${PRODUCT_NAME} PUBLIC -ltcmalloc)
+    endif()
 endif()

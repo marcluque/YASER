@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: address-sanitizer-report
-          path: ./address-sanitizer-report.txt
+          path: address-sanitizer-report.txt
 
   run-memory-sanitizer:
     runs-on: ubuntu-latest
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: memory-sanitizer-report
-          path: ./memory-sanitizer-report.txt
+          path: memory-sanitizer-report.txt
 
   run-UB-sanitizer:
     runs-on: ubuntu-latest
@@ -88,7 +88,32 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ub-sanitizer-report
-          path: ./ub-sanitizer-report.txt
+          path: ub-sanitizer-report.txt
+
+  run-valgrind:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install valgrind
+        run: |
+          sudo apt update
+          sudo apt install valgrind -y
+
+      - name: Run valgrind
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DDONT_LINK_TCMALLOC=1 .
+          make -j 2
+          valgrind --leak-check=yes ./yaser > valgrind-report.txt
+          cat valgrind-report.txt
+
+      - name: Upload valgrind report
+        uses: actions/upload-artifact@v2
+        with:
+          name: valgrind-report
+          path: valgrind-report.txt
 
   deploy-docs:
     runs-on: ubuntu-latest
