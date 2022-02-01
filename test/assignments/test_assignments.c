@@ -2,7 +2,7 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "unity.h"
+#include "../external/Unity/src/unity.h"
 #include "test_assignments.h"
 
 void setUp (void) {}
