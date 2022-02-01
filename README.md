@@ -3,10 +3,11 @@
 
 CURRENTLY UNDER CONSTRUCTION.
 
+## [Documentation](https://marcluque.github.io/YASER/)
+
 ## Roadmap
 ### Implementation
 - [X] [DIMACS](https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html) Parser
-- [ ] Special macro for asserts
 - [ ] DIMACS Parser Tests
 - [ ] Clause resolution
 - [ ] Conflict resolution
@@ -33,7 +34,7 @@ CURRENTLY UNDER CONSTRUCTION.
 - [ ] clang-format
 - [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
 - [ ] DOCS: [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
-- [ ] Sonarcloud
+- [ ] [Sonarcloud](https://sonarcloud.io/)
 - [X] Clang compilation
 - [X] GNU Complexity
 
