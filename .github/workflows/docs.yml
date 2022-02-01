@@ -138,10 +138,37 @@ jobs:
           name: complexity-report
           path: complexity-report.txt
 
+  code-coverage:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install lcov
+        run: |
+          sudo apt update
+          sudo apt install lcov -y
+
+      - name: Build tests
+        run: |
+          cd test
+          find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
+          ./main_assignments_test
+          lcov -c --directory . --output-file main_assignments_test.info
+          lcov --remove main_assignments_test.info -o main_assignments_test.info '*/unity.c' '*/test/*'
+          genhtml main_assignments_test.info --output-directory gcov-report
+
+      - name: Upload complexity report
+        uses: actions/upload-artifact@v2
+        with:
+          name: gcov-report
+          path: ./test/gcov-report
+
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
