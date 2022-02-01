@@ -1,0 +1,119 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  run-unit-tests:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Build repo
+        run: |
+          cmake -DTARGET_GROUP=test .
+          make -j 2
+
+      - name: Run tests
+        run: |
+          ctest > unit-test-report.txt
+          cat unit-test-report.txt
+
+      - name: Upload unit test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-report
+          path: ./unit-test-report.txt
+
+  run-address-sanitizer:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run address sanitizer
+        run: |
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I include -Wno-unknown-warning-option -g
+          ./a.out > address-sanitizer-report.txt
+          cat address-sanitizer-report.txt
+
+      - name: Upload address sanitizer report
+        uses: actions/upload-artifact@v2
+        with:
+          name: address-sanitizer-report
+          path: ./address-sanitizer-report.txt
+
+  run-memory-sanitizer:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run memory sanitizer
+        run: |
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I include -Wno-unknown-warning-option
+          ./a.out > memory-sanitizer-report.txt
+          cat memory-sanitizer-report.txt
+
+      - name: Upload memory sanitizer report
+        uses: actions/upload-artifact@v2
+        with:
+          name: memory-sanitizer-report
+          path: ./memory-sanitizer-report.txt
+
+  run-UB-sanitizer:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Run UB sanitizer
+        run: |
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I include -Wno-unknown-warning-option 
+          ./a.out > ub-sanitizer-report.txt
+          cat ub-sanitizer-report.txt
+
+      - name: Upload UB sanitizer report
+        uses: actions/upload-artifact@v2
+        with:
+          name: ub-sanitizer-report
+          path: ./ub-sanitizer-report.txt
+
+  deploy-docs:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: [run-unit-tests, run-address-sanitizer, run-memory-sanitizer, run-UB-sanitizer]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install doxygen sphinx-doc -y
+          pip3 install sphinx-rtd-theme breathe sphinx-sitemap m2r2
+
+      - name: Generate docs
+        run: |
+          cd docs
+          make html
+          cd _build/html
+          touch .nojekyll
+
+      - name: Download reports
+        uses: actions/download-artifact@v2
+        with:
+          path: ./_static/reports
+
+      - name: Deploy to GitHub pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: docs/_build/html
