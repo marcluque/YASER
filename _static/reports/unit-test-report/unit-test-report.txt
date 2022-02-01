@@ -1,6 +1,6 @@
 Test project /home/runner/work/YASER/YASER
     Start 1: test_assignments
-1/2 Test #1: test_assignments .................   Passed    0.00 sec
+1/2 Test #1: test_assignments .................   Passed    0.01 sec
     Start 2: test_conflicts
 2/2 Test #2: test_conflicts ...................   Passed    0.00 sec
 
