@@ -18,11 +18,11 @@ CURRENTLY UNDER CONSTRUCTION.
 - [ ] DOCS: Check correctness with [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
 - [ ] DOCS: 100% Unittests coverage: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
 - [ ] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
-- [X] Sphinx + Doxygen + RTD Docs
-- [ ] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
-- [X] AddressSanitizer
-- [X] MemorySanitizer
-- [X] UBSan
+- [X] [Sphinx](https://www.sphinx-doc.org/en/master/) + [Doxygen](https://www.doxygen.nl/index.html) + [RTD](https://github.com/readthedocs/sphinx_rtd_theme) Docs
+- [X] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
+- [X] [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
+- [X] [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer)
+- [X] [UBSan](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [ ] DOCS: [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
 - [ ] clang-format -> source code
 - [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
