@@ -48,22 +48,12 @@ else()
             -Wnonnull
     )
 
-    if (NOT DEFINED OPTIMIZE)
-        add_compile_options(
-                ### OPTIMIZATIONS
-                # Standard GCC optimizations: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options
-                -O3 # The higher, the better warnings work (-O3 is only used for the pipeline)
-
-                # Optimize-Options: https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#Optimize-Options
-                -ffunction-sections # Used for -Wl,--relax,--gc-sections
-                -fdata-sections # Used for -Wl,--relax,--gc-sections
-        )
-    else()
+    if(NOT DEFINED OPTIMIZE)
         message("Using -O0 -g for debuggin purposes")
-        add_compile_options(
-                -g
-                -O0
-        )
+        add_compile_options(-g -O0)
+    else()
+        message("Using -O3")
+        add_compile_options(-O3)
     endif()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
