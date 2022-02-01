@@ -115,10 +115,33 @@ jobs:
           name: valgrind-report
           path: valgrind-report.txt
 
+  complexity:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install GNU Complexity
+        run: |
+          sudo apt update
+          sudo apt install complexity -y
+
+      - name: Run complexity
+        run: |
+          find ./src -iname '*.c' | xargs complexity --histogram --score --threshold=0 &> complexity-report.txt
+          cat complexity-report.txt
+
+      - name: Upload complexity report
+        uses: actions/upload-artifact@v2
+        with:
+          name: complexity-report
+          path: complexity-report.txt
+
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
