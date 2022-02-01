@@ -1,5 +1,7 @@
 # Compilation files
-*build*
+build
+cmake-*
+*.out
 
 # CLion
 .idea
