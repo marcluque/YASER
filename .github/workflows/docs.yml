@@ -144,6 +144,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install lcov
         run: |
