@@ -184,7 +184,7 @@ jobs:
       - name: Download reports
         uses: actions/download-artifact@v2
         with:
-          path: docs/_build/html/_static/reports
+          path: docs/_static/reports
 
       - name: Generate docs
         run: |
