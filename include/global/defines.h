@@ -29,6 +29,11 @@ typedef unsigned long long formula_pos;
 /**
  *
  */
+#define EXIT_DEBUG (0U)
+
+/**
+ *
+ */
 typedef unsigned long long clause_index;
 
 /**

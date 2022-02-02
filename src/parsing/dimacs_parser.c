@@ -5,30 +5,31 @@
 #include "parsing/dimacs_parser.h"
 #include "global/defines.h"
 #include "global/formula.h"
+#include "assignments/assignment_stack.h"
+#include "assignments/assignment_unit_clauses.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <sys/types.h>
 
-void (*init_callback)(size_t, size_t);
+#define MAX_LINE_LENGTH (512U)
 
-void dimacs_parser_register_init_callback(void (*callback)(size_t, size_t)) {
-    init_callback = callback;
+static void init(size_t init_num_variables, size_t init_num_clauses) {
+    formula_init(init_num_variables, init_num_clauses);
+    assignment_stack_init(init_num_variables * 2);
+    assignment_unit_clause_stack_init(init_num_clauses);
 }
 
-void dimacs_parse_file(const char* const restrict file_path) {
-    // TODO: Make sure that input is not longer than ULLONG_MAX
+void dimacs_parse_file(const char* const file_path) {
+    // TODO: Make sure that input formula is not longer than ULLONG_MAX
 
-    FILE* file;
-    char* line = 0;
-
-    file = fopen(file_path, "r");
+    FILE* file = fopen(file_path, "r");
     if (file == 0) {
         fprintf(stderr, "Couldn't open file with path: %s\n", file_path);
         fflush(stderr);
 #ifdef NDEBUG
-        exit(0);
+        exit(EXIT_DEBUG);
 #else
         exit(EXIT_FAILURE);
 #endif
@@ -37,6 +38,7 @@ void dimacs_parse_file(const char* const restrict file_path) {
     bool done_reading_header = false;
     ssize_t read;
     size_t len = 0;
+    char* line = malloc(MAX_LINE_LENGTH * sizeof(char));
     while ((read = getline(&line, &len, file)) != -1 && !done_reading_header) {
         for (int i = 0; i < read; ++i) {
             switch (line[i]) {
@@ -45,7 +47,7 @@ void dimacs_parse_file(const char* const restrict file_path) {
                 case 'c':
                     break;
                 case 'p':
-                    init_callback((size_t) (line[i + 6] - '0'), (size_t) (line[i + 8] - '0'));
+                    init((size_t) (line[i + 6] - '0'), (size_t) (line[i + 8] - '0'));
                     done_reading_header = true;
                     break;
                 default:
@@ -69,8 +71,8 @@ void dimacs_parse_file(const char* const restrict file_path) {
         clauses[clause_pointer++] = last_clause_pointer;
         last_clause_pointer       = literal_pointer;
     }
-
     clauses[clause_pointer] = last_clause_pointer;
+
     free(line);
     fclose(file);
 }
