@@ -152,7 +152,7 @@ jobs:
           sudo apt update
           sudo apt install lcov -y
 
-      - name: Build tests
+      - name: Run gcov
         run: |
           cd test
           find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
