@@ -61,8 +61,6 @@ jobs:
           mkdir build
           cmake -DCMAKE_BUILD_TYPE=DEBUG . -B build
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build --config DEBUG
-          ls
-          cat gcov/main_test_assignments.c.gcov
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
