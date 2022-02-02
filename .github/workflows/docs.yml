@@ -181,17 +181,17 @@ jobs:
           sudo apt install doxygen sphinx-doc -y
           pip3 install sphinx-rtd-theme breathe sphinx-sitemap m2r2
 
+      - name: Download reports
+        uses: actions/download-artifact@v2
+        with:
+          path: docs/_build/html/_static/reports
+
       - name: Generate docs
         run: |
           cd docs
           make html
           cd _build/html
           touch .nojekyll
-
-      - name: Download reports
-        uses: actions/download-artifact@v2
-        with:
-          path: docs/_build/html/_static/reports
 
       - name: Deploy to GitHub pages
         uses: JamesIves/github-pages-deploy-action@4.1.5
