@@ -1,7 +1,7 @@
 .. _reports_valgrind:
 
-Valgrind Report
-===============
+Valgrind
+========
 
 .. include:: ../_static/reports/valgrind-report/valgrind-report.txt
    :literal:
