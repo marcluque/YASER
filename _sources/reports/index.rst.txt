@@ -8,4 +8,4 @@ Reports
     :glob:
 
     *
-    GCOV <https://marcluque.github.io/YASER/_static/reports/gcov-report/index.html>
+    GCov <https://marcluque.github.io/YASER/_static/reports/gcov-report/index.html>
