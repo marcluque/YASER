@@ -23,8 +23,8 @@ jobs:
         run: |
           mkdir ${{ env.GCOV_OUT_DIR }}
           cd ${{ env.GCOV_OUT_DIR }}
-          find ../src/* ../test/assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -I../test/assignments ../external/Unity/src/unity.c
-          ./main_assignments_test
+          find ../src/* ../test/assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_test_assignments -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -I../test/assignments ../external/Unity/src/unity.c
+          ./main_test_assignments
           for f in `find . -name '*.gcda'`; do
             echo "Processing $f file..."
             gcov -o ${f} x
@@ -59,7 +59,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=DEBUG . -B build
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build --config DEBUG
           ls
-          cat gcov/main_assignments_test.c.gcov
+          cat gcov/main_test_assignments.c.gcov
       - name: Run sonar-scanner
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
