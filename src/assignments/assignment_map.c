@@ -2,9 +2,9 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include <assert.h>
 #include "assignments/assignment_map.h"
 #include "global/formula.h"
+#include <assert.h>
 
 static AssignmentMapItem* assignment_map = NULL;
 
