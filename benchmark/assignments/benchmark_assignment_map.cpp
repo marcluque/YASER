@@ -10,6 +10,8 @@ static void BM_assignment_map_add(benchmark::State& state) {
     formula_init(6, 6);
     for (auto _ : state)
         assignment_map_add(5, VALUE_FALSE);
+
+    formula_clear();
 }
 BENCHMARK(BM_assignment_map_add);
 
@@ -18,5 +20,7 @@ static void BM_assignment_map_get_value(benchmark::State& state) {
     assignment_map_add(2, VALUE_FALSE);
     for (auto _ : state)
         assignment_map_get_value(2);
+
+    formula_clear();
 }
 BENCHMARK(BM_assignment_map_get_value);
