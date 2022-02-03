@@ -81,7 +81,7 @@ else()
     include_directories(include)
     file(GLOB_RECURSE SRC_FILES "src/*.c")
 
-    add_executable(${PRODUCT_NAME} ${SRC_FILES})
+    add_executable(${PRODUCT_NAME} ${SRC_FILES} src/main.cc)
 
     if (NOT DEFINED DONT_LINK_TCMALLOC)
         target_link_libraries(${PRODUCT_NAME} PUBLIC -ltcmalloc)
