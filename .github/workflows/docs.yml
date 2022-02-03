@@ -24,7 +24,7 @@ jobs:
 
       - name: Run tests
         run: |
-          ctest > unit-test-report.txt
+          ctest --verbose &> unit-test-report.txt
           cat unit-test-report.txt
 
       - name: Upload unit test report
