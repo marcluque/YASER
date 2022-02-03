@@ -178,6 +178,7 @@ jobs:
 
       - name: Install Google Benchmark
         run: |
+          rm -rf src/main.c
           git clone https://github.com/google/benchmark.git google-benchmark
           cd google-benchmark
           cmake -E make_directory "build"
