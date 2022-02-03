@@ -6,4 +6,4 @@ Test project /home/runner/work/YASER/YASER
 
 100% tests passed, 0 tests failed out of 2
 
-Total Test time (real) =   0.07 sec
+Total Test time (real) =   0.10 sec
