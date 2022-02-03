@@ -188,7 +188,7 @@ jobs:
 
       - name: Run benchmark
         run: |
-          g++ benchmark/**/*.cpp -std=c++11 -isystem benchmark/include -Iinclude -Lbenchmark/build/src -lbenchmark -lbenchmark_main -lpthread -o yaser_benchmark
+          g++ benchmark/**/*.cpp src/**/*.c -fpermissive -w -std=c++11 -isystem benchmark/include -Iinclude -Lbenchmark/build/src -lbenchmark -lbenchmark_main -lpthread -o yaser_benchmark && ./yaser_benchmark
           ./yaser_benchmark &> benchmark-report.txt
 
       - name: Upload benchmark report
