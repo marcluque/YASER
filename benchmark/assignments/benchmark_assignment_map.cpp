@@ -7,13 +7,13 @@
 
 static void BM_assignment_map_add(benchmark::State& state) {
     for (auto _ : state)
-        std::string empty_string;
+        assignment_map_add(1, VALUE_INVALID);
 }
 BENCHMARK(BM_assignment_map_add);
 
 static void BM_assignment_map_get_value(benchmark::State& state) {
-    std::string x = "hello";
+    assignment_map_add(1, VALUE_INVALID);
     for (auto _ : state)
-        std::string copy(x);
+        assignment_map_get_value(1);
 }
 BENCHMARK(BM_assignment_map_get_value);
