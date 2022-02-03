@@ -18,6 +18,16 @@ void test_assignment_stack_full(void);
 
 void test_assignment_stack_push(void);
 
+void test_assignment_stack_pop(void);
+
+//
+// Assignment Map
+//
+void test_assignment_map_add(void);
+
+void test_assignment_map_get_value(void);
+
+void test_assignment_map_clear(void);
 
 //
 // Unit Clause Stack
