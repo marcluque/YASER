@@ -25,6 +25,10 @@ void assignment_unit_clause_stack_clear(void) {
     free(unit_clause_stack);
 }
 
+void assignment_unit_clause_stack_reset(void) {
+    unit_clause_sp = 0;
+}
+
 bool assignment_unit_clause_stack_empty(void) {
     return unit_clause_sp == 0;
 }

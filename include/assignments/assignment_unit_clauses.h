@@ -16,6 +16,8 @@ void assignment_unit_clause_stack_init(size_t stack_size);
 
 void assignment_unit_clause_stack_clear(void);
 
+void assignment_unit_clause_stack_reset(void);
+
 ATTR_PURE bool assignment_unit_clause_stack_empty(void);
 
 ATTR_PURE bool assignment_unit_clause_stack_full(void);
