@@ -167,6 +167,36 @@ jobs:
           name: gcov-report
           path: ./test/gcov-report
 
+  benchmark:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          submodules: 'true'
+
+      - name: Install Google Benchmark
+        run: |
+          git clone https://github.com/google/benchmark.git
+          cd google-benchmark
+          cmake -E make_directory "build"
+          cmake -E chdir "build" cmake -DBENCHMARK_ENABLE_GTEST_TESTS=OFF -DBENCHMARK_DOWNLOAD_DEPENDENCIES=on -DCMAKE_BUILD_TYPE=Release ../
+          cmake --build "build" --config Release
+          sudo cmake --build "build" --config Release --target install
+          cd ..
+
+      - name: Run benchmark
+        run: |
+          g++ benchmark/**/*.cpp -std=c++11 -isystem benchmark/include -Iinclude -Lbenchmark/build/src -lbenchmark -lbenchmark_main -lpthread -o yaser_benchmark
+          ./yaser_benchmark &> benchmark-report.txt
+
+      - name: Upload benchmark report
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmark-report
+          path: benchmark-report.txt
+
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
