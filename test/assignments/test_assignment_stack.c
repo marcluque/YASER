@@ -152,4 +152,7 @@ void test_assignment_stack_pop(void) {
     TEST_ASSERT_FALSE(result->visited);
     TEST_ASSERT_EQUAL_UINT64(0, result->literal_pos);
     TEST_ASSERT_EQUAL_INT(VALUE_TRUE, result->value);
+
+    assignment_stack_clear();
+    formula_clear();
 }
