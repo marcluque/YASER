@@ -201,7 +201,7 @@ jobs:
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage, benchmark]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
