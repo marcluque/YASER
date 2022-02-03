@@ -60,7 +60,8 @@ void watched_literals_check(const formula_pos watched_literal_pos) {
         // Update clause_map
         clause_literal_map_delete(clause);
         // TODO: Does an anonymous array work?
-        clause_literal_map_add(clause, (formula_pos[]){partner_literal_pos, new_literal_pos});
+        const formula_pos watched_literals[] = {partner_literal_pos, new_literal_pos};
+        clause_literal_map_add(clause, watched_literals);
 
         // Update watched_literal_map
         literal_clause_map_delete(watched_literal_pos);
