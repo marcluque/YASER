@@ -19,7 +19,7 @@ typedef struct {
 
 void assignment_map_add(formula_pos literal_pos, value v);
 
-ATTR_PURE int assignment_map_get_value(formula_pos literal_pos);
+ATTR_PURE value assignment_map_get_value(formula_pos literal_pos);
 
 void assignment_map_clear(void);
 
