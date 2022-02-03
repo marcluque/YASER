@@ -1,0 +1,15 @@
+2022-02-03T00:13:18+00:00
+Running ./yaser_benchmark
+Run on (2 X 2793.44 MHz CPU s)
+CPU Caches:
+  L1 Data 48 KiB (x2)
+  L1 Instruction 32 KiB (x2)
+  L2 Unified 1280 KiB (x2)
+  L3 Unified 49152 KiB (x1)
+Load Average: 1.12, 0.44, 0.16
+----------------------------------------------------------------------
+Benchmark                            Time             CPU   Iterations
+----------------------------------------------------------------------
+BM_assignment_map_add             5.64 ns         5.62 ns    124396455
+BM_assignment_map_get_value       11.6 ns         11.6 ns     60090479
+BM_dimacs_parse_file              5.62 ns         5.62 ns    124541421
