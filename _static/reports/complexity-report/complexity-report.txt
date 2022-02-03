@@ -3,8 +3,9 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     0       1       1   ./src/assignments/assignment_stack.c(22): assignment_stack_reset
     0       1       1   ./src/assignments/assignment_stack.c(26): assignment_stack_empty
     0       1       1   ./src/assignments/assignment_stack.c(30): assignment_stack_full
-    0       1       1   ./src/assignments/assignment_unit_clauses.c(23): assignment_unit_clause_stack_empty
-    0       1       1   ./src/assignments/assignment_unit_clauses.c(27): assignment_unit_clause_stack_full
+    0       1       1   ./src/assignments/assignment_unit_clauses.c(23): assignment_unit_clause_stack_reset
+    0       1       1   ./src/assignments/assignment_unit_clauses.c(27): assignment_unit_clause_stack_empty
+    0       1       1   ./src/assignments/assignment_unit_clauses.c(31): assignment_unit_clause_stack_full
     0       1       1   ./src/assignments/assignment_sat_clauses.c(8): assignment_exists_unsat_clause
     0       1       1   ./src/assignments/assignment_sat_clauses.c(13): assignment_sat_clauses_add_clause
     0       1       1   ./src/conflicts/dpll.c(8): dpll_register_assignment_callback
@@ -13,13 +14,13 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       3       2   ./src/assignments/assignment_unit_clauses.c(17): assignment_unit_clause_stack_clear
     1       3       3   ./src/parsing/dimacs_parser.c(7): init
     1       4       3   ./src/assignments/assignment_stack.c(49): assignment_stack_pop
-    1       4       3   ./src/assignments/assignment_unit_clauses.c(40): assignment_unit_clause_stack_pop
+    1       4       3   ./src/assignments/assignment_unit_clauses.c(44): assignment_unit_clause_stack_pop
     1       5       3   ./src/conflicts/dpll.c(12): update_assignment
     1       4       4   ./src/assignments/assignment_stack.c(10): assignment_stack_init
     1       4       4   ./src/assignments/assignment_unit_clauses.c(10): assignment_unit_clause_stack_init
     1       4       4   ./src/global/formula.c(11): formula_init
     1       4       4   ./src/watched-literals/watched_literals.c(23): watched_literals_init
-    1       6       5   ./src/assignments/assignment_unit_clauses.c(31): assignment_unit_clause_stack_push
+    1       6       5   ./src/assignments/assignment_unit_clauses.c(35): assignment_unit_clause_stack_push
     1       7       5   ./src/watched-literals/literal_clause_map.c(41): literal_clause_map_find
     1       8       5   ./src/conflicts/dpll.c(21): bcp
     1       6       6   ./src/conflicts/clause_resolution.c(24): resolvent_variable_table_clear
@@ -47,10 +48,10 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         295 ************************************************************
+    0-9         296 ************************************************************
 
-Scored procedure ct:       44
-Non-comment line ct:      295
+Scored procedure ct:       45
+Non-comment line ct:      296
 Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              1 (half in higher score procs)

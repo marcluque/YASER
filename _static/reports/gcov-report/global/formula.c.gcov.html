@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-02-03 01:41:47</td>
+            <td class="headerValue">2022-02-03 01:54:19</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">2</td>
@@ -72,17 +72,17 @@
 <a name="10"><span class="lineNum">      10 </span>            : formula_pos* clauses = NULL;</a>
 <a name="11"><span class="lineNum">      11 </span>            : size_t num_clauses   = 0;</a>
 <a name="12"><span class="lineNum">      12 </span>            : </a>
-<a name="13"><span class="lineNum">      13 </span><span class="lineCov">          5 : void formula_init(const size_t num_variables_param, const size_t num_clauses_param) {</span></a>
-<a name="14"><span class="lineNum">      14 </span><span class="lineCov">          5 :     num_literals = num_variables_param;</span></a>
-<a name="15"><span class="lineNum">      15 </span><span class="lineCov">          5 :     num_clauses  = num_clauses_param;</span></a>
-<a name="16"><span class="lineNum">      16 </span><span class="lineCov">          5 :     formula      = malloc(sizeof(literal) * num_literals * num_clauses);</span></a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineCov">          5 :     clauses      = malloc(sizeof(formula_pos) * num_clauses);</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineCov">          5 : }</span></a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineCov">         10 : void formula_init(const size_t num_variables_param, const size_t num_clauses_param) {</span></a>
+<a name="14"><span class="lineNum">      14 </span><span class="lineCov">         10 :     num_literals = num_variables_param;</span></a>
+<a name="15"><span class="lineNum">      15 </span><span class="lineCov">         10 :     num_clauses  = num_clauses_param;</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineCov">         10 :     formula      = malloc(sizeof(literal) * num_literals * num_clauses);</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineCov">         10 :     clauses      = malloc(sizeof(formula_pos) * num_clauses);</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineCov">         10 : }</span></a>
 <a name="19"><span class="lineNum">      19 </span>            : </a>
-<a name="20"><span class="lineNum">      20 </span><span class="lineCov">          4 : void formula_clear(void) {</span></a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineCov">          4 :     free(formula);</span></a>
-<a name="22"><span class="lineNum">      22 </span><span class="lineCov">          4 :     free(clauses);</span></a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineCov">          4 : }</span></a>
+<a name="20"><span class="lineNum">      20 </span><span class="lineCov">         10 : void formula_clear(void) {</span></a>
+<a name="21"><span class="lineNum">      21 </span><span class="lineCov">         10 :     free(formula);</span></a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineCov">         10 :     free(clauses);</span></a>
+<a name="23"><span class="lineNum">      23 </span><span class="lineCov">         10 : }</span></a>
 </pre>
       </td>
     </tr>
