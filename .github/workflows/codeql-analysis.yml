@@ -31,7 +31,8 @@ jobs:
       with:
         languages: ${{ matrix.language }}
 
-    - run: sudo apt update && sudo apt install google-perftools libgoogle-perftools-dev -y
+    - name: Install dependencies
+      run: sudo apt update && sudo apt install google-perftools libgoogle-perftools-dev -y
 
     - name: Autobuild
       uses: github/codeql-action/autobuild@v1
