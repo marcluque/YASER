@@ -11,6 +11,7 @@
 
 ### Implementation
 
+- [ ] Better assert with more informative output
 - [X] [DIMACS](https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html) Parser
 - [ ] DIMACS Parser Tests
 - [ ] Clause resolution
