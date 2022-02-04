@@ -25,7 +25,7 @@
 
 #### General
 
-- [X] [Embed Unity Test framework in CMake](http://www.throwtheswitch.org/build/cmake)
+- [X] [Unity Test framework](http://www.throwtheswitch.org/build/cmake) with CMake
 - [X] [Clang](https://clang.llvm.org/) compilation
 - [X] [Sonarcloud](https://sonarcloud.io/)
 - [X] Include GCov report into [Sonarcloud](https://sonarcloud.io/)
