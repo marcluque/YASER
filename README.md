@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
-## UNDER CONSTRUCTION
+## WORK IN PROGRESS
 
 ## [Documentation](https://marcluque.github.io/YASER/)
 
@@ -34,18 +34,19 @@
 
 #### Documentation of code & analysis results
 
-- [X] [Sphinx](https://www.sphinx-doc.org/en/master/) + [Doxygen](https://www.doxygen.nl/index.html) + [RTD](https://github.com/readthedocs/sphinx_rtd_theme) Docs
+- [X] [Sphinx](https://www.sphinx-doc.org/en/master/) + [Breathe](https://github.com/michaeljones/breathe) + [Doxygen](https://www.doxygen.nl/index.html) + [RTD](https://github.com/readthedocs/sphinx_rtd_theme) Docs
 - [X] [GNU Complexity](https://www.gnu.org/software/complexity/)
-- [X] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
 - [X] [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer)
 - [X] [MemorySanitizer](https://github.com/google/sanitizers/wiki/MemorySanitizer)
 - [X] [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [X] [Thread-caching malloc](https://gperftools.github.io/gperftools/tcmalloc.html)
 - [X] [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
-- [X] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
-- [ ] [Cachegrind](https://valgrind.org/docs/manual/cg-manual.html)
-- [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
-- [ ] [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
+- [X] [Google Benchmark](https://github.com/google/benchmark)
+- [X] [Valgrind](https://valgrind.org/docs/manual/quick-start.html)
+- [X] [Cachegrind](https://valgrind.org/docs/manual/cg-manual.html)
+- [X] [Callgrind](https://valgrind.org/docs/manual/cl-manual.html)
+- [X] [GProf](https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html_mono/gprof.html)
+- [X] [gprof2dot](https://github.com/jrfonseca/gprof2dot)
 - [ ] [Google's Heap Profiler](https://gperftools.github.io/gperftools/heapprofile.html)
 - [ ] [Google's Heap Checker](https://gperftools.github.io/gperftools/heap_checker.html)
 - [ ] [Google's CPU Profiler](https://gperftools.github.io/gperftools/cpuprofile.html)
