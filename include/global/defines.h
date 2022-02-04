@@ -36,16 +36,16 @@ typedef unsigned long long clause_index;
  *
  */
 typedef enum {
-    VALUE_INVALID = -1,
-    VALUE_FALSE   = 0,
-    VALUE_TRUE    = 1,
+  VALUE_INVALID = -1,
+  VALUE_FALSE   = 0,
+  VALUE_TRUE    = 1,
 } value;
 
 static void yaser_exit(void) {
 #ifdef YASER_DEBUG
-    exit(0);
+  exit(0);
 #else
-    exit(EXIT_FAILURE);
+  exit(EXIT_FAILURE);
 #endif
 }
 

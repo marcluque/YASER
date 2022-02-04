@@ -13,66 +13,66 @@
 #include <assert.h>
 
 ATTR_PURE static formula_pos find_new_literal(const clause_index clause) {
-    assert(clause < NOT_FOUND);
-    assert(clause <= num_clauses);
+  assert(clause < NOT_FOUND);
+  assert(clause <= num_clauses);
 
-    for (formula_pos i = 0; i < clauses[clause + 1]; ++i) {
-        value assignment = assignment_map_get_value(clauses[clause] + i);
-        assert(assignment != VALUE_INVALID);
+  for (formula_pos i = 0; i < clauses[clause + 1]; ++i) {
+    value assignment = assignment_map_get_value(clauses[clause] + i);
+    assert(assignment != VALUE_INVALID);
 
-        // TODO: Is this correct?
-        if (assignment == 1 || assignment == 0) {
-            return clauses[clause] + i;
-        }
+    // TODO: Is this correct?
+    if (assignment == 1 || assignment == 0) {
+      return clauses[clause] + i;
     }
+  }
 
-    return NOT_FOUND;
+  return NOT_FOUND;
 }
 
 void watched_literals_init(void) {
-    for (clause_index i = 0; i < num_clauses; ++i) {
-        literal_clause_map_add(clauses[i], i);
-        literal_clause_map_add(clauses[i] + 1, i);
-    }
+  for (clause_index i = 0; i < num_clauses; ++i) {
+    literal_clause_map_add(clauses[i], i);
+    literal_clause_map_add(clauses[i] + 1, i);
+  }
 }
 
 void watched_literals_check(const formula_pos watched_literal_pos) {
-    assert(watched_literal_pos < NOT_FOUND);
-    assert(watched_literal_pos < num_literals);
+  assert(watched_literal_pos < NOT_FOUND);
+  assert(watched_literal_pos < num_literals);
 
-    // Find clause of negated watched_literal_pos
-    clause_index clause = literal_clause_map_find(watched_literal_pos);
-    if (clause == NOT_FOUND) {
-        // TODO: Print something I guess
-        return;
-    }
+  // Find clause of negated watched_literal_pos
+  clause_index clause = literal_clause_map_find(watched_literal_pos);
+  if (clause == NOT_FOUND) {
+    // TODO: Print something I guess
+    return;
+  }
 
-    formula_pos partner_literal_pos = clause_literal_map_find(clause, watched_literal_pos);
-    assert(partner_literal_pos != NOT_FOUND);
+  formula_pos partner_literal_pos = clause_literal_map_find(clause, watched_literal_pos);
+  assert(partner_literal_pos != NOT_FOUND);
 
-    value partner_literal_assignment = assignment_map_get_value(partner_literal_pos);
+  value partner_literal_assignment = assignment_map_get_value(partner_literal_pos);
 
-    formula_pos new_literal_pos;
-    if (partner_literal_assignment == VALUE_TRUE) {
-        // clause satisfied
-        assignment_sat_clauses_add_clause();
-    } else if ((new_literal_pos = find_new_literal(clause)) != NOT_FOUND) {
-        // Update clause_map
-        clause_literal_map_delete(clause);
-        // TODO: Does an anonymous array work?
-        const formula_pos watched_literals[] = {partner_literal_pos, new_literal_pos};
-        clause_literal_map_add(clause, watched_literals);
+  formula_pos new_literal_pos;
+  if (partner_literal_assignment == VALUE_TRUE) {
+    // clause satisfied
+    assignment_sat_clauses_add_clause();
+  } else if ((new_literal_pos = find_new_literal(clause)) != NOT_FOUND) {
+    // Update clause_map
+    clause_literal_map_delete(clause);
+    // TODO: Does an anonymous array work?
+    const formula_pos watched_literals[] = {partner_literal_pos, new_literal_pos};
+    clause_literal_map_add(clause, watched_literals);
 
-        // Update watched_literal_map
-        literal_clause_map_delete(watched_literal_pos);
-        literal_clause_map_add(new_literal_pos, clause);
-    } else if (partner_literal_assignment == VALUE_INVALID) {
-        // Clause is unit, partner_literal is unassigned
-        assignment_unit_clause_stack_push(partner_literal_pos);
-    } else if (partner_literal_assignment == VALUE_FALSE) {
-        // Clause is conflicting -> resolve
-        conflict_present = true;
-        // get variable from assignment stack
-        // AssignmentStackItem* assignment = assignment_stack_pop();
-    }
+    // Update watched_literal_map
+    literal_clause_map_delete(watched_literal_pos);
+    literal_clause_map_add(new_literal_pos, clause);
+  } else if (partner_literal_assignment == VALUE_INVALID) {
+    // Clause is unit, partner_literal is unassigned
+    assignment_unit_clause_stack_push(partner_literal_pos);
+  } else if (partner_literal_assignment == VALUE_FALSE) {
+    // Clause is conflicting -> resolve
+    conflict_present = true;
+    // get variable from assignment stack
+    // AssignmentStackItem* assignment = assignment_stack_pop();
+  }
 }

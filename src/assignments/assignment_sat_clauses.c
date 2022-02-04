@@ -10,10 +10,10 @@
 static size_t sat_clause_set_count = 0;
 
 bool assignment_exists_unsat_clause(void) {
-    return sat_clause_set_count != num_clauses;
+  return sat_clause_set_count != num_clauses;
 }
 
 // TODO: Hash set necessary, or just counter?
 void assignment_sat_clauses_add_clause(void) {
-    ++sat_clause_set_count;
+  ++sat_clause_set_count;
 }

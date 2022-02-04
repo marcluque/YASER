@@ -7,4 +7,4 @@
 
 void cleanup_all(void);
 
-#endif //YASER_CLEANUP_H
+#endif // YASER_CLEANUP_H

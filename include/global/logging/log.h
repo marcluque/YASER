@@ -13,4 +13,4 @@ ATTR_NON_NULL void log_debug(const char* file_path, const char* debug_message);
 
 ATTR_NON_NULL void log_error(const char* file_path, const char* error_message);
 
-#endif //YASER_LOG_H
+#endif // YASER_LOG_H

@@ -9,12 +9,12 @@
 
 #include "global/defines.h"
 #include "global/attributes.h"
-#include "external/uthash.h"
+#include "uthash.h"
 
 typedef struct {
-    formula_pos literal_pos;
-    value v;
-    UT_hash_handle hh;
+  formula_pos literal_pos;
+  value v;
+  UT_hash_handle hh;
 } AssignmentMapItem;
 
 void assignment_map_add(formula_pos literal_pos, value v);

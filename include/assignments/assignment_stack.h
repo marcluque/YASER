@@ -13,13 +13,13 @@
 #include <stddef.h>
 
 typedef struct {
-    formula_pos literal_pos;
-    value value;
-    bool satisfied;
-    /**
-     * true <=> visited negated literal_pos
-     */
-    bool visited;
+  formula_pos literal_pos;
+  value value;
+  bool satisfied;
+  /**
+   * true <=> visited negated literal_pos
+   */
+  bool visited;
 } AssignmentStackItem;
 
 void assignment_stack_init(size_t stack_size);

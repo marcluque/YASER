@@ -12,20 +12,20 @@
 #include <stdio.h>
 
 void cleanup_all(void) {
-    // Make sure all messages get out
-    fflush(stdout);
+  // Make sure all messages get out
+  fflush(stdout);
 
-    // NOTE: Below cleanups are only done if something has been allocated
+  // NOTE: Below cleanups are only done if something has been allocated
 
-    // assignment
-    assignment_stack_clear();
-    assignment_unit_clause_stack_clear();
-    assignment_map_clear();
+  // assignment
+  assignment_stack_clear();
+  assignment_unit_clause_stack_clear();
+  assignment_map_clear();
 
-    // watched literals
-    clause_literal_map_clear();
-    literal_clause_map_clear();
+  // watched literals
+  clause_literal_map_clear();
+  literal_clause_map_clear();
 
-    // formula
-    formula_clear();
+  // formula
+  formula_clear();
 }

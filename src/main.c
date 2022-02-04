@@ -12,13 +12,13 @@
 #include "global/logging/yaser_malloc.h"
 
 int main(void) {
-    dimacs_parse_file("NULL");
-    watched_literals_init();
-    dpll_register_assignment_callback(watched_literals_check);
+  dimacs_parse_file("NULL");
+  watched_literals_init();
+  dpll_register_assignment_callback(watched_literals_check);
 
-    dpll();
+  dpll();
 
-    cleanup_all();
+  cleanup_all();
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
