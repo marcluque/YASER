@@ -198,10 +198,38 @@ jobs:
           name: benchmark-report
           path: benchmark-report.txt
 
+  gnu-profiler:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install gprof2dot
+        run: |
+          sudo apt update
+          sudo apt install python3 graphviz -y
+          pip install gprof2dot
+          
+      - name: Run gcc with profiling flags
+        run: |
+          find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iinclude -o yaser
+          ./yaser
+
+      - name: Run gprof2dot
+        run: |
+          gprof yaser | gprof2dot | dot -Tpng -o gprof-report.png
+
+      - name: Upload valgrind report
+        uses: actions/upload-artifact@v2
+        with:
+          name: gprof-report
+          path: gprof-report.png
+
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage, benchmark]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage, benchmark, gnu-profiler]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
