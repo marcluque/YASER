@@ -7,13 +7,14 @@
 #include "global/formula.h"
 #include "assignments/assignment_stack.h"
 #include "assignments/assignment_unit_clauses.h"
+#include "global/logging/log.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <sys/types.h>
 
-#define MAX_LINE_LENGTH (512U)
+#define MAX_LINE_LENGTH (1024U)
 
 static void init(size_t init_num_variables, size_t init_num_clauses) {
     formula_init(init_num_variables, init_num_clauses);
@@ -26,13 +27,8 @@ void dimacs_parse_file(const char* const file_path) {
 
     FILE* file = fopen(file_path, "r");
     if (file == 0) {
-        fprintf(stderr, "Couldn't open file with path: %s\n", file_path);
-        fflush(stderr);
-#ifdef NDEBUG
-        exit(EXIT_DEBUG);
-#else
-        exit(EXIT_FAILURE);
-#endif
+        log_error(__FILE__, "Couldn't open file\n");
+        yaser_exit();
     }
 
     bool done_reading_header = false;
