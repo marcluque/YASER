@@ -226,6 +226,38 @@ jobs:
           name: gprof-report
           path: gprof-report.png
 
+  callgrind:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Install valgrind & gprof2dot
+        run: |
+          sudo apt update
+          sudo apt install valgrind -y
+          sudo apt install python3 graphviz -y
+          pip install gprof2dot
+
+      - name: Run valgrind
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTIMIZE=1 -DDONT_LINK_TCMALLOC=1 .
+          make -j 2
+          mkdir callgrind-report
+          valgrind --tool=callgrind --cache-sim=yes --branch-sim=yes ./yaser &> callgrind-report/callgrind-report.txt
+          cat callgrind-report.txt
+
+      - name: Run gprof2dot
+        run: |
+          gprof2dot --format=callgrind callgrind.out.* | dot -Tpng -o callgrind-report/callgrind-report.png
+
+      - name: Upload callgrind report
+        uses: actions/upload-artifact@v2
+        with:
+          name: callgrind-report
+          path: callgrind-report
+
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
