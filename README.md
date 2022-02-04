@@ -12,6 +12,7 @@
 ### Implementation
 
 - [ ] Better assert with more informative output
+- [ ] Logging tool
 - [X] [DIMACS](https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html) Parser
 - [ ] DIMACS Parser Tests
 - [ ] Clause resolution
@@ -42,6 +43,7 @@
 - [X] [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [X] [Thread-caching malloc](https://gperftools.github.io/gperftools/tcmalloc.html)
 - [X] [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
+- [ ] [Cachegrind](https://valgrind.org/docs/manual/cg-manual.html)
 - [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
 - [ ] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
 - [ ] [Google's Heap Profiler](https://gperftools.github.io/gperftools/heapprofile.html)
