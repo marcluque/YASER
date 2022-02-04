@@ -11,18 +11,13 @@ endif()
 
 if(TARGET_GROUP STREQUAL test)
     include(CTest)
+    include_directories(external/uthash/src)
 
     add_subdirectory(src)
     add_subdirectory(external)
     add_subdirectory(test)
 else()
-    include_directories(external/uthash/src)
-    include_directories(include)
-    file(GLOB_RECURSE SRC_FILES "src/*.c")
-
-    add_executable(${PRODUCT_NAME} ${SRC_FILES})
-
-    target_compile_options(yaser PUBLIC
+    add_compile_options(
             -std=c11
 
             ### WARNINGS
@@ -56,25 +51,22 @@ else()
     )
 
     if(NOT DEFINED OPTIMIZE)
-        message("[YASER] Using -O0")
-        target_compile_options(yaser PUBLIC -O0)
+        message("Using -O0 -g")
+        add_compile_options(-O0 -g)
     else()
-        message("[YASER] Using -O3")
-        target_compile_options(yaser PUBLIC -O3)
+        message("Using -O3")
+        add_compile_options(-O3)
     endif()
 
     if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
         message("[YASER] Using -g")
-        target_compile_options(yaser PUBLIC -g)
+        add_compile_options(-g)
     endif()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        target_compile_options(yaser PUBLIC
-                -Weverything
-                -Wno-unknown-warning-option
-        )
+        target_compile_options(-Weverything -Wno-unknown-warning-option)
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        target_compile_options(yaser PUBLIC
+        add_compile_options(
                 ### WARNINGS
                 # Standard GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
                 -Werror
@@ -89,6 +81,12 @@ else()
                 -Wformat=1
         )
     endif()
+
+    include_directories(external/uthash/src)
+    include_directories(include)
+    file(GLOB_RECURSE SRC_FILES "src/*.c")
+
+    add_executable(${PRODUCT_NAME} ${SRC_FILES})
 
     if (NOT DEFINED DONT_LINK_TCMALLOC)
         target_link_libraries(${PRODUCT_NAME} PUBLIC -ltcmalloc)

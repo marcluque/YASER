@@ -2,8 +2,8 @@
 // Created with <3 by marcluque, January 2022
 //
 
-#include "../external/Unity/src/unity.h"
 #include "watched-literals/clause_literal_map.h"
+#include "../external/Unity/src/unity.h"
 
 void setUp (void) {}
 void tearDown (void) {

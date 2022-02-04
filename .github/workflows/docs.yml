@@ -44,7 +44,7 @@ jobs:
 
       - name: Run address sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I include -DNDEBUG=1 -Wno-unknown-warning-option -g
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option -g
           ./a.out > address-sanitizer-report.txt
           cat address-sanitizer-report.txt
 
@@ -65,7 +65,7 @@ jobs:
 
       - name: Run memory sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I include -DNDEBUG=1 -Wno-unknown-warning-option
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option
           ./a.out > memory-sanitizer-report.txt
           cat memory-sanitizer-report.txt
 
@@ -86,7 +86,7 @@ jobs:
 
       - name: Run UB sanitizer
         run: |
-          find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I include -DNDEBUG=1 -Wno-unknown-warning-option 
+          find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option 
           ./a.out > ub-sanitizer-report.txt
           cat ub-sanitizer-report.txt
 
@@ -165,7 +165,7 @@ jobs:
       - name: Run gcov
         run: |
           cd test
-          find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
+          find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I external/uthash/src -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
           ./main_assignments_test
           lcov -c --directory . --output-file main_assignments_test.info
           lcov --remove main_assignments_test.info -o main_assignments_test.info '*/unity.c' '*/test/*'
@@ -199,7 +199,7 @@ jobs:
 
       - name: Run benchmark
         run: |
-          g++ benchmark/**/*.cpp src/**/*.c -fpermissive -w -std=c++11 -isystem benchmark/include -Iinclude -Lbenchmark/build/src -lbenchmark -lbenchmark_main -lpthread -o yaser_benchmark && ./yaser_benchmark
+          g++ benchmark/**/*.cpp src/**/*.c -fpermissive -w -std=c++11 -isystem benchmark/include -Iexternal/uthash/src -Iinclude -Lbenchmark/build/src -lbenchmark -lbenchmark_main -lpthread -o yaser_benchmark && ./yaser_benchmark
           ./yaser_benchmark &> benchmark-report.txt
 
       - name: Upload benchmark report
@@ -225,7 +225,7 @@ jobs:
           
       - name: Run gcc with profiling flags
         run: |
-          find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iinclude -o yaser
+          find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iexternal/uthash/src -Iinclude -o yaser
           ./yaser
 
       - name: Run gprof2dot
