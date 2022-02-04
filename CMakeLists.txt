@@ -5,7 +5,7 @@ set(PRODUCT_NAME yaser)
 set(CMAKE_C_STANDARD 11)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
-    message("[YASER] Using special Yaser debug mode (NOT NDEBUG)")
+    message("[YASER] Using special yaser debug mode (NOT NDEBUG)")
     add_definitions(-DYASER_DEBUG)
 endif()
 
@@ -60,6 +60,11 @@ else()
     else()
         message("[YASER] Using -O3")
         target_compile_options(yaser PUBLIC -O3)
+    endif()
+
+    if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
+        message("[YASER] Using -g")
+        target_compile_options(yaser PUBLIC -g)
     endif()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
