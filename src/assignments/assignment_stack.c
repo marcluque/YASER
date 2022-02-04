@@ -20,8 +20,9 @@ void assignment_stack_init(const size_t stack_size) {
 }
 
 void assignment_stack_clear(void) {
-    assert(assignment_stack != NULL);
-    free(assignment_stack);
+    if (assignment_stack != NULL) {
+        free(assignment_stack);
+    }
 }
 
 void assignment_stack_reset(void) {

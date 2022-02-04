@@ -8,6 +8,7 @@
 #define YASER_DEFINES_H
 
 #include <limits.h>
+#include <stdlib.h>
 
 /**
  * Represents the index of the either positive or negative l. E.g. l x_i will be stored with i.
@@ -29,11 +30,6 @@ typedef unsigned long long formula_pos;
 /**
  *
  */
-#define EXIT_DEBUG (0U)
-
-/**
- *
- */
 typedef unsigned long long clause_index;
 
 /**
@@ -44,5 +40,13 @@ typedef enum {
     VALUE_FALSE   = 0,
     VALUE_TRUE    = 1,
 } value;
+
+static void yaser_exit(void) {
+#ifdef YASER_DEBUG
+    exit(0);
+#else
+    exit(EXIT_FAILURE);
+#endif
+}
 
 #endif // YASER_DEFINES_H
