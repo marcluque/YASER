@@ -1,6 +1,5 @@
 ![default_2 (2)](https://user-images.githubusercontent.com/33261455/152163475-9d24febc-723a-4390-97ba-fa11e133f15c.png)
 
-
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
 
 ## UNDER CONSTRUCTION
@@ -20,7 +19,7 @@
 - [ ] VSIDS heuristic
 - [ ] Watched Literals
 - [ ] Stats printing
-- [ ] 100% Code Coverage
+- [ ] As close as possible to 100% Code Coverage
 
 ### CI
 
@@ -43,14 +42,14 @@
 - [X] [UBSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
 - [X] [Thread-caching malloc](https://gperftools.github.io/gperftools/tcmalloc.html)
 - [X] [GCov Code Coverage](https://docs.oracle.com/en/operating-systems/oracle-linux/6/porting/ch02s05s01.html)
+- [X] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
 - [ ] [Cachegrind](https://valgrind.org/docs/manual/cg-manual.html)
-- [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
-- [ ] [Google Benchmark with CMake](https://pixorblog.wordpress.com/2016/05/22/cmake-google-micro-benchmarking/)
+- [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
+- [ ] [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
 - [ ] [Google's Heap Profiler](https://gperftools.github.io/gperftools/heapprofile.html)
 - [ ] [Google's Heap Checker](https://gperftools.github.io/gperftools/heap_checker.html)
 - [ ] [Google's CPU Profiler](https://gperftools.github.io/gperftools/cpuprofile.html)
-- [ ] [GProf](https://www.maketecheasier.com/profile-c-program-linux-using-gprof/?amp)
-- [ ] [Convert gprof Output to Graph](https://github.com/jrfonseca/gprof2dot)
+- [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
 
 ## License
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
