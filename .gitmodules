@@ -1,3 +1,6 @@
 [submodule "external/Unity"]
 	path = external/Unity
 	url = https://github.com/ThrowTheSwitch/Unity
+[submodule "external/uthash"]
+	path = external/uthash
+	url = https://github.com/troydhanson/uthash

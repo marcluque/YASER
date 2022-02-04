@@ -16,6 +16,7 @@ if(TARGET_GROUP STREQUAL test)
     add_subdirectory(external)
     add_subdirectory(test)
 else()
+    include_directories(external/uthash/src)
     include_directories(include)
     file(GLOB_RECURSE SRC_FILES "src/*.c")
 
