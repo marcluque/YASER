@@ -39,6 +39,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Run address sanitizer
         run: |
@@ -58,6 +60,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Run memory sanitizer
         run: |
@@ -77,6 +81,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Run UB sanitizer
         run: |
@@ -96,6 +102,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install valgrind
         run: |
@@ -121,6 +129,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install GNU Complexity
         run: |
@@ -204,6 +214,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install gprof2dot
         run: |
@@ -232,6 +244,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install valgrind & gprof2dot
         run: |
@@ -265,6 +279,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install dependencies
         run: |

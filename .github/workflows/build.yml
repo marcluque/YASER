@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install dependencies
         run: |
@@ -36,6 +38,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        with:
+          submodules: 'true'
 
       - name: Install dependencies
         run: |
