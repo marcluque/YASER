@@ -23,7 +23,7 @@ jobs:
         run: |
           mkdir ${{ env.GCOV_OUT_DIR }}
           cd ${{ env.GCOV_OUT_DIR }}
-          find ../src/* ../test/assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_test_assignments -fprofile-arcs -ftest-coverage -g -O0 -I../external/Unity/src -I../include -I../test/assignments ../external/Unity/src/unity.c
+          find ../src/* ../test/assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_test_assignments -fprofile-arcs -ftest-coverage -g -O0 -I../external/uthash/src -I../external/Unity/src -I../include -I../test/assignments ../external/Unity/src/unity.c
           ./main_test_assignments
           for f in `find . -name '*test*.gcda'`; do
             rm -rf ${f}
