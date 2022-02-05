@@ -13,18 +13,22 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/types.h>
+#include <limits.h>
 
 #define MAX_LINE_LENGTH (1024U)
 
-static void init(size_t init_num_variables, size_t init_num_clauses) {
-  formula_init(init_num_variables, init_num_clauses);
-  assignment_stack_init(init_num_variables * 2);
+static void init(size_t init_num_literals, size_t init_num_clauses) {
+  if (init_num_literals > ULLONG_MAX) {
+    log_error(__FILE__, "input file exceeds ULLONG_MAX");
+    yaser_exit();
+  }
+
+  formula_init(init_num_literals, init_num_clauses);
+  assignment_stack_init(init_num_literals * 2);
   assignment_unit_clause_stack_init(init_num_clauses);
 }
 
 void dimacs_parse_file(const char* const file_path) {
-  // TODO: Make sure that input formula is not longer than ULLONG_MAX
-
   FILE* file = fopen(file_path, "r");
   if (file == 0) {
     log_error(__FILE__, "Couldn't open file\n");

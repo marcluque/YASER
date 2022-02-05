@@ -9,6 +9,7 @@
 
 #include <limits.h>
 #include <stdlib.h>
+#include "cleanup.h"
 
 /**
  * Represents the index of the either positive or negative l. E.g. l x_i will be stored with i.
@@ -42,6 +43,7 @@ typedef enum {
 } value;
 
 static void yaser_exit(void) {
+  cleanup_all();
 #ifdef YASER_DEBUG
   exit(0);
 #else
