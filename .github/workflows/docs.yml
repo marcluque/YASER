@@ -43,6 +43,7 @@ jobs:
           submodules: 'true'
 
       - name: Run address sanitizer
+        continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option -g
           ./a.out > address-sanitizer-report.txt
@@ -64,6 +65,7 @@ jobs:
           submodules: 'true'
 
       - name: Run memory sanitizer
+        continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option
           ./a.out > memory-sanitizer-report.txt
@@ -85,6 +87,7 @@ jobs:
           submodules: 'true'
 
       - name: Run UB sanitizer
+        continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option 
           ./a.out > ub-sanitizer-report.txt
