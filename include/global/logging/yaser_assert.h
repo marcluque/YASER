@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define YASER_ASSERT(left,operator_,right) asserted(!((left) operator_ (right)), (left), #operator_, (right), __FILE__, __LINE__, #left " " #operator_ " " #right)
+#define YASER_ASSERT(left,operator_,right) asserted(!(((long long) left) operator_ ((long long) right)), ((long long) left), #operator_, ((long long) right), __FILE__, __LINE__, #left " " #operator_ " " #right)
 
 static void asserted(const bool cond, const long long left, const char* const operator, const long long right, const char* const file_path, const int line, const char* const expression) {
 #if defined(YASER_DEBUG)
