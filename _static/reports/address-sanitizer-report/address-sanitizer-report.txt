@@ -1,0 +1,53 @@
+=================================================================
+==1849==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60600000005f at pc 0x00000043a098 bp 0x7ffd7c2ae710 sp 0x7ffd7c2ade90
+READ of size 64 at 0x60600000005f thread T0
+    #0 0x43a097 in printf_common(void*, char const*, __va_list_tag*) (/home/runner/work/YASER/YASER/a.out+0x43a097)
+    #1 0x43b920 in snprintf (/home/runner/work/YASER/YASER/a.out+0x43b920)
+    #2 0x4c87c6 in log_error /home/runner/work/YASER/YASER/./src/global/log.c:66:3
+    #3 0x4cfaac in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:30:5
+    #4 0x4c857d in main /home/runner/work/YASER/YASER/./src/main.c:15:3
+    #5 0x7fd95b4ad0b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #6 0x41c2cd in _start (/home/runner/work/YASER/YASER/a.out+0x41c2cd)
+
+0x60600000005f is located 0 bytes to the right of 63-byte region [0x606000000020,0x60600000005f)
+allocated by thread T0 here:
+    #0 0x49752d in malloc (/home/runner/work/YASER/YASER/a.out+0x49752d)
+    #1 0x4c8772 in log_error /home/runner/work/YASER/YASER/./src/global/log.c:60:20
+    #2 0x4cfaac in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:30:5
+    #3 0x4c857d in main /home/runner/work/YASER/YASER/./src/main.c:15:3
+    #4 0x7fd95b4ad0b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow (/home/runner/work/YASER/YASER/a.out+0x43a097) in printf_common(void*, char const*, __va_list_tag*)
+Shadow bytes around the buggy address:
+  0x0c0c7fff7fb0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c0c7fff7fc0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c0c7fff7fd0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c0c7fff7fe0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x0c0c7fff7ff0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x0c0c7fff8000: fa fa fa fa 00 00 00 00 00 00 00[07]fa fa fa fa
+  0x0c0c7fff8010: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c0c7fff8020: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c0c7fff8030: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c0c7fff8040: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x0c0c7fff8050: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+  Shadow gap:              cc
+==1849==ABORTING
