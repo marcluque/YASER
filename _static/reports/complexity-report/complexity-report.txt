@@ -41,21 +41,21 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1      12      11   ./src/watched-literals/clause_literal_map.c(18): clause_literal_map_add
     1      12      11   ./src/assignments/assignment_stack.c(35): assignment_stack_push
     1      16      14   ./src/watched-literals/clause_literal_map.c(44): clause_literal_map_find
-    1      23      18   ./src/global/log.c(36): log_error
+    1      22      17   ./src/global/log.c(35): log_error
+    1      23      18   ./src/global/log.c(9): log_debug
     2      17      14   ./src/conflicts/dpll.c(44): dpll
-    2      24      19   ./src/global/log.c(9): log_debug
     3      38      23   ./src/watched-literals/watched_literals.c(30): watched_literals_check
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
     7      46      41   ./src/parsing/dimacs_parser.c(13): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         343 ************************************************************
+    0-9         341 ************************************************************
 
 Scored procedure ct:       47
-Non-comment line ct:      343
+Non-comment line ct:      341
 Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              1 (half in higher score procs)
-75%-ile score:              2 (25% in higher score procs)
+75%-ile score:              3 (25% in higher score procs)
 Highest score:              7 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
