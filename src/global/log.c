@@ -11,8 +11,8 @@
 // Subtract 1 for NULL-termination
 #define MAX_LEN_LOG_MESSAGE (2048 - 1)
 
-#define DEBUG_FORMAT       COMMON_FORMAT(DEBUG_ID) ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET
-#define ERROR_FORMAT       COMMON_FORMAT(ERROR_ID) ANSI_COLOR_RED "%s" ANSI_COLOR_RESET
+#define DEBUG_FORMAT       COMMON_FORMAT(DEBUG_ID, ANSI_COLOR_CYAN) "%s" ANSI_COLOR_RESET
+#define ERROR_FORMAT       COMMON_FORMAT(ERROR_ID, ANSI_COLOR_RED) "%s" ANSI_COLOR_RESET
 
 void log_debug_(const char* const file_path, const char* const debug_format, ...) {
 #if defined(YASER_DEBUG)
