@@ -26,4 +26,14 @@
  */
 #define ATTR_PURE __attribute__((pure))
 
+/**
+ *
+ */
+#define ATTR_HIDDEN __attribute__((__visibility__("hidden")))
+
+/**
+ *
+ */
+#define ATTR_FORMAT __attribute__ ((__format__ (printf, 2, 3)))
+
 #endif // YASER_ATTRIBUTES_H
