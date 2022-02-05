@@ -41,7 +41,7 @@ void assignment_stack_push(const formula_pos literal_pos, const value v, const b
   assert(assignment_stack != NULL);
   assert(!assignment_stack_full());
   assert(literal_pos < NOT_FOUND);
-  assert(literal_pos < num_literals);
+  assert(literal_pos < num_variables);
   assert(v != VALUE_INVALID);
 
   assignment_stack[assignment_sp].literal_pos = literal_pos;

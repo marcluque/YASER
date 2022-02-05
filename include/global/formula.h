@@ -15,7 +15,7 @@
  * Clause ranges are indicated with the clauses array
  */
 extern literal* formula;
-extern size_t num_literals;
+extern size_t num_variables;
 
 /**
  * Each array entry stores the starting position of its clause in the formula array

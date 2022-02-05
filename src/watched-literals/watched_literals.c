@@ -38,7 +38,7 @@ void watched_literals_init(void) {
 
 void watched_literals_check(const formula_pos watched_literal_pos) {
   assert(watched_literal_pos < NOT_FOUND);
-  assert(watched_literal_pos < num_literals);
+  assert(watched_literal_pos < num_variables);
 
   // Find clause of negated watched_literal_pos
   clause_index clause = literal_clause_map_find(watched_literal_pos);

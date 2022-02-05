@@ -41,7 +41,7 @@ void assignment_unit_clause_stack_push(const formula_pos literal_pos) {
   assert(unit_clause_stack != NULL);
   assert(!assignment_unit_clause_stack_full());
   assert(literal_pos < NOT_FOUND);
-  assert(literal_pos < num_literals);
+  assert(literal_pos < num_variables);
 
   unit_clause_stack[unit_clause_sp++] = literal_pos;
 }

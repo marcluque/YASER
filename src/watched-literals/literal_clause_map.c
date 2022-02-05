@@ -20,7 +20,7 @@ void literal_clause_map_clear(void) {
 
 void literal_clause_map_add(const formula_pos literal_pos, const clause_index clause) {
   assert(literal_pos < NOT_FOUND);
-  assert(literal_pos < num_literals);
+  assert(literal_pos < num_variables);
   assert(clause < NOT_FOUND);
   assert(clause < num_clauses);
 
@@ -32,7 +32,7 @@ void literal_clause_map_add(const formula_pos literal_pos, const clause_index cl
 
 void literal_clause_map_delete(const formula_pos watched_literal_pos) {
   assert(watched_literal_pos < NOT_FOUND);
-  assert(watched_literal_pos < num_literals);
+  assert(watched_literal_pos < num_variables);
 
   LiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_map, &watched_literal_pos, sizeof(formula_pos), item);
@@ -43,7 +43,7 @@ void literal_clause_map_delete(const formula_pos watched_literal_pos) {
 
 clause_index literal_clause_map_find(const formula_pos watched_literal_pos) {
   assert(watched_literal_pos < NOT_FOUND);
-  assert(watched_literal_pos < num_literals);
+  assert(watched_literal_pos < num_variables);
 
   LiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_map, &watched_literal_pos, sizeof(formula_pos), item);
