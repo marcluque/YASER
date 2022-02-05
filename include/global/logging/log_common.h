@@ -27,8 +27,7 @@
 #define MAX_LEN_TIME_BUFFER (10U)
 
 static char* get_time(char* time_buffer) {
-  struct tm local_time;
-  strftime(time_buffer, MAX_LEN_TIME_BUFFER, "%H:%M:%S", localtime_r(&(time_t){time(NULL)}, &local_time));
+  strftime(time_buffer, MAX_LEN_TIME_BUFFER, "%H:%M:%S", localtime(&(time_t){time(0)}));
   return time_buffer;
 }
 
