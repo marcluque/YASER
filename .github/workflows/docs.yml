@@ -229,7 +229,7 @@ jobs:
       - name: Run gcc with profiling flags
         run: |
           find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iexternal/uthash/src -Iinclude -o yaser
-          ./yaser
+          ./yaser || true
 
       - name: Run gprof2dot
         run: |
