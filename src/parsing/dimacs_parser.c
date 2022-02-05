@@ -52,13 +52,12 @@ void dimacs_parse_file(const char* const file_path) {
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
         case 'p':
-          printf("OUT: %c", line[i]);
-          fflush(stdout);
           init((size_t) (line[i + 6] - '0'), (size_t) (line[i + 8] - '0'));
           done_reading_header = true;
           break;
-        case ' ':
         case 'c':
+          break;
+        case ' ':
         default:
           continue;
       }
