@@ -20,7 +20,9 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define COMMON_FORMAT "[%s][YASER - %s][%s]"
+#define DEBUG_ID           ANSI_COLOR_CYAN "DEBUG" ANSI_COLOR_RESET
+#define ERROR_ID           ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
+#define COMMON_FORMAT(id, color)  "[%s][YASER - " id "][%s]: " color
 
 // Subtract 1 for NULL-termination
 #define MAX_LEN_BASENAME    (64 - 1)
@@ -34,17 +36,17 @@ static char* get_time(char* time_buffer) {
 static void get_basename(const char* const file_path, char* const basename_buffer) {
   size_t len = strlen(file_path);
   size_t i   = len - 1;
-  for (; file_path[i] != '/'; --i)
-    ;
+  for (; file_path[i] != '/'; --i) {}
 
   len = len - 1 - i;
   // We don't assert since yaser_assert relies on the log
   if (len > MAX_LEN_BASENAME) {
     char time_buffer[MAX_LEN_TIME_BUFFER];
     get_time(time_buffer);
-    printf(COMMON_FORMAT ":" ANSI_COLOR_RED
-                         " basename_buffer (length: %d) too small for basename (length: %lu)\n" ANSI_COLOR_RESET,
-           time_buffer, ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET, "log_common.h", MAX_LEN_BASENAME, len);
+
+    const char* format = COMMON_FORMAT(ERROR_ID, ANSI_COLOR_RED) "basename_buffer (length: %d) too small for basename (length: %lu)\n" ANSI_COLOR_RESET;
+    printf(format, time_buffer, "log_common.h", MAX_LEN_BASENAME, len);
+
     return;
   }
 
