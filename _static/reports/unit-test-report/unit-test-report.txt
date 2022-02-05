@@ -30,7 +30,7 @@ test 1
 1: -----------------------
 1: 12 Tests 0 Failures 0 Ignored 
 1: OK
-1/2 Test #1: test_assignments .................   Passed    0.00 sec
+1/2 Test #1: test_assignments .................   Passed    0.01 sec
 test 2
     Start 2: test_conflicts
 
@@ -44,4 +44,4 @@ test 2
 
 100% tests passed, 0 tests failed out of 2
 
-Total Test time (real) =   0.01 sec
+Total Test time (real) =   0.16 sec
