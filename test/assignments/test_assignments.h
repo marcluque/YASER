@@ -23,9 +23,7 @@ void test_assignment_stack_pop(void);
 //
 // Assignment Map
 //
-void test_assignment_map_add(void);
-
-void test_assignment_map_get_value(void);
+void test_assignment_map_add_and_get(void);
 
 void test_assignment_map_clear(void);
 
@@ -44,4 +42,4 @@ void test_assignment_unit_clause_stack_push(void);
 
 void test_assignment_unit_clause_stack_pop(void);
 
-#endif //YASER_TEST_ASSIGNMENTS_H
+#endif // YASER_TEST_ASSIGNMENTS_H
