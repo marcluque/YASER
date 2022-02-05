@@ -37,7 +37,7 @@
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-02-05 01:51:29</td>
+            <td class="headerValue">2022-02-05 02:05:36</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -69,16 +69,15 @@
 <a name="7"><span class="lineNum">       7 </span>            : #include &lt;stddef.h&gt;</a>
 <a name="8"><span class="lineNum">       8 </span>            : #include &lt;stdbool.h&gt;</a>
 <a name="9"><span class="lineNum">       9 </span>            : </a>
-<a name="10"><span class="lineNum">      10 </span>            : static size_t sat_clause_set_count = 0;</a>
+<a name="10"><span class="lineNum">      10 </span>            : static size_t sat_clause_count = 0;</a>
 <a name="11"><span class="lineNum">      11 </span>            : </a>
 <a name="12"><span class="lineNum">      12 </span><span class="lineNoCov">          0 : bool assignment_exists_unsat_clause(void) {</span></a>
-<a name="13"><span class="lineNum">      13 </span><span class="lineNoCov">          0 :   return sat_clause_set_count != num_clauses;</span></a>
+<a name="13"><span class="lineNum">      13 </span><span class="lineNoCov">          0 :   return sat_clause_count != num_clauses;</span></a>
 <a name="14"><span class="lineNum">      14 </span>            : }</a>
 <a name="15"><span class="lineNum">      15 </span>            : </a>
-<a name="16"><span class="lineNum">      16 </span>            : // TODO: Hash set necessary, or just counter?</a>
-<a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 : void assignment_sat_clauses_add_clause(void) {</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :   ++sat_clause_set_count;</span></a>
-<a name="19"><span class="lineNum">      19 </span><span class="lineNoCov">          0 : }</span></a>
+<a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 : void assignment_sat_clauses_add_clause(void) {</span></a>
+<a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 :   ++sat_clause_count;</span></a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 : }</span></a>
 </pre>
       </td>
     </tr>

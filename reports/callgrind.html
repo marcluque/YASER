@@ -80,40 +80,40 @@
              
   <section id="callgrind">
 <span id="reports-callgrind"></span><h1>Callgrind<a class="headerlink" href="#callgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3661== Callgrind, a call-graph generating cache profiler
-==3661== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
-==3661== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3661== Command: ./yaser
-==3661== 
---3661-- warning: L3 cache found, using its data for the LL simulation.
---3661-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
---3661-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
-==3661== For interactive control, run &#39;callgrind_control -h&#39;.
-[01:51:43][YASER - [31mERROR[0m][dimacs_parser.c]: [31mCouldn&#39;t open file
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3603== Callgrind, a call-graph generating cache profiler
+==3603== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
+==3603== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3603== Command: ./yaser
+==3603== 
+--3603-- warning: L3 cache found, using its data for the LL simulation.
+--3603-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
+--3603-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
+==3603== For interactive control, run &#39;callgrind_control -h&#39;.
+[02:05:50][YASER - [31mERROR[0m][dimacs_parser.c]: [31mCouldn&#39;t open file
 [0m
-==3661== 
-==3661== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
-==3661== Collected : 245005 55192 15239 1488 2740 684 1452 2157 618 50218 5792 444 196
-==3661== 
-==3661== I   refs:      245,005
-==3661== I1  misses:      1,488
-==3661== LLi misses:      1,452
-==3661== I1  miss rate:    0.61%
-==3661== LLi miss rate:    0.59%
-==3661== 
-==3661== D   refs:       70,431  (55,192 rd + 15,239 wr)
-==3661== D1  misses:      3,424  ( 2,740 rd +    684 wr)
-==3661== LLd misses:      2,775  ( 2,157 rd +    618 wr)
-==3661== D1  miss rate:     4.9% (   5.0%   +    4.5%  )
-==3661== LLd miss rate:     3.9% (   3.9%   +    4.1%  )
-==3661== 
-==3661== LL refs:         4,912  ( 4,228 rd +    684 wr)
-==3661== LL misses:       4,227  ( 3,609 rd +    618 wr)
-==3661== LL miss rate:      1.3% (   1.2%   +    4.1%  )
-==3661== 
-==3661== Branches:       50,662  (50,218 cond +    444 ind)
-==3661== Mispredicts:     5,988  ( 5,792 cond +    196 ind)
-==3661== Mispred rate:     11.8% (  11.5%     +   44.1%   )
+==3603== 
+==3603== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+==3603== Collected : 245162 55241 15271 1504 2742 684 1468 2159 618 50242 5796 446 197
+==3603== 
+==3603== I   refs:      245,162
+==3603== I1  misses:      1,504
+==3603== LLi misses:      1,468
+==3603== I1  miss rate:    0.61%
+==3603== LLi miss rate:    0.60%
+==3603== 
+==3603== D   refs:       70,512  (55,241 rd + 15,271 wr)
+==3603== D1  misses:      3,426  ( 2,742 rd +    684 wr)
+==3603== LLd misses:      2,777  ( 2,159 rd +    618 wr)
+==3603== D1  miss rate:     4.9% (   5.0%   +    4.5%  )
+==3603== LLd miss rate:     3.9% (   3.9%   +    4.0%  )
+==3603== 
+==3603== LL refs:         4,930  ( 4,246 rd +    684 wr)
+==3603== LL misses:       4,245  ( 3,627 rd +    618 wr)
+==3603== LL miss rate:      1.3% (   1.2%   +    4.0%  )
+==3603== 
+==3603== Branches:       50,688  (50,242 cond +    446 ind)
+==3603== Mispredicts:     5,993  ( 5,796 cond +    197 ind)
+==3603== Mispred rate:     11.8% (  11.5%     +   44.2%   )
 </pre></div>
 </div>
 <img alt="gprof report" src="../_images/callgrind-report.png" />

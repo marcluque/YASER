@@ -8,8 +8,7 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     0       1       1   ./src/assignments/assignment_unit_clauses.c(27): assignment_unit_clause_stack_empty
     0       1       1   ./src/assignments/assignment_unit_clauses.c(31): assignment_unit_clause_stack_full
     0       1       1   ./src/assignments/assignment_sat_clauses.c(8): assignment_exists_unsat_clause
-    0       1       1   ./src/assignments/assignment_sat_clauses.c(13): assignment_sat_clauses_add_clause
-    1       3       3   ./src/parsing/dimacs_parser.c(7): init
+    0       1       1   ./src/assignments/assignment_sat_clauses.c(12): assignment_sat_clauses_add_clause
     1       3       3   ./src/assignments/assignment_stack.c(17): assignment_stack_clear
     1       3       3   ./src/assignments/assignment_unit_clauses.c(17): assignment_unit_clause_stack_clear
     1       4       3   ./src/assignments/assignment_stack.c(50): assignment_stack_pop
@@ -33,6 +32,7 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       8       7   ./src/watched-literals/literal_clause_map.c(30): literal_clause_map_delete
     1       8       7   ./src/watched-literals/clause_literal_map.c(33): clause_literal_map_delete
     1       8       7   ./src/conflicts/clause_resolution.c(13): resolvent_literal_table_add
+    1       8       7   ./src/parsing/dimacs_parser.c(7): init
     1       8       7   ./src/assignments/assignment_map.c(8): assignment_map_add
     1      15       7   ./src/global/clean_up.c(6): cleanup_all
     1       9       8   ./src/watched-literals/literal_clause_map.c(18): literal_clause_map_add
@@ -46,14 +46,14 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     2      17      14   ./src/conflicts/dpll.c(44): dpll
     3      38      23   ./src/watched-literals/watched_literals.c(30): watched_literals_check
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
-    7      46      41   ./src/parsing/dimacs_parser.c(13): dimacs_parse_file
+    7      46      41   ./src/parsing/dimacs_parser.c(18): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         341 ************************************************************
+    0-9         345 ************************************************************
 
 Scored procedure ct:       47
-Non-comment line ct:      341
+Non-comment line ct:      345
 Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              1 (half in higher score procs)
