@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
   YASER_CHECK_MALLOC(file_path);
 
   if (argc == 0) {
-    log_error("You need to provide an input file at least");
+    log_error("an input file is obligatory");
   }
 
   for (int i = 0; i < argc; ++i) {
@@ -49,6 +49,8 @@ int main(int argc, char** argv) {
   dimacs_parse_file(file_path);
   watched_literals_init();
   dpll_register_assignment_callback(watched_literals_check);
+
+  log_debug("Initialization done...");
 
   dpll();
 

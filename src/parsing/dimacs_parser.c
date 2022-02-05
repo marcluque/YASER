@@ -41,6 +41,7 @@ void dimacs_parse_file(const char* const file_path) {
     log_error("%s", strerror(errno));
     yaser_exit();
   }
+
   log_debug("Successfully opened file (%s)", file_path);
 
   bool done_reading_header = false;
@@ -49,7 +50,7 @@ void dimacs_parse_file(const char* const file_path) {
   char* line = malloc(MAX_LINE_LENGTH * sizeof(char));
   YASER_CHECK_MALLOC(line);
 
-  while ((read = getline(&line, &len, file)) != -1 && !done_reading_header) {
+  while (!done_reading_header && (read = getline(&line, &len, file)) != -1) {
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
         case 'p':
@@ -65,9 +66,6 @@ void dimacs_parse_file(const char* const file_path) {
       break;
     }
   }
-
-  // Print number of literals and clauses
-
 
   clause_index clause_pointer     = 0;
   formula_pos last_clause_pointer = 0;
@@ -86,9 +84,12 @@ void dimacs_parse_file(const char* const file_path) {
   }
   clauses[clause_pointer] = last_clause_pointer;
 
-  // Sanity check the number of literals and clauses
-  YASER_ASSERT((long long int) literal_pointer - 1, ==, (long long int) num_variables);
-  YASER_ASSERT((long long int) clause_pointer + 1, ==, (long long int) num_clauses);
+  num_literals = literal_pointer;
+  log_debug("#Literals=%zu", num_literals);
+
+  // TODO: Check number of variables
+  // Sanity check the number of clauses
+  YASER_ASSERT(clause_pointer, ==, num_clauses);
 
   free(line);
   fclose(file);

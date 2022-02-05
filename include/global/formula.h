@@ -17,6 +17,8 @@
 extern literal* formula;
 extern size_t num_variables;
 
+extern size_t num_literals;
+
 /**
  * Each array entry stores the starting position of its clause in the formula array
  * To iterate over clause[i] we do the following: for (int i = 0; i < clause[i + 1]; ++i)

@@ -7,6 +7,7 @@
 
 literal* formula     = NULL;
 size_t num_variables = 0;
+size_t num_literals = 0;
 formula_pos* clauses = NULL;
 size_t num_clauses   = 0;
 
