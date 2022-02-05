@@ -21,17 +21,17 @@ typedef int literal;
 /**
  *
  */
-typedef unsigned long long formula_pos;
+typedef unsigned long int formula_pos;
 
 /**
  *
  */
-#define NOT_FOUND (ULLONG_MAX)
+#define NOT_FOUND (ULONG_MAX)
 
 /**
  *
  */
-typedef unsigned long long clause_index;
+typedef unsigned long int clause_index;
 
 /**
  *
