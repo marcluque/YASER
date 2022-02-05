@@ -45,7 +45,7 @@ typedef enum {
 static void yaser_exit(void) {
   cleanup_all();
 #ifdef YASER_DEBUG
-  exit(0);
+  exit(EXIT_SUCCESS);
 #else
   exit(EXIT_FAILURE);
 #endif

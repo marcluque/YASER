@@ -9,8 +9,13 @@
 
 #include "global/attributes.h"
 
-ATTR_NON_NULL void log_debug(const char* file_path, const char* debug_message);
 
-ATTR_NON_NULL void log_error(const char* file_path, const char* error_message);
+ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_debug_(const char* file_path, const char* debug_format, ...);
+
+#define log_debug(...) log_debug_(__FILE__, __VA_ARGS__)
+
+ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_error_(const char* file_path, const char* error_format, ...);
+
+#define log_error(...) log_error_(__FILE__, __VA_ARGS__)
 
 #endif // YASER_LOG_H
