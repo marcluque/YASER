@@ -227,6 +227,7 @@ jobs:
           pip install gprof2dot
           
       - name: Run gcc with profiling flags
+        continue-on-error: true
         run: |
           find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iexternal/uthash/src -Iinclude -o yaser
           ./yaser
@@ -258,12 +259,13 @@ jobs:
           pip install gprof2dot
 
       - name: Run valgrind
+        continue-on-error: true
         run: |
           cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTIMIZE=1 -DDONT_LINK_TCMALLOC=1 .
           make -j 2
           mkdir callgrind-report
           valgrind --tool=callgrind --cache-sim=yes --branch-sim=yes ./yaser &> callgrind-report/callgrind-report.txt
-          cat callgrind-report.txt
+          cat callgrind-report/callgrind-report.txt
 
       - name: Run gprof2dot
         run: |
