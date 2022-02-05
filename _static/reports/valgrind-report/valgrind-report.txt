@@ -1,26 +1,26 @@
-==3133== Memcheck, a memory error detector
-==3133== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==3133== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3133== Command: ./yaser
-==3133== 
-==3133== Conditional jump or move depends on uninitialised value(s)
-==3133==    at 0x483EF58: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3133==    by 0x48D5E94: __vfprintf_internal (vfprintf-internal.c:1688)
-==3133==    by 0x48E9119: __vsnprintf_internal (vsnprintf.c:114)
-==3133==    by 0x48BEF75: snprintf (snprintf.c:31)
-==3133==    by 0x10D3F2: log_error (log.c:66)
-==3133==    by 0x10D71E: dimacs_parse_file (dimacs_parser.c:30)
-==3133==    by 0x10D652: main (main.c:15)
-==3133== 
-[00:50:26][YASER - [31mERROR[0m][dimacs_parser.c]: [31mCouldn't open file
+==3062== Memcheck, a memory error detector
+==3062== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3062== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3062== Command: ./yaser
+==3062== 
+==3062== Conditional jump or move depends on uninitialised value(s)
+==3062==    at 0x483EF58: strlen (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3062==    by 0x48D5E94: __vfprintf_internal (vfprintf-internal.c:1688)
+==3062==    by 0x48E9119: __vsnprintf_internal (vsnprintf.c:114)
+==3062==    by 0x48BEF75: snprintf (snprintf.c:31)
+==3062==    by 0x10D3EB: log_error (log.c:66)
+==3062==    by 0x10D710: dimacs_parse_file (dimacs_parser.c:30)
+==3062==    by 0x10D644: main (main.c:15)
+==3062== 
+[01:04:22][YASER - [31mERROR[0m][dimacs_parser.c]: [31mCouldn't open file
 [0m
-==3133== 
-==3133== HEAP SUMMARY:
-==3133==     in use at exit: 0 bytes in 0 blocks
-==3133==   total heap usage: 9 allocs, 9 frees, 11,298 bytes allocated
-==3133== 
-==3133== All heap blocks were freed -- no leaks are possible
-==3133== 
-==3133== Use --track-origins=yes to see where uninitialised values come from
-==3133== For lists of detected and suppressed errors, rerun with: -s
-==3133== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==3062== 
+==3062== HEAP SUMMARY:
+==3062==     in use at exit: 0 bytes in 0 blocks
+==3062==   total heap usage: 9 allocs, 9 frees, 11,298 bytes allocated
+==3062== 
+==3062== All heap blocks were freed -- no leaks are possible
+==3062== 
+==3062== Use --track-origins=yes to see where uninitialised values come from
+==3062== For lists of detected and suppressed errors, rerun with: -s
+==3062== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
