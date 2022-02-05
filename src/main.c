@@ -11,13 +11,48 @@
 #include "global/logging/yaser_assert.h"
 #include "global/logging/yaser_malloc.h"
 
-int main(void) {
-  dimacs_parse_file("NULL");
+#define MAX_LEN_FILE_PATH (128U)
+
+static void parse_flag(int argc, const char* const* const argv, int i, char* file_path) {
+  if (argv[i][1] == 'i') {
+    if (i + 1 >= argc) {
+      log_error("no file path provided");
+      yaser_exit();
+    }
+
+    size_t file_path_len = strnlen(argv[i + 1], MAX_LEN_FILE_PATH);
+    if (file_path_len == MAX_LEN_FILE_PATH) {
+      log_error("file (%s) with length %zu exceeds max file path length %d", file_path, file_path_len, MAX_LEN_FILE_PATH);
+      yaser_exit();
+    }
+    strncpy(file_path, argv[i + 1], MAX_LEN_FILE_PATH);
+  } else {
+    log_error("unknown flag %c", argv[i][0]);
+    yaser_exit();
+  }
+}
+
+int main(int argc, char** argv) {
+  char* file_path = malloc(MAX_LEN_FILE_PATH * sizeof(char));
+  YASER_CHECK_MALLOC(file_path);
+
+  if (argc == 0) {
+    log_error("You need to provide an input file at least");
+  }
+
+  for (int i = 0; i < argc; ++i) {
+    if (argv[i][0] == '-') {
+      parse_flag(argc, (const char* const*) argv, i, file_path);
+    }
+  }
+
+  dimacs_parse_file(file_path);
   watched_literals_init();
   dpll_register_assignment_callback(watched_literals_check);
 
   dpll();
 
+  free(file_path);
   cleanup_all();
 
   return EXIT_SUCCESS;
