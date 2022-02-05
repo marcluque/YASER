@@ -171,7 +171,7 @@ jobs:
           find ../src/* assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_assignments_test -fprofile-arcs -ftest-coverage -g -O0 -I../external/uthash/src -I../external/Unity/src -I../include -Iassignments ../external/Unity/src/unity.c
           ./main_assignments_test
           lcov -c --directory . --output-file main_assignments_test.info
-          lcov --remove main_assignments_test.info -o main_assignments_test.info '*/unity.c' '*/test/*'
+          lcov --remove main_assignments_test.info -o main_assignments_test.info '*/unity.c' '*/test/*' 'defines.h' 'log_common.h' 'clean_up.c' 'log.c'
           genhtml main_assignments_test.info --output-directory gcov-report
 
       - name: Upload gcov report
