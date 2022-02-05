@@ -48,6 +48,7 @@ void dimacs_parse_file(const char* const file_path) {
   size_t len = 0;
   char* line = malloc(MAX_LINE_LENGTH * sizeof(char));
   YASER_CHECK_MALLOC(line);
+
   while ((read = getline(&line, &len, file)) != -1 && !done_reading_header) {
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
@@ -85,9 +86,9 @@ void dimacs_parse_file(const char* const file_path) {
   }
   clauses[clause_pointer] = last_clause_pointer;
 
-  // TODO: SANITY CHECK with number of literals and clauses
-  YASER_ASSERT(literal_pointer == num_variables);
-  YASER_ASSERT(clause_pointer == num_clauses);
+  // Sanity check the number of literals and clauses
+  YASER_ASSERT((long long int) literal_pointer - 1, ==, (long long int) num_variables);
+  YASER_ASSERT((long long int) clause_pointer + 1, ==, (long long int) num_clauses);
 
   free(line);
   fclose(file);
