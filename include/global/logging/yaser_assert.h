@@ -21,8 +21,6 @@
 static void asserted(const int cond, const char* const file_path, const int line, const char* const expression) {
 #if defined(YASER_DEBUG)
   if (cond) {
-    char* out = malloc(MAX_DEBUG_OUTPUT * sizeof(char));
-    YASER_CHECK_MALLOC(out, __FILE__, __LINE__);
     char basename[MAX_LEN_BASENAME];
     get_basename(file_path, basename);
     char time_buffer[MAX_LEN_TIME_BUFFER];
