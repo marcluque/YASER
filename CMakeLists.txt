@@ -26,6 +26,7 @@ else()
             -Wextra
             -Wunused
             -Wno-unused-function
+            -Wno-unused-parameter
             -Wshadow
             -Wcast-align
             -Wconversion
