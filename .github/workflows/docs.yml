@@ -227,7 +227,6 @@ jobs:
           pip install gprof2dot
           
       - name: Run gcc with profiling flags
-        continue-on-error: true
         run: |
           find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iexternal/uthash/src -Iinclude -o yaser
           ./yaser
@@ -236,7 +235,7 @@ jobs:
         run: |
           gprof yaser | gprof2dot | dot -Tpng -o gprof-report.png
 
-      - name: Upload valgrind report
+      - name: Upload gprof report
         uses: actions/upload-artifact@v2
         with:
           name: gprof-report
@@ -280,7 +279,7 @@ jobs:
   deploy-docs:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage, benchmark, gnu-profiler]
+    needs: [unit-tests, address-sanitizer, memory-sanitizer, UB-sanitizer, valgrind, complexity, code-coverage, benchmark, gnu-profiler, callgrind]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
