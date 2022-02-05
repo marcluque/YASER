@@ -54,8 +54,12 @@ ATTR_PURE formula_pos clause_literal_map_find(const clause_index clause, const f
   ClauseLiteralItem* item;
   HASH_FIND(hh, clause_map, &clause, sizeof(clause_index), item);
 
-  bool is_partner_present     = item == NULL;
-  formula_pos partner_literal = item->watched_literals[0] == literal_pos ? item->watched_literals[1]
-                                                                         : item->watched_literals[0];
-  return is_partner_present ? NOT_FOUND : partner_literal;
+  bool is_partner_present = item != NULL;
+  if (is_partner_present) {
+      formula_pos partner_literal = item->watched_literals[0] == literal_pos ? item->watched_literals[1]
+                                                                             : item->watched_literals[0];
+      return partner_literal;
+  } else {
+      return NOT_FOUND;
+  }
 }
