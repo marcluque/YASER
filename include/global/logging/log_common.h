@@ -49,6 +49,7 @@ static void get_basename(const char* const file_path, char* const basename_buffe
   }
 
   strncpy(basename_buffer, file_path + i + 1, len);
+  basename_buffer[len] = '\0';
 }
 
 #endif // YASER_LOG_COMMON_H
