@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">0</td>
-            <td class="headerCovTableEntry">36</td>
+            <td class="headerCovTableEntry">38</td>
             <td class="headerCovTableEntryLo">0.0 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2022-02-05 00:10:00</td>
+            <td class="headerValue">2022-02-05 00:24:20</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -116,11 +116,15 @@
 <a name="54"><span class="lineNum">      54 </span>            :   ClauseLiteralItem* item;</a>
 <a name="55"><span class="lineNum">      55 </span><span class="lineNoCov">          0 :   HASH_FIND(hh, clause_map, &amp;clause, sizeof(clause_index), item);</span></a>
 <a name="56"><span class="lineNum">      56 </span>            : </a>
-<a name="57"><span class="lineNum">      57 </span><span class="lineNoCov">          0 :   bool is_partner_present     = item == NULL;</span></a>
-<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :   formula_pos partner_literal = item-&gt;watched_literals[0] == literal_pos ? item-&gt;watched_literals[1]</span></a>
-<a name="59"><span class="lineNum">      59 </span><span class="lineNoCov">          0 :                                                                          : item-&gt;watched_literals[0];</span></a>
-<a name="60"><span class="lineNum">      60 </span><span class="lineNoCov">          0 :   return is_partner_present ? NOT_FOUND : partner_literal;</span></a>
-<a name="61"><span class="lineNum">      61 </span>            : }</a>
+<a name="57"><span class="lineNum">      57 </span><span class="lineNoCov">          0 :   bool is_partner_present = item != NULL;</span></a>
+<a name="58"><span class="lineNum">      58 </span><span class="lineNoCov">          0 :   if (is_partner_present) {</span></a>
+<a name="59"><span class="lineNum">      59 </span><span class="lineNoCov">          0 :       formula_pos partner_literal = item-&gt;watched_literals[0] == literal_pos ? item-&gt;watched_literals[1]</span></a>
+<a name="60"><span class="lineNum">      60 </span><span class="lineNoCov">          0 :                                                                              : item-&gt;watched_literals[0];</span></a>
+<a name="61"><span class="lineNum">      61 </span><span class="lineNoCov">          0 :       return partner_literal;</span></a>
+<a name="62"><span class="lineNum">      62 </span>            :   } else {</a>
+<a name="63"><span class="lineNum">      63 </span><span class="lineNoCov">          0 :       return NOT_FOUND;</span></a>
+<a name="64"><span class="lineNum">      64 </span>            :   }</a>
+<a name="65"><span class="lineNum">      65 </span>            : }</a>
 </pre>
       </td>
     </tr>
