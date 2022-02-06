@@ -14,6 +14,11 @@
 #define ATTR_NON_NULL __attribute__((nonnull))
 
 /**
+ * Tell the compiler that the function is not returning. This saves some bytes on the stack.
+ */
+#define ATTR_NORETURN __attribute__((noreturn))
+
+/**
  * Tell the compiler that the function is constant.
  * Declaring such functions with the const attribute allows GCC to avoid emitting some calls in repeated
  * invocations of the function with the same argument values.
