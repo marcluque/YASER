@@ -7,9 +7,11 @@
 #ifndef YASER_DEFINES_H
 #define YASER_DEFINES_H
 
+#include "utarray.h"
+#include "cleanup.h"
+#include "attributes.h"
 #include <limits.h>
 #include <stdlib.h>
-#include "cleanup.h"
 
 /**
  * Represents the index of the either positive or negative l. E.g. l x_i will be stored with i.
@@ -37,12 +39,12 @@ typedef unsigned long int clause_index;
  *
  */
 typedef enum {
-  VALUE_INVALID = -1,
-  VALUE_FALSE   = 0,
-  VALUE_TRUE    = 1,
+  VALUE_INVALID = 0,
+  VALUE_FALSE   = 1,
+  VALUE_TRUE    = 2,
 } value;
 
-static void yaser_exit(void) {
+ATTR_NORETURN static void yaser_exit(void) {
   cleanup_all();
 #ifdef YASER_DEBUG
   exit(EXIT_SUCCESS);

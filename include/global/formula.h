@@ -15,9 +15,18 @@
  * Clause ranges are indicated with the clauses array
  */
 extern literal* formula;
+extern size_t num_literals;
+
+/**
+ * variable -> value
+ */
+extern value* assignment_map;
 extern size_t num_variables;
 
-extern size_t num_literals;
+// TODO: Assert whenever used that != VALUE_INVALID
+#define assignment_map_get(literal) assignment_map[abs(literal)]
+
+#define assignment_map_set(literal, value) assignment_map[abs(literal)] = value
 
 /**
  * Each array entry stores the starting position of its clause in the formula array
