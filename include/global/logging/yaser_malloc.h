@@ -13,6 +13,7 @@
 #define ERROR_ID ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
 
 static void check_malloc(const void* const address, const char* const file_path, const size_t line) {
+#if defined(YASER_DEBUG)
   if ((address) == NULL) {
     char basename_[MAX_LEN_BASENAME];
     get_basename(file_path, basename_);
@@ -24,6 +25,9 @@ static void check_malloc(const void* const address, const char* const file_path,
     cleanup_all();
     yaser_exit();
   }
+#else
+  return;
+#endif
 }
 
 #define YASER_CHECK_MALLOC(address_)                                                                              \
