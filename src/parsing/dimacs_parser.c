@@ -74,13 +74,20 @@ void dimacs_parse_file(const char* const file_path) {
   while (getline(&line, &len, file) != -1) {
     char* token = strtok(line, delim);
     while (token != 0 && token[0] != '0') {
-      formula[literal_pointer++] = (literal) strtol(token, (char**) 0, 10);
-      // formula_add_map_item(formula[literal_pointer - 1], last_clause_pointer);
+      formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
       token                      = strtok((char*) 0, delim);
+      ++literal_pointer;
     }
 
-    clauses[clause_pointer++] = last_clause_pointer;
+    clauses[clause_pointer] = last_clause_pointer;
     last_clause_pointer       = literal_pointer;
+
+    // Check for unit clauses
+    if (literal_pointer - clauses[clause_pointer] == 1) {
+      assignment_unit_clause_stack_push(clauses[clause_pointer]);
+    }
+
+    ++clause_pointer;
   }
   clauses[clause_pointer] = last_clause_pointer;
 
