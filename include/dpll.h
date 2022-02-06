@@ -11,8 +11,6 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-void dpll_register_assignment_callback(void (*callback)(formula_pos));
-
 bool dpll(void);
 
 #endif // YASER_DPLL_H
