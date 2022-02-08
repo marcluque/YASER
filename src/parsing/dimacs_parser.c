@@ -83,7 +83,7 @@ void dimacs_parse_file(const char* const file_path) {
 
     // Check for unit clauses
     if (literal_pointer - clauses[clause_pointer] == 1) {
-      unit_clause_stack_push(clauses[clause_pointer]);
+      unit_clause_stack_push(clause_pointer, formula[clauses[clause_pointer]]);
     }
 
     ++clause_pointer;
