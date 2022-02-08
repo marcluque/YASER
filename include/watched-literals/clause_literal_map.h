@@ -18,19 +18,22 @@ typedef struct {
    * It is also the 'unique representation' of a clause.
    */
   clause_index clause;
+
   /**
-   * The array stores the two POSITIONS of the literals in the formula
+   * The array stores the two watched literals
    */
-  formula_pos watched_literals[2];
+  literal watched_literals[2];
+
+  /**
+   *
+   */
   UT_hash_handle hh;
 } ClauseLiteralItem;
 
 void clause_literal_map_clear(void);
 
-ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const formula_pos* watched_literals);
+ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const literal* watched_literals);
 
-void clause_literal_map_delete(clause_index clause);
-
-ATTR_PURE formula_pos clause_literal_map_find(clause_index clause, formula_pos literal_pos);
+ATTR_PURE literal* clause_literal_map_get(clause_index clause);
 
 #endif // YASER_CLAUSE_LITERAL_MAP_H
