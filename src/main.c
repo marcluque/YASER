@@ -12,7 +12,7 @@
 
 #define MAX_LEN_FILE_PATH (128U)
 
-static void parse_flag(const int argc, const char* const* const argv, const int i, const char* const file_path) {
+static void parse_flag(const int argc, const char* const* const argv, const int i, char* const file_path) {
   if (argv[i][1] == 'i') {
     if (i + 1 >= argc) {
       log_error("no file path provided");

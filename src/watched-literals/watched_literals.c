@@ -5,7 +5,6 @@
 #include "watched-literals/watched_literals.h"
 #include "global/formula.h"
 #include "conflicts/conflict_resolution.h"
-#include "assignments/assignment_sat_clauses.h"
 #include "assignments/unit_clause_stack.h"
 #include "watched-literals/clause_literal_map.h"
 #include "global/logging/yaser_assert.h"
