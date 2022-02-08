@@ -9,13 +9,13 @@
 #include <malloc.h>
 #include <assert.h>
 
-static literal* unit_clause_stack        = NULL;
+static UnitClause* unit_clause_stack        = NULL;
 static size_t unit_clause_stack_initial_size = 0;
 static ssize_t unit_clause_sp                = -1;
 
 void unit_clause_stack_init(const size_t stack_size) {
   unit_clause_stack_initial_size = stack_size;
-  unit_clause_stack              = malloc(sizeof(literal) * stack_size);
+  unit_clause_stack              = malloc(sizeof(UnitClause) * stack_size);
   YASER_CHECK_MALLOC(unit_clause_stack);
   unit_clause_sp = 0;
 }
@@ -38,16 +38,17 @@ bool unit_clause_stack_full(void) {
   return (size_t) unit_clause_sp == unit_clause_stack_initial_size;
 }
 
-void unit_clause_stack_push(literal l) {
+void unit_clause_stack_push(const clause_index clause, const literal l) {
   assert(unit_clause_stack != NULL);
   assert(!unit_clause_stack_full());
-
-  unit_clause_stack[unit_clause_sp++] = l;
+  unit_clause_stack[unit_clause_sp].l = l;
+  unit_clause_stack[unit_clause_sp].clause = clause;
+  ++unit_clause_sp;
 }
 
-literal unit_clause_stack_pop(void) {
+UnitClause* unit_clause_stack_pop(void) {
   assert(unit_clause_stack != NULL);
   assert(!unit_clause_stack_empty());
 
-  return unit_clause_stack[--unit_clause_sp];
+  return &unit_clause_stack[--unit_clause_sp];
 }
