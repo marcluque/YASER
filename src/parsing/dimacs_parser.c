@@ -6,7 +6,7 @@
 #include "global/defines.h"
 #include "global/formula.h"
 #include "assignments/assignment_stack.h"
-#include "assignments/assignment_unit_clauses.h"
+#include "assignments/unit_clause_stack.h"
 #include "global/logging/log.h"
 #include "global/logging/yaser_malloc.h"
 #include "global/logging/yaser_assert.h"
@@ -30,9 +30,8 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
   }
 
   formula_init(init_num_variables, init_num_clauses);
-  log_debug("#Variables=%zu; #Clauses=%zu", num_variables, num_clauses);
   assignment_stack_init(init_num_variables * 2);
-  assignment_unit_clause_stack_init(init_num_clauses);
+  unit_clause_stack_init(init_num_clauses);
 }
 
 void dimacs_parse_file(const char* const file_path) {
@@ -84,7 +83,7 @@ void dimacs_parse_file(const char* const file_path) {
 
     // Check for unit clauses
     if (literal_pointer - clauses[clause_pointer] == 1) {
-      assignment_unit_clause_stack_push(clauses[clause_pointer]);
+      unit_clause_stack_push(clauses[clause_pointer]);
     }
 
     ++clause_pointer;
@@ -92,9 +91,8 @@ void dimacs_parse_file(const char* const file_path) {
   clauses[clause_pointer] = last_clause_pointer;
 
   num_literals = literal_pointer;
-  log_debug("#Literals=%zu", num_literals);
+  log_debug("#Literals=%zu (not distinct); #Variables=%zu; #Clauses=%zu", num_literals, num_variables, num_clauses);
 
-  // TODO: Check number of variables
   // Sanity check the number of clauses
   YASER_ASSERT(clause_pointer, ==, num_clauses);
 
