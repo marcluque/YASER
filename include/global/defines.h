@@ -39,7 +39,7 @@ typedef unsigned long int clause_index;
  *
  */
 typedef enum {
-  VALUE_INVALID = 0,
+  VALUE_UNASSIGNED = 0,
   VALUE_FALSE   = 1,
   VALUE_TRUE    = 2,
 } value;

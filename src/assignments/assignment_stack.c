@@ -26,6 +26,8 @@ void assignment_stack_clear(void) {
 }
 
 void assignment_stack_reset(void) {
+  // TODO: Make is possible to reset to a certain decision level
+
   assignment_sp = 0;
 }
 
@@ -37,17 +39,15 @@ bool assignment_stack_full(void) {
   return (size_t) assignment_sp == assignment_stack_initial_size;
 }
 
-void assignment_stack_push(const formula_pos literal_pos, const value v, const bool visited) {
+void assignment_stack_push(const literal l, const value v, const bool visited) {
   assert(assignment_stack != NULL);
   assert(!assignment_stack_full());
-  assert(literal_pos < NOT_FOUND);
-  assert(literal_pos < num_variables);
-  assert(v != VALUE_INVALID);
+  assert(v != VALUE_UNASSIGNED);
 
-  assignment_stack[assignment_sp].literal_pos = literal_pos;
+  assignment_stack[assignment_sp].l           = l;
   assignment_stack[assignment_sp].value       = v;
-  assignment_stack[assignment_sp].satisfied   = (formula[literal_pos] > 0 && v == 1)
-                                              || (formula[literal_pos] < 0 && v == 0);
+  assignment_stack[assignment_sp].satisfied   = (l > 0 && v == 1)
+                                              || (l < 0 && v == 0);
   assignment_stack[assignment_sp].visited = visited;
   ++assignment_sp;
 }
@@ -55,6 +55,8 @@ void assignment_stack_push(const formula_pos literal_pos, const value v, const b
 AssignmentStackItem* assignment_stack_pop(void) {
   assert(assignment_stack != NULL);
   assert(!assignment_stack_empty());
+
+  // TODO: Maybe needs to store clause here too
 
   return &(assignment_stack[--assignment_sp]);
 }
