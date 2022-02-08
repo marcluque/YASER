@@ -5,31 +5,28 @@
 #include "dpll.h"
 #include "conflicts/conflict_resolution.h"
 #include "assignments/assignment_stack.h"
-#include "assignments/assignment_unit_clauses.h"
-#include "assignments/assignment_sat_clauses.h"
+#include "assignments/unit_clause_stack.h"
 #include "watched-literals/watched_literals.h"
 #include "global/formula.h"
+#include "watched-literals/sat_clause_set.h"
 
 static void update_assignment(const literal l, const value v) {
   // Trail -> entries (l, v, b): assigning v to l, b == true <=> negated l is visited
   assignment_stack_push(l, v, true);
   assignment_map_set(l, v);
+  // TODO: Find clause of literal and set clause to satisfied
 
   // Call to update watched literals
   watched_literals_check(l);
-
-  // TODO: Remove the clause l is in from the list in watched_literal_clause_map
-  //clause_index clause = literal_clause_map();
-
 }
 
 static bool bcp(void) {
-  while (!assignment_unit_clause_stack_empty()) {
-    literal l = assignment_unit_clause_stack_pop();
+  while (!unit_clause_stack_empty()) {
+    literal l = unit_clause_stack_pop();
     update_assignment(l, l < 0 ? VALUE_FALSE : VALUE_TRUE);
   }
 
-  return assignment_exists_unsat_clause();
+  return sat_clause_set_exists_unsat();
 }
 
 static bool decide(void) {

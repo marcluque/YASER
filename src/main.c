@@ -4,8 +4,7 @@
 
 #include "parsing/dimacs_parser.h"
 #include "watched-literals/watched_literals.h"
-#include "conflicts/dpll.h"
-#include "assignments/assignment_map.h"
+#include "dpll.h"
 #include "global/cleanup.h"
 #include "global/logging/log.h"
 #include "global/logging/yaser_assert.h"
@@ -13,7 +12,7 @@
 
 #define MAX_LEN_FILE_PATH (128U)
 
-static void parse_flag(int argc, const char* const* const argv, int i, char* file_path) {
+static void parse_flag(const int argc, const char* const* const argv, const int i, const char* const file_path) {
   if (argv[i][1] == 'i') {
     if (i + 1 >= argc) {
       log_error("no file path provided");
@@ -48,8 +47,6 @@ int main(int argc, char** argv) {
 
   dimacs_parse_file(file_path);
   watched_literals_init();
-  dpll_register_assignment_callback(watched_literals_check);
-
   log_debug("Initialization done...");
 
   dpll();
