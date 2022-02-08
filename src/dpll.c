@@ -10,11 +10,12 @@
 #include "global/formula.h"
 #include "watched-literals/sat_clause_set.h"
 
-static void update_assignment(const literal l, const value v) {
+static void update_assignment(const clause_index clause, const literal l) {
   // Trail -> entries (l, v, b): assigning v to l, b == true <=> negated l is visited
+  value v = l < 0 ? VALUE_FALSE : VALUE_TRUE;
   assignment_stack_push(l, v, true);
   assignment_map_set(l, v);
-  // TODO: Find clause of literal and set clause to satisfied
+  sat_clause_set_add(clause);
 
   // Call to update watched literals
   watched_literals_check(l);
@@ -22,8 +23,8 @@ static void update_assignment(const literal l, const value v) {
 
 static bool bcp(void) {
   while (!unit_clause_stack_empty()) {
-    literal l = unit_clause_stack_pop();
-    update_assignment(l, l < 0 ? VALUE_FALSE : VALUE_TRUE);
+    UnitClause* unit_clause = unit_clause_stack_pop();
+    update_assignment(unit_clause->clause, unit_clause->l);
   }
 
   return sat_clause_set_exists_unsat();
@@ -34,8 +35,10 @@ static bool decide(void) {
     return false;
   }
   // TODO: choose unassigned literal heuristically
+  // TODO: Do we know the clause that the literal is coming from?
   literal l = 0;
-  update_assignment(l, l < 0 ? VALUE_FALSE : VALUE_TRUE);
+  clause_index clause = 0;
+  update_assignment(clause, l);
   return true;
 }
 
