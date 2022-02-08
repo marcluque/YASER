@@ -11,6 +11,6 @@
 
 void watched_literals_init(void);
 
-void watched_literals_check(formula_pos watched_literal_pos);
+void watched_literals_check(literal watched_literal);
 
 #endif // YASER_WATCHED_LITERALS_H

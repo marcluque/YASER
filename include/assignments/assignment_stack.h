@@ -13,11 +13,11 @@
 #include <stddef.h>
 
 typedef struct {
-  formula_pos literal_pos;
+  literal l;
   value value;
   bool satisfied;
   /**
-   * true <=> visited negated literal_pos
+   * true <=> visited negated l
    */
   bool visited;
 } AssignmentStackItem;
@@ -32,7 +32,7 @@ ATTR_PURE bool assignment_stack_empty(void);
 
 ATTR_PURE bool assignment_stack_full(void);
 
-void assignment_stack_push(formula_pos literal_pos, value v, bool visited);
+void assignment_stack_push(literal l, value v, bool visited);
 
 AssignmentStackItem* assignment_stack_pop(void);
 
