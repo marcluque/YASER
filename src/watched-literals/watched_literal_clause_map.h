@@ -29,7 +29,7 @@ typedef struct {
 
 void watched_literal_clause_map_clear(void);
 
-void watched_literal_clause_map_add(literal watched_literal, clause_index clause_index);
+void watched_literal_clause_map_add(literal watched_literal, clause_index clause);
 
 ClauseArray watched_literal_clause_map_get(literal watched_literal);
 

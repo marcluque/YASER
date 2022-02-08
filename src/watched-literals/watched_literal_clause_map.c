@@ -20,27 +20,32 @@ void watched_literal_clause_map_clear(void) {
   }
 }
 
-void watched_literal_clause_map_add(literal watched_literal, clause_index clause_index) {
-  // TODO: Sanity check watched_literal?
-  YASER_ASSERT(clause_index, <, NOT_FOUND);
-  YASER_ASSERT(clause_index, <, num_literals);
+void watched_literal_clause_map_add(literal watched_literal, clause_index clause) {
+  YASER_ASSERT(watched_literal, !=, 0);
+  YASER_ASSERT(watched_literal, !=, INT_MAX);
+  YASER_ASSERT(clause, <, NOT_FOUND);
+  YASER_ASSERT(clause, <, num_literals);
 
   WatchedLiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_clause_map, &watched_literal, sizeof(literal), item);
   if (item == NULL) {
     item = malloc(sizeof(WatchedLiteralClauseItem));
     YASER_CHECK_MALLOC(item);
+
     item->l = watched_literal;
     utarray_new(item->clauses, &clause_index_icd);
-    utarray_push_back(item->clauses, &clause_index);
+    utarray_push_back(item->clauses, &clause);
+
     HASH_ADD(hh, watched_literal_clause_map, l, sizeof(literal), item);
   } else {
-    utarray_push_back(item->clauses, &clause_index);
+    utarray_push_back(item->clauses, &clause);
   }
 }
 
 ClauseArray watched_literal_clause_map_get(literal watched_literal) {
-  // TODO: Sanity check watched_literal?
+  YASER_ASSERT(watched_literal, !=, 0);
+  YASER_ASSERT(watched_literal, !=, INT_MAX);
+
   WatchedLiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_clause_map, &watched_literal, sizeof(literal), item);
   return item->clauses;
