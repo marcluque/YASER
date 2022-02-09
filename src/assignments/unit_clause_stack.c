@@ -9,7 +9,7 @@
 #include <malloc.h>
 #include <assert.h>
 
-static UnitClause* unit_clause_stack        = NULL;
+static UnitClause* unit_clause_stack         = NULL;
 static size_t unit_clause_stack_initial_size = 0;
 static ssize_t unit_clause_sp                = -1;
 
@@ -41,7 +41,7 @@ bool unit_clause_stack_full(void) {
 void unit_clause_stack_push(const clause_index clause, const literal l) {
   assert(unit_clause_stack != NULL);
   assert(!unit_clause_stack_full());
-  unit_clause_stack[unit_clause_sp].l = l;
+  unit_clause_stack[unit_clause_sp].l      = l;
   unit_clause_stack[unit_clause_sp].clause = clause;
   ++unit_clause_sp;
 }

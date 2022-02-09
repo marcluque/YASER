@@ -74,12 +74,12 @@ void dimacs_parse_file(const char* const file_path) {
     char* token = strtok(line, delim);
     while (token != 0 && token[0] != '0') {
       formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
-      token                      = strtok((char*) 0, delim);
+      token                    = strtok((char*) 0, delim);
       ++literal_pointer;
     }
 
     clauses[clause_pointer] = last_clause_pointer;
-    last_clause_pointer       = literal_pointer;
+    last_clause_pointer     = literal_pointer;
 
     // Check for unit clauses
     if (literal_pointer - clauses[clause_pointer] == 1) {
@@ -91,7 +91,8 @@ void dimacs_parse_file(const char* const file_path) {
   clauses[clause_pointer] = last_clause_pointer;
 
   num_literals = literal_pointer;
-  log_debug("#Literals=%zu (not distinct); #Variables=%zu; #Clauses=%zu", num_literals, num_variables, num_clauses);
+  log_debug("#Literals=%zu (not distinct); #Variables=%zu; #Clauses=%zu", num_literals, num_variables,
+            num_clauses);
 
   // Sanity check the number of clauses
   YASER_ASSERT(clause_pointer, ==, num_clauses);

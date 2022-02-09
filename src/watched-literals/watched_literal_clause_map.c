@@ -7,7 +7,7 @@
 #include "global/formula.h"
 
 static WatchedLiteralClauseItem* watched_literal_clause_map = NULL;
-static UT_icd clause_index_icd = {sizeof(clause_index), NULL, NULL, NULL };
+static UT_icd clause_index_icd                              = {sizeof(clause_index), NULL, NULL, NULL};
 
 void watched_literal_clause_map_clear(void) {
   WatchedLiteralClauseItem* current;

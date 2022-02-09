@@ -21,7 +21,8 @@ static void parse_flag(const int argc, const char* const* const argv, const int 
 
     size_t file_path_len = strnlen(argv[i + 1], MAX_LEN_FILE_PATH);
     if (file_path_len == MAX_LEN_FILE_PATH) {
-      log_error("file (%s) with length %zu exceeds max file path length %d", file_path, file_path_len, MAX_LEN_FILE_PATH);
+      log_error("file (%s) with length %zu exceeds max file path length %d", file_path, file_path_len,
+                MAX_LEN_FILE_PATH);
       yaser_exit();
     }
     strncpy(file_path, argv[i + 1], MAX_LEN_FILE_PATH);

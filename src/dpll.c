@@ -36,7 +36,7 @@ static bool decide(void) {
   }
   // TODO: choose unassigned literal heuristically
   // TODO: Do we know the clause that the literal is coming from?
-  literal l = 0;
+  literal l           = 0;
   clause_index clause = 0;
   update_assignment(clause, l);
   return true;
