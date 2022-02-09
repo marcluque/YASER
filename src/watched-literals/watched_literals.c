@@ -72,7 +72,8 @@ static void check_watched_literal_partner(const clause_index clause, const liter
     watched_literals[1] = partner_literal;
 
     // Update watched_literal_clause_map:
-    // The call from dpll takes care of removing the required clause for the original watched literal (not the negated one)
+    // The call from dpll takes care of removing the required clause for the original watched literal
+    // (not the negated one)
     // We need to make sure that new_literal is mapped to its new clause
     // partner_literal remains a watched literal for the clause, so no need to clean up
     watched_literal_clause_map_add(new_literal, clause);
