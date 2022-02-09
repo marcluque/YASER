@@ -39,6 +39,6 @@
 /**
  *
  */
-#define ATTR_FORMAT __attribute__ ((__format__ (printf, 2, 3)))
+#define ATTR_FORMAT __attribute__((__format__(printf, 2, 3)))
 
 #endif // YASER_ATTRIBUTES_H

@@ -19,9 +19,8 @@ static void check_malloc(const void* const address, const char* const file_path,
     get_basename(file_path, basename_);
     char time_buffer_[MAX_LEN_TIME_BUFFER];
     get_time(time_buffer_);
-    printf("[%s][YASER - " ERROR_ID "][%s:%zu]:" ANSI_COLOR_RED
-           " malloc failed\n" ANSI_COLOR_RESET,
-           time_buffer_, basename_, line);
+    printf("[%s][YASER - " ERROR_ID "][%s:%zu]:" ANSI_COLOR_RED " malloc failed\n" ANSI_COLOR_RESET, time_buffer_,
+           basename_, line);
     cleanup_all();
     yaser_exit();
   }
@@ -32,7 +31,7 @@ static void check_malloc(const void* const address, const char* const file_path,
 
 #define YASER_CHECK_MALLOC(address_)                                                                              \
   do {                                                                                                            \
-    check_malloc(address_, __FILE__, __LINE__);                                                                                                           \
+    check_malloc(address_, __FILE__, __LINE__);                                                                   \
   } while (0)
 
 #endif // YASER_MALLOC_H

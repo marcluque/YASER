@@ -9,7 +9,6 @@
 
 #include "global/attributes.h"
 
-
 ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_debug_(const char* file_path, const char* debug_format, ...);
 
 #define log_debug(...) log_debug_(__FILE__, __VA_ARGS__)

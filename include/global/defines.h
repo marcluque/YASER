@@ -40,8 +40,8 @@ typedef unsigned long int clause_index;
  */
 typedef enum {
   VALUE_UNASSIGNED = 0,
-  VALUE_FALSE   = 1,
-  VALUE_TRUE    = 2,
+  VALUE_FALSE      = 1,
+  VALUE_TRUE       = 2,
 } value;
 
 ATTR_NORETURN static void yaser_exit(void) {

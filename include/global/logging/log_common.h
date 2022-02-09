@@ -20,9 +20,9 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define DEBUG_ID           ANSI_COLOR_CYAN "DEBUG" ANSI_COLOR_RESET
-#define ERROR_ID           ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
-#define COMMON_FORMAT(id, color)  "[%s][YASER - " id "][%s]: " color
+#define DEBUG_ID                 ANSI_COLOR_CYAN "DEBUG" ANSI_COLOR_RESET
+#define ERROR_ID                 ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
+#define COMMON_FORMAT(id, color) "[%s][YASER - " id "][%s]: " color
 
 // Subtract 1 for NULL-termination
 #define MAX_LEN_BASENAME    (64 - 1)
@@ -44,7 +44,9 @@ static void get_basename(const char* const file_path, char* const basename_buffe
     char time_buffer[MAX_LEN_TIME_BUFFER];
     get_time(time_buffer);
 
-    const char* format = COMMON_FORMAT(ERROR_ID, ANSI_COLOR_RED) "basename_buffer (length: %d) too small for basename (length: %lu)\n" ANSI_COLOR_RESET;
+    const char* format = COMMON_FORMAT(
+        ERROR_ID,
+        ANSI_COLOR_RED) "basename_buffer (length: %d) too small for basename (length: %lu)\n" ANSI_COLOR_RESET;
     printf(format, time_buffer, "log_common.h", MAX_LEN_BASENAME, len);
 
     return;
