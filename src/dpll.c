@@ -42,6 +42,18 @@ static bool decide(void) {
   return true;
 }
 
+static bool backtrack() {
+  while (assignment_stack_empty()) {
+    AssignmentStackItem* item = assignment_stack_pop();
+    if (!item->visited) {
+      assignment_stack_push(item->l, item->value, true);
+      return true;
+    }
+  }
+
+  return false;
+}
+
 bool dpll(void) {
   assignment_stack_reset();
   if (!bcp()) {
@@ -54,8 +66,7 @@ bool dpll(void) {
     }
 
     while (!bcp()) {
-      // TODO: Tell the method which clause and variable is affected
-      if (!resolve_conflict()) {
+      if (!backtrack()) {
         return false;
       }
     }
