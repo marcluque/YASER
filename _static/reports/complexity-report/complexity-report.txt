@@ -1,61 +1,58 @@
 Complexity Scores
 Score | ln-ct | nc-lns| file-name(line): proc-name
-    0       1       1   ./src/conflicts/dpll.c(8): dpll_register_assignment_callback
+    0       1       1   ./src/watched-literals/sat_clause_set.c(18): sat_clause_set_add
+    0       1       1   ./src/watched-literals/sat_clause_set.c(24): sat_clause_set_exists_unsat
     0       1       1   ./src/assignments/assignment_stack.c(23): assignment_stack_reset
-    0       1       1   ./src/assignments/assignment_stack.c(27): assignment_stack_empty
-    0       1       1   ./src/assignments/assignment_stack.c(31): assignment_stack_full
-    0       1       1   ./src/assignments/assignment_unit_clauses.c(23): assignment_unit_clause_stack_reset
-    0       1       1   ./src/assignments/assignment_unit_clauses.c(27): assignment_unit_clause_stack_empty
-    0       1       1   ./src/assignments/assignment_unit_clauses.c(31): assignment_unit_clause_stack_full
-    0       1       1   ./src/assignments/assignment_sat_clauses.c(8): assignment_exists_unsat_clause
-    0       1       1   ./src/assignments/assignment_sat_clauses.c(12): assignment_sat_clauses_add_clause
+    0       1       1   ./src/assignments/assignment_stack.c(29): assignment_stack_empty
+    0       1       1   ./src/assignments/assignment_stack.c(33): assignment_stack_full
+    0       1       1   ./src/assignments/unit_clause_stack.c(23): unit_clause_stack_reset
+    0       1       1   ./src/assignments/unit_clause_stack.c(27): unit_clause_stack_empty
+    0       1       1   ./src/assignments/unit_clause_stack.c(31): unit_clause_stack_full
     1       3       3   ./src/assignments/assignment_stack.c(17): assignment_stack_clear
-    1       3       3   ./src/assignments/assignment_unit_clauses.c(17): assignment_unit_clause_stack_clear
-    1       4       3   ./src/assignments/assignment_stack.c(50): assignment_stack_pop
-    1       4       3   ./src/assignments/assignment_unit_clauses.c(44): assignment_unit_clause_stack_pop
-    1       5       3   ./src/conflicts/dpll.c(12): update_assignment
-    1       4       4   ./src/global/formula.c(11): formula_init
-    1       4       4   ./src/watched-literals/watched_literals.c(23): watched_literals_init
+    1       3       3   ./src/assignments/unit_clause_stack.c(17): unit_clause_stack_clear
+    1       4       3   ./src/watched-literals/sat_clause_set.c(11): sat_clause_set_contains
+    1       4       3   ./src/assignments/unit_clause_stack.c(43): unit_clause_stack_pop
+    1       6       3   ./src/assignments/assignment_stack.c(49): assignment_stack_pop
     1       4       4   ./src/assignments/assignment_stack.c(10): assignment_stack_init
-    1       4       4   ./src/assignments/assignment_unit_clauses.c(10): assignment_unit_clause_stack_init
-    1       6       5   ./src/assignments/assignment_unit_clauses.c(35): assignment_unit_clause_stack_push
-    1       7       5   ./src/watched-literals/literal_clause_map.c(41): literal_clause_map_find
-    1       8       5   ./src/conflicts/dpll.c(21): bcp
+    1       4       4   ./src/assignments/unit_clause_stack.c(10): unit_clause_stack_init
+    1       5       5   ./src/assignments/unit_clause_stack.c(35): unit_clause_stack_push
+    1       6       5   ./src/watched-literals/watched_literal_clause_map.c(42): watched_literal_clause_map_get
+    1       6       5   ./src/dpll.c(17): bcp
+    1       7       5   ./src/dpll.c(6): update_assignment
     1       6       6   ./src/conflicts/clause_resolution.c(24): resolvent_variable_table_clear
-    1       7       6   ./src/global/formula.c(18): formula_clear
-    1       7       6   ./src/watched-literals/literal_clause_map.c(8): literal_clause_map_clear
-    1       7       6   ./src/watched-literals/clause_literal_map.c(8): clause_literal_map_clear
-    1       7       6   ./src/assignments/assignment_map.c(32): assignment_map_clear
+    1       8       6   ./src/watched-literals/clause_literal_map.c(8): clause_literal_map_clear
+    1       8       6   ./src/watched-literals/clause_literal_map.c(30): clause_literal_map_get
+    1       8       6   ./src/watched-literals/watched_literals.c(24): watched_literals_init
     1       8       6   ./src/conflicts/conflict_resolution.c(8): resolve_conflict
-    1       9       6   ./src/main.c(6): main
-    1       9       6   ./src/conflicts/dpll.c(32): decide
-    1       8       7   ./src/watched-literals/literal_clause_map.c(30): literal_clause_map_delete
-    1       8       7   ./src/watched-literals/clause_literal_map.c(33): clause_literal_map_delete
+    1      14       6   ./src/global/clean_up.c(6): cleanup_all
+    1       8       7   ./src/watched-literals/clause_literal_map.c(19): clause_literal_map_add
+    1       8       7   ./src/watched-literals/watched_literal_clause_map.c(9): watched_literal_clause_map_clear
     1       8       7   ./src/conflicts/clause_resolution.c(13): resolvent_literal_table_add
-    1       8       7   ./src/parsing/dimacs_parser.c(7): init
-    1       8       7   ./src/assignments/assignment_map.c(8): assignment_map_add
-    1      15       7   ./src/global/clean_up.c(6): cleanup_all
-    1       9       8   ./src/watched-literals/literal_clause_map.c(18): literal_clause_map_add
-    1      10       9   ./src/assignments/assignment_map.c(19): assignment_map_get_value
-    1      14      10   ./src/watched-literals/watched_literals.c(6): find_new_literal
-    1      12      11   ./src/watched-literals/clause_literal_map.c(18): clause_literal_map_add
-    1      12      11   ./src/assignments/assignment_stack.c(35): assignment_stack_push
-    1      16      14   ./src/watched-literals/clause_literal_map.c(44): clause_literal_map_find
-    1      22      17   ./src/global/log.c(35): log_error
-    1      23      18   ./src/global/log.c(9): log_debug
-    2      17      14   ./src/conflicts/dpll.c(44): dpll
-    3      38      23   ./src/watched-literals/watched_literals.c(30): watched_literals_check
+    1       8       7   ./src/parsing/dimacs_parser.c(10): init
+    1       9       7   ./src/dpll.c(26): decide
+    1       9       8   ./src/global/formula.c(13): formula_init
+    1       9       8   ./src/assignments/assignment_stack.c(37): assignment_stack_push
+    1      11       9   ./src/global/formula.c(25): formula_clear
+    1      14      11   ./src/watched-literals/watched_literals.c(80): watched_literals_check
+    1      24      18   ./src/global/log.c(37): log_error_
+    1      25      19   ./src/global/log.c(9): log_debug_
+    2      14      11   ./src/watched-literals/watched_literals.c(7): find_new_literal
+    2      17      14   ./src/dpll.c(38): dpll
+    2      17      16   ./src/main.c(7): parse_flag
+    2      19      16   ./src/watched-literals/watched_literal_clause_map.c(20): watched_literal_clause_map_add
+    2      23      17   ./src/main.c(27): main
+    2      42      23   ./src/watched-literals/watched_literals.c(35): check_watched_literal_partner
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
-    7      46      41   ./src/parsing/dimacs_parser.c(18): dimacs_parse_file
+    8      64      52   ./src/parsing/dimacs_parser.c(21): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         345 ************************************************************
+    0-9         368 ************************************************************
 
-Scored procedure ct:       47
-Non-comment line ct:      345
+Scored procedure ct:       44
+Non-comment line ct:      368
 Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              1 (half in higher score procs)
-75%-ile score:              3 (25% in higher score procs)
-Highest score:              7 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
+75%-ile score:              2 (25% in higher score procs)
+Highest score:              8 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
