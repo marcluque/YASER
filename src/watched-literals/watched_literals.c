@@ -97,11 +97,14 @@ void watched_literals_check(const literal watched_literal) {
   literal negated_watched_literal = -watched_literal;
   ClauseArray clause_array        = watched_literal_clause_map_get(negated_watched_literal);
   YASER_ASSERT(clause_array, !=, NULL);
+  long* clause = utarray_front(clause_array);
 
-  clause_index* clause = (clause_index*) utarray_front(clause_array);
-  for (; clause != NULL; clause = (clause_index*) utarray_next(clause_array, clause)) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+  for (; clause != NULL; clause = utarray_next(clause_array, (int*) clause)) {
     if (!sat_clause_set_contains(*clause)) {
       check_watched_literal_partner(*clause, negated_watched_literal);
     }
   }
+#pragma GCC diagnostic pop
 }
