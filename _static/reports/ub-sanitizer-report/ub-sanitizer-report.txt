@@ -1,1 +1,0 @@
-[13:33:57][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m

@@ -1,9 +1,0 @@
-Uninitialized bytes in __interceptor_fopen at offset 0 inside [0x708000000000, 1)
-==1893==WARNING: MemorySanitizer: use-of-uninitialized-value
-    #0 0x56508b0c6d92 in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:38:16
-    #1 0x56508b0c1560 in main /home/runner/work/YASER/YASER/./src/main.c:49:3
-    #2 0x7f247d3920b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
-    #3 0x56508b04524d in _start (/home/runner/work/YASER/YASER/a.out+0x1e24d)
-
-SUMMARY: MemorySanitizer: use-of-uninitialized-value /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:38:16 in dimacs_parse_file
-Exiting
