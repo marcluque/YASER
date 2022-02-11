@@ -2,9 +2,9 @@
 // Created with <3 by marcluque, February 2022
 //
 
-#include "global/logging/log.h"
-#include "global/logging/log_common.h"
-#include "global/logging/yaser_malloc.h"
+#include "logging/log.h"
+#include "logging/log_common.h"
+#include "global/yaser.h"
 #include <malloc.h>
 #include <stdarg.h>
 

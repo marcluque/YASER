@@ -41,7 +41,7 @@ static bool decide(void) {
   return true;
 }
 
-static bool backtrack() {
+static bool backtrack(void) {
   while (assignment_stack_empty()) {
     AssignmentStackItem* item = assignment_stack_pop();
     if (!item->visited) {
