@@ -13,16 +13,16 @@ void tearDown (void) {
 static void test_clause_literal_map_add(void) {
     clause_index index_1 = 100;
     clause_literal_map_add(index_1, (const formula_pos[]){323, 1});
-    formula_pos literal_partner = clause_literal_map_find(index_1, 1);
+    formula_pos literal_partner = clause_literal_map_get(index_1, 1);
     TEST_ASSERT_EQUAL_UINT64(literal_partner, 323);
-    literal_partner = clause_literal_map_find(index_1, 323);
+    literal_partner = clause_literal_map_get(index_1, 323);
     TEST_ASSERT_EQUAL_UINT64(literal_partner, 1);
 
     clause_index index_2 = 2;
     clause_literal_map_add(index_2, (const formula_pos[]){666, 2368723});
-    literal_partner = clause_literal_map_find(index_2, 666);
+    literal_partner = clause_literal_map_get(index_2, 666);
     TEST_ASSERT_EQUAL_UINT64(literal_partner, 2368723);
-    literal_partner = clause_literal_map_find(index_2, 2368723);
+    literal_partner = clause_literal_map_get(index_2, 2368723);
     TEST_ASSERT_EQUAL_UINT64(literal_partner, 666);
 }
 
