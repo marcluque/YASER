@@ -31,26 +31,27 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       8       7   ./src/parsing/dimacs_parser.c(10): init
     1       9       7   ./src/dpll.c(26): decide
     1       9       8   ./src/global/formula.c(13): formula_init
+    1       9       8   ./src/dpll.c(38): backtrack
     1       9       8   ./src/assignments/assignment_stack.c(37): assignment_stack_push
     1      11       9   ./src/global/formula.c(25): formula_clear
-    1      14      11   ./src/watched-literals/watched_literals.c(80): watched_literals_check
+    1      16      11   ./src/watched-literals/watched_literals.c(76): watched_literals_check
     1      24      18   ./src/global/log.c(37): log_error_
     1      25      19   ./src/global/log.c(9): log_debug_
     2      14      11   ./src/watched-literals/watched_literals.c(7): find_new_literal
-    2      17      14   ./src/dpll.c(38): dpll
+    2      16      14   ./src/dpll.c(50): dpll
     2      17      16   ./src/main.c(7): parse_flag
     2      19      16   ./src/watched-literals/watched_literal_clause_map.c(20): watched_literal_clause_map_add
     2      23      17   ./src/main.c(27): main
-    2      42      23   ./src/watched-literals/watched_literals.c(35): check_watched_literal_partner
+    2      38      23   ./src/watched-literals/watched_literals.c(35): check_watched_literal_partner
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
     8      64      52   ./src/parsing/dimacs_parser.c(21): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         368 ************************************************************
+    0-9         376 ************************************************************
 
-Scored procedure ct:       44
-Non-comment line ct:      368
+Scored procedure ct:       45
+Non-comment line ct:      376
 Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              1 (half in higher score procs)
