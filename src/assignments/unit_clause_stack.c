@@ -21,9 +21,7 @@ void unit_clause_stack_init(const size_t stack_size) {
 }
 
 void unit_clause_stack_clear(void) {
-  if (unit_clause_stack != NULL) {
-    free(unit_clause_stack);
-  }
+  free(unit_clause_stack);
 }
 
 void unit_clause_stack_reset(void) {

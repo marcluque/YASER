@@ -14,8 +14,6 @@ void cleanup_all(void) {
   // Make sure all messages get out
   fflush(stdout);
 
-  // NOTE: Below cleanups are only done if something has been allocated
-
   // assignment
   assignment_stack_clear();
   unit_clause_stack_clear();
