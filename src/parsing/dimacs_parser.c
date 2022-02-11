@@ -7,9 +7,9 @@
 #include "global/formula.h"
 #include "assignments/assignment_stack.h"
 #include "assignments/unit_clause_stack.h"
-#include "global/logging/log.h"
-#include "global/logging/yaser_malloc.h"
-#include "global/logging/yaser_assert.h"
+#include "logging/log.h"
+#include "global/yaser.h"
+#include "global/yaser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -26,7 +26,7 @@
 static void init(size_t init_num_variables, size_t init_num_clauses) {
   if (init_num_variables > ULLONG_MAX) {
     log_error("number of variables exceeds %llu", ULLONG_MAX);
-    yaser_exit();
+    YASER_EXIT();
   }
 
   formula_init(init_num_variables, init_num_clauses);
@@ -38,7 +38,7 @@ void dimacs_parse_file(const char* const file_path) {
   FILE* file = fopen(file_path, "r");
   if (file == 0) {
     log_error("%s", strerror(errno));
-    yaser_exit();
+    YASER_EXIT();
   }
 
   log_debug("Successfully opened file (%s)", file_path);

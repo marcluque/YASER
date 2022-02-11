@@ -3,7 +3,7 @@
 //
 
 #include "global/formula.h"
-#include "global/logging/yaser_malloc.h"
+#include "global/yaser.h"
 #include <malloc.h>
 
 literal* formula      = NULL;

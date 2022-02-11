@@ -3,7 +3,7 @@
 //
 
 #include "watched_literal_clause_map.h"
-#include "global/logging/yaser_assert.h"
+#include "global/yaser.h"
 #include "global/formula.h"
 
 static WatchedLiteralClauseItem* watched_literal_clause_map = NULL;

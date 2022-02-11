@@ -7,9 +7,9 @@
 #include "conflicts/conflict_resolution.h"
 #include "assignments/unit_clause_stack.h"
 #include "watched-literals/clause_literal_map.h"
-#include "global/logging/yaser_assert.h"
+#include "global/yaser.h"
 #include "watched_literal_clause_map.h"
-#include "global/logging/log.h"
+#include "logging/log.h"
 #include "sat_clause_set.h"
 #include <limits.h>
 

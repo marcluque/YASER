@@ -6,9 +6,9 @@
 #include "watched-literals/watched_literals.h"
 #include "dpll.h"
 #include "global/cleanup.h"
-#include "global/logging/log.h"
-#include "global/logging/yaser_assert.h"
-#include "global/logging/yaser_malloc.h"
+#include "logging/log.h"
+#include "global/yaser.h"
+#include "global/yaser.h"
 
 #define MAX_LEN_FILE_PATH (128U)
 
@@ -16,19 +16,19 @@ static void parse_flag(const int argc, const char* const* const argv, const int 
   if (argv[i][1] == 'i') {
     if (i + 1 >= argc) {
       log_error("no file path provided");
-      yaser_exit();
+      YASER_EXIT();
     }
 
     size_t file_path_len = strnlen(argv[i + 1], MAX_LEN_FILE_PATH);
     if (file_path_len == MAX_LEN_FILE_PATH) {
       log_error("file (%s) with length %zu exceeds max file path length %d", file_path, file_path_len,
                 MAX_LEN_FILE_PATH);
-      yaser_exit();
+      YASER_EXIT();
     }
     strncpy(file_path, argv[i + 1], MAX_LEN_FILE_PATH);
   } else {
     log_error("unknown flag %c", argv[i][0]);
-    yaser_exit();
+    YASER_EXIT();
   }
 }
 

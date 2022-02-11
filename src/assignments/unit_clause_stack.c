@@ -4,7 +4,7 @@
 
 #include "assignments/unit_clause_stack.h"
 #include "global/formula.h"
-#include "global/logging/yaser_malloc.h"
+#include "global/yaser.h"
 #include <sys/types.h>
 #include <malloc.h>
 #include <assert.h>

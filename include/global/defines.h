@@ -44,13 +44,4 @@ typedef enum {
   VALUE_TRUE       = 2,
 } value;
 
-ATTR_NORETURN static void yaser_exit(void) {
-  cleanup_all();
-#ifdef YASER_DEBUG
-  exit(EXIT_SUCCESS);
-#else
-  exit(EXIT_FAILURE);
-#endif
-}
-
 #endif // YASER_DEFINES_H

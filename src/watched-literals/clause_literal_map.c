@@ -4,7 +4,7 @@
 
 #include "watched-literals/clause_literal_map.h"
 #include "global/formula.h"
-#include "global/logging/yaser_assert.h"
+#include "global/yaser.h"
 #include <assert.h>
 #include <stdbool.h>
 
