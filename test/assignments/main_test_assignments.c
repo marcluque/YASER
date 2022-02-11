@@ -30,12 +30,12 @@ int main(void) {
     //
     // Unit Clause Stack
     //
-    RUN_TEST(test_assignment_unit_clause_stack_init);
-    RUN_TEST(test_assignment_unit_clause_stack_reset);
-    RUN_TEST(test_assignment_unit_clause_stack_empty);
-    RUN_TEST(test_assignment_unit_clause_stack_full);
-    RUN_TEST(test_assignment_unit_clause_stack_push);
-    RUN_TEST(test_assignment_unit_clause_stack_pop);
+    RUN_TEST(test_unit_clause_stack_init);
+    RUN_TEST(test_unit_clause_stack_reset);
+    RUN_TEST(test_unit_clause_stack_empty);
+    RUN_TEST(test_unit_clause_stack_full);
+    RUN_TEST(test_unit_clause_stack_push);
+    RUN_TEST(test_unit_clause_stack_pop);
 
     return UNITY_END();
 }

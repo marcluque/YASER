@@ -126,7 +126,7 @@ void test_assignment_stack_push(void) {
     TEST_ASSERT_FALSE(assignment_stack_full());
     TEST_ASSERT_FALSE(result->satisfied);
     TEST_ASSERT_FALSE(result->visited);
-    TEST_ASSERT_EQUAL_UINT64(3, result->literal_pos);
+    TEST_ASSERT_EQUAL_UINT64(3, result->l);
     TEST_ASSERT_EQUAL_INT(VALUE_FALSE, result->value);
 
     assignment_stack_clear();
@@ -150,7 +150,7 @@ void test_assignment_stack_pop(void) {
     TEST_ASSERT_FALSE(assignment_stack_full());
     TEST_ASSERT_FALSE(result->satisfied);
     TEST_ASSERT_FALSE(result->visited);
-    TEST_ASSERT_EQUAL_UINT64(0, result->literal_pos);
+    TEST_ASSERT_EQUAL_UINT64(0, result->l);
     TEST_ASSERT_EQUAL_INT(VALUE_TRUE, result->value);
 
     assignment_stack_clear();
