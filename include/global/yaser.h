@@ -16,6 +16,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#define ASSERT_ID         ANSI_COLOR_YELLOW "ASSERTION" ANSI_COLOR_RESET
+#define FORMAT(id, color) "[%s][YASER - " id "][%s:%d]:" color
+
 #if defined(YASER_DEBUG)
   #define YASER_EXIT()                                                                                            \
     do {                                                                                                          \
@@ -30,8 +33,8 @@
         get_basename(__FILE__, basename_);                                                                        \
         char time_buffer_[MAX_LEN_TIME_BUFFER];                                                                   \
         get_time(time_buffer_);                                                                                   \
-        printf("[%s][YASER - " ERROR_ID "][%s:%d]:" ANSI_COLOR_RED " malloc failed\n" ANSI_COLOR_RESET,           \
-               time_buffer_, basename_, __LINE__);                                                                \
+        printf(FORMAT(ERROR_ID, ANSI_COLOR_RED) " malloc failed\n" ANSI_COLOR_RESET, time_buffer_, basename_,     \
+               __LINE__);                                                                                         \
         cleanup_all();                                                                                            \
         YASER_EXIT();                                                                                             \
       }                                                                                                           \
@@ -46,8 +49,8 @@
         char time_buffer[MAX_LEN_TIME_BUFFER];                                                                    \
         get_time(time_buffer);                                                                                    \
                                                                                                                   \
-        const char* format = "[%s][YASER - " ANSI_COLOR_YELLOW "ASSERTION" ANSI_COLOR_RESET                       \
-                             "][%s:%d]:" ANSI_COLOR_YELLOW " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;  \
+        const char* format = FORMAT(ASSERT_ID,                                                                    \
+                                    ANSI_COLOR_YELLOW) " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;      \
         printf(format, time_buffer, basename, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,     \
                right_);                                                                                           \
                                                                                                                   \
