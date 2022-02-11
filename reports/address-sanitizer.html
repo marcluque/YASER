@@ -81,19 +81,19 @@
   <section id="address-sanitizer">
 <span id="reports-address-san"></span><h1>Address Sanitizer<a class="headerlink" href="#address-sanitizer" title="Permalink to this headline"></a></h1>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="o">=================================================================</span>
-<span class="o">==</span><span class="mi">1831</span><span class="o">==</span><span class="nl">ERROR</span><span class="p">:</span> <span class="nl">AddressSanitizer</span><span class="p">:</span> <span class="n">heap</span><span class="o">-</span><span class="n">buffer</span><span class="o">-</span><span class="n">overflow</span> <span class="n">on</span> <span class="n">address</span> <span class="mh">0x60c0000000c0</span> <span class="n">at</span> <span class="n">pc</span> <span class="mh">0x00000046ae8b</span> <span class="n">bp</span> <span class="mh">0x7ffdb29176f0</span> <span class="n">sp</span> <span class="mh">0x7ffdb2916eb0</span>
+<span class="o">==</span><span class="mi">1830</span><span class="o">==</span><span class="nl">ERROR</span><span class="p">:</span> <span class="nl">AddressSanitizer</span><span class="p">:</span> <span class="n">heap</span><span class="o">-</span><span class="n">buffer</span><span class="o">-</span><span class="n">overflow</span> <span class="n">on</span> <span class="n">address</span> <span class="mh">0x60c0000000c0</span> <span class="n">at</span> <span class="n">pc</span> <span class="mh">0x00000046ae8b</span> <span class="n">bp</span> <span class="mh">0x7ffe522194d0</span> <span class="n">sp</span> <span class="mh">0x7ffe52218c90</span>
 <span class="n">READ</span> <span class="n">of</span> <span class="n">size</span> <span class="mi">129</span> <span class="n">at</span> <span class="mh">0x60c0000000c0</span> <span class="kr">thread</span> <span class="n">T0</span>
     <span class="cp">#0 0x46ae8a in fopen (/home/runner/work/YASER/YASER/a.out+0x46ae8a)</span>
     <span class="cp">#1 0x4cf29f in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:38:16</span>
     <span class="cp">#2 0x4c8633 in main /home/runner/work/YASER/YASER/./src/main.c:49:3</span>
-    <span class="cp">#3 0x7f11d27910b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
+    <span class="cp">#3 0x7efe38be10b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
     <span class="cp">#4 0x41c2cd in _start (/home/runner/work/YASER/YASER/a.out+0x41c2cd)</span>
 
 <span class="mh">0x60c0000000c0</span> <span class="n">is</span> <span class="n">located</span> <span class="mi">0</span> <span class="n">bytes</span> <span class="n">to</span> <span class="n">the</span> <span class="n">right</span> <span class="n">of</span> <span class="mi">128</span><span class="o">-</span><span class="n">byte</span> <span class="n">region</span> <span class="p">[</span><span class="mh">0x60c000000040</span><span class="p">,</span><span class="mh">0x60c0000000c0</span><span class="p">)</span>
 <span class="n">allocated</span> <span class="n">by</span> <span class="kr">thread</span> <span class="n">T0</span> <span class="nl">here</span><span class="p">:</span>
     <span class="cp">#0 0x49752d in malloc (/home/runner/work/YASER/YASER/a.out+0x49752d)</span>
     <span class="cp">#1 0x4c858c in main /home/runner/work/YASER/YASER/./src/main.c:36:21</span>
-    <span class="cp">#2 0x7f11d27910b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
+    <span class="cp">#2 0x7efe38be10b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
 
 <span class="nl">SUMMARY</span><span class="p">:</span> <span class="nl">AddressSanitizer</span><span class="p">:</span> <span class="n">heap</span><span class="o">-</span><span class="n">buffer</span><span class="o">-</span><span class="n">overflow</span> <span class="p">(</span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">YASER</span><span class="o">/</span><span class="n">YASER</span><span class="o">/</span><span class="n">a</span><span class="p">.</span><span class="n">out</span><span class="o">+</span><span class="mh">0x46ae8a</span><span class="p">)</span> <span class="n">in</span> <span class="n">fopen</span>
 <span class="n">Shadow</span> <span class="n">bytes</span> <span class="n">around</span> <span class="n">the</span> <span class="n">buggy</span> <span class="nl">address</span><span class="p">:</span>
@@ -128,7 +128,7 @@
   <span class="n">Left</span> <span class="n">alloca</span> <span class="nl">redzone</span><span class="p">:</span>     <span class="n">ca</span>
   <span class="n">Right</span> <span class="n">alloca</span> <span class="nl">redzone</span><span class="p">:</span>    <span class="n">cb</span>
   <span class="n">Shadow</span> <span class="nl">gap</span><span class="p">:</span>              <span class="n">cc</span>
-<span class="o">==</span><span class="mi">1831</span><span class="o">==</span><span class="n">ABORTING</span>
+<span class="o">==</span><span class="mi">1830</span><span class="o">==</span><span class="n">ABORTING</span>
 </pre></div>
 </div>
 </section>
