@@ -25,7 +25,7 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       8       6   ./src/watched-literals/clause_literal_map.c(30): clause_literal_map_get
     1       8       6   ./src/watched-literals/watched_literals.c(24): watched_literals_init
     1       8       6   ./src/conflicts/conflict_resolution.c(8): resolve_conflict
-    1      12       6   ./src/global/clean_up.c(6): cleanup_all
+    1      12       6   ./src/global/cleanup.c(6): cleanup_all
     1       8       7   ./src/watched-literals/clause_literal_map.c(19): clause_literal_map_add
     1       8       7   ./src/watched-literals/watched_literal_clause_map.c(9): watched_literal_clause_map_clear
     1       8       7   ./src/conflicts/clause_resolution.c(13): resolvent_literal_table_add
