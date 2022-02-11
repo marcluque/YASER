@@ -16,7 +16,7 @@
 /**
  * Tell the compiler that the function is not returning. This saves some bytes on the stack.
  */
-#define ATTR_NORETURN __attribute__((noreturn))
+#define ATTR_NORETURN _Noreturn
 
 /**
  * Tell the compiler that the function is constant.
