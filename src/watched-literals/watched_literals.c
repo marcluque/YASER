@@ -72,11 +72,7 @@ static void check_watched_literal_partner(const clause_index clause, const liter
     watched_literals[0] = new_literal;
     watched_literals[1] = partner_literal;
 
-    // Update watched_literal_clause_map:
-    // The call from dpll takes care of removing the required clause for the original watched literal
-    // (not the negated one)
-    // We need to make sure that new_literal is mapped to its new clause
-    // partner_literal remains a watched literal for the clause, so no need to clean up
+    // Update watched_literal_clause_map: We need to make sure that new_literal is mapped to its new clause
     watched_literal_clause_map_add(new_literal, clause);
   } else if (assignment_map_get(partner_literal) == VALUE_UNASSIGNED) {
     // Clause is unit, partner_literal is unassigned
@@ -97,10 +93,12 @@ void watched_literals_check(const literal watched_literal) {
   literal negated_watched_literal = -watched_literal;
   ClauseArray clause_array        = watched_literal_clause_map_get(negated_watched_literal);
   YASER_ASSERT(clause_array, !=, NULL);
-  long* clause = utarray_front(clause_array);
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"
+  // Iterate over all clauses that contain the negated watched literal, but only "check" them if they are not
+  // satisfied yet
+  long* clause = utarray_front(clause_array);
   for (; clause != NULL; clause = utarray_next(clause_array, (int*) clause)) {
     if (!sat_clause_set_contains(*clause)) {
       check_watched_literal_partner(*clause, negated_watched_literal);

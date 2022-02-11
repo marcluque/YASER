@@ -3,7 +3,6 @@
 //
 
 #include "dpll.h"
-#include "conflicts/conflict_resolution.h"
 #include "assignments/assignment_stack.h"
 #include "assignments/unit_clause_stack.h"
 #include "watched-literals/watched_literals.h"
