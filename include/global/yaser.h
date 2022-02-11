@@ -29,21 +29,21 @@
 #if defined(YASER_DEBUG)
   #define YASER_CHECK_MALLOC(address_)                                                                            \
     do {                                                                                                          \
-      if ((address_) == NULL) {                                                                                    \
+      if ((address_) == NULL) {                                                                                   \
         char basename_[MAX_LEN_BASENAME];                                                                         \
-        get_basename(__FILE__, basename_);                                                                       \
+        get_basename(__FILE__, basename_);                                                                        \
         char time_buffer_[MAX_LEN_TIME_BUFFER];                                                                   \
         get_time(time_buffer_);                                                                                   \
-        printf("[%s][YASER - " ERROR_ID "][%s:%d]:" ANSI_COLOR_RED " malloc failed\n" ANSI_COLOR_RESET,          \
-               time_buffer_, basename_, __LINE__);                                                                    \
+        printf("[%s][YASER - " ERROR_ID "][%s:%d]:" ANSI_COLOR_RED " malloc failed\n" ANSI_COLOR_RESET,           \
+               time_buffer_, basename_, __LINE__);                                                                \
         cleanup_all();                                                                                            \
         YASER_EXIT();                                                                                             \
       }                                                                                                           \
     } while (0)
 
-  #define YASER_ASSERT(left_, operator_, right_)                                                                    \
+  #define YASER_ASSERT(left_, operator_, right_)                                                                  \
     do {                                                                                                          \
-      if (!(left_ operator_ right_)) {                                                                              \
+      if (!(left_ operator_ right_)) {                                                                            \
         char basename[MAX_LEN_BASENAME];                                                                          \
         get_basename(__FILE__, basename);                                                                         \
                                                                                                                   \
@@ -52,8 +52,8 @@
                                                                                                                   \
         const char* format = "[%s][YASER - " ANSI_COLOR_YELLOW "ASSERTION" ANSI_COLOR_RESET                       \
                              "][%s:%d]:" ANSI_COLOR_YELLOW " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;  \
-        printf(format, time_buffer, basename, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,        \
-               right_);                                                                                            \
+        printf(format, time_buffer, basename, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,     \
+               right_);                                                                                           \
                                                                                                                   \
         cleanup_all();                                                                                            \
         YASER_EXIT();                                                                                             \
