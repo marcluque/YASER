@@ -16,17 +16,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define YASER_EXIT()                                                                                              \
-  do {                                                                                                            \
-    cleanup_all();                                                                                                \
-    if (YASER_DEBUG == 1) {                                                                                       \
-      exit(EXIT_SUCCESS);                                                                                         \
-    } else {                                                                                                      \
-      exit(EXIT_FAILURE);                                                                                         \
-    }                                                                                                             \
-  } while (0)
-
 #if defined(YASER_DEBUG)
+  #define YASER_EXIT()                                                                                            \
+    do {                                                                                                          \
+      cleanup_all();                                                                                              \
+      exit(EXIT_SUCCESS);                                                                                         \
+    } while (0)
+
   #define YASER_CHECK_MALLOC(address_)                                                                            \
     do {                                                                                                          \
       if ((address_) == NULL) {                                                                                   \
@@ -60,9 +56,16 @@
       }                                                                                                           \
     } while (0)
 #else
+  #define YASER_EXIT()                                                                                            \
+    do {                                                                                                          \
+      cleanup_all();                                                                                              \
+      exit(EXIT_FAILURE);                                                                                         \
+    } while (0)
+
   #define YASER_CHECK_MALLOC(address_)                                                                            \
     do {                                                                                                          \
     } while (0)
+
   #define YASER_ASSERT(left, operator_, right)                                                                    \
     do {                                                                                                          \
     } while (0)
