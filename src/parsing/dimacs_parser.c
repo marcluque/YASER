@@ -41,11 +41,11 @@ static void print_formula(void) {
   formula_out[0] = '(';
 
   unsigned int max_variable_len = 13;
-  char* format = malloc(max_variable_len * sizeof(char));
+  char* format                  = malloc(max_variable_len * sizeof(char));
   YASER_CHECK_MALLOC(format);
 
   size_t clause_counter = 0;
-  size_t current_pos = 1;
+  size_t current_pos    = 1;
   for (size_t i = 0; i < num_literals; ++i) {
     if (i >= clauses[clause_counter + 1]) {
       ++clause_counter;
@@ -55,7 +55,7 @@ static void print_formula(void) {
     }
 
     const char* variable = formula[i] < 0 ? "\u00ACx%d \u2228 " : "x%d \u2228 ";
-    int n = snprintf(format, max_variable_len, variable, abs(formula[i]));
+    int n                = snprintf(format, max_variable_len, variable, abs(formula[i]));
     if (n < 0) {
       log_error("%s", strerror(errno));
       YASER_EXIT();

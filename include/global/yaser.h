@@ -43,15 +43,15 @@
   #define YASER_ASSERT(left_, operator_, right_)                                                                  \
     do {                                                                                                          \
       if (!(left_ operator_ right_)) {                                                                            \
-        char basename_[MAX_LEN_BASENAME];                                                                          \
-        get_basename(__FILE__, basename_);                                                                         \
+        char basename_[MAX_LEN_BASENAME];                                                                         \
+        get_basename(__FILE__, basename_);                                                                        \
                                                                                                                   \
-        char time_buffer_[MAX_LEN_TIME_BUFFER];                                                                    \
-        get_time(time_buffer_);                                                                                    \
+        char time_buffer_[MAX_LEN_TIME_BUFFER];                                                                   \
+        get_time(time_buffer_);                                                                                   \
                                                                                                                   \
-        const char* format_ = FORMAT(ASSERT_ID,                                                                    \
-                                    ANSI_COLOR_YELLOW) " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;      \
-        printf(format_, time_buffer_, basename_, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,     \
+        const char* format_ = FORMAT(ASSERT_ID,                                                                   \
+                                     ANSI_COLOR_YELLOW) " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;     \
+        printf(format_, time_buffer_, basename_, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,  \
                right_);                                                                                           \
                                                                                                                   \
         cleanup_all();                                                                                            \
