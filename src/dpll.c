@@ -46,6 +46,7 @@ static bool backtrack(void) {
     AssignmentStackItem* item = assignment_stack_pop();
     if (!item->visited) {
       assignment_stack_push(item->l, item->value, true);
+      // TODO: Reset watched literals and set them again
       return true;
     }
   }

@@ -39,9 +39,11 @@ void watched_literals_init(void) {
     if (clauses[i + 1] - clauses[i] > 1) {
       // The function takes care of collecting clauses for equal literals (e.g., l_1 -> {c_1, c_2})
       watched_literal_clause_map_add(formula[clauses[i]], i);
-      watched_literal_clause_map_add(formula[clauses[i]] + 1, i);
+      watched_literal_clause_map_add(formula[clauses[i] + 1], i);
     }
   }
+
+  log_debug("Watched Literals are initialized...");
 }
 
 static void check_watched_literal_partner(const clause_index clause, const literal negated_watched_literal) {
