@@ -34,6 +34,49 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
   unit_clause_stack_init(init_num_clauses);
 }
 
+static void log_formula(void) {
+#if defined(YASER_DEBUG)
+  char* formula_out = malloc(10 * num_literals * sizeof(char));
+  YASER_CHECK_MALLOC(formula_out);
+  formula_out[0] = '(';
+
+  unsigned int max_variable_len = 13;
+  char* format = malloc(max_variable_len * sizeof(char));
+  YASER_CHECK_MALLOC(format);
+
+  size_t clause_counter = 0;
+  size_t current_pos = 1;
+  for (size_t i = 0; i < num_literals; ++i) {
+    if (i >= clauses[clause_counter + 1]) {
+      ++clause_counter;
+      current_pos -= 5;
+      strncpy(formula_out + current_pos, ") \u2227 (", 8);
+      current_pos += 7;
+    }
+
+    const char* variable = formula[i] < 0 ? "\u00ACx%d \u2228 " : "x%d \u2228 ";
+    int n = snprintf(format, max_variable_len, variable, abs(formula[i]));
+    if (n < 0) {
+      log_error("%s", strerror(errno));
+      YASER_EXIT();
+    }
+
+    strncpy(formula_out + current_pos, format, (unsigned long) n);
+    current_pos += (unsigned long) n;
+  }
+
+  current_pos -= 5;
+  strncpy(formula_out + current_pos, ")", 2);
+
+  log_debug("Parsed formula %s", formula_out);
+
+  free(formula_out);
+  free(format);
+#else
+  return;
+#endif
+}
+
 void dimacs_parse_file(const char* const file_path) {
   FILE* file = fopen(file_path, "r");
   if (file == 0) {
@@ -91,8 +134,11 @@ void dimacs_parse_file(const char* const file_path) {
   clauses[clause_pointer] = last_clause_pointer;
 
   num_literals = literal_pointer;
-  log_debug("#Literals=%zu (not distinct); #Variables=%zu; #Clauses=%zu", num_literals, num_variables,
-            num_clauses);
+  log_debug("#Literals=%zu (not distinct)", num_literals);
+  log_debug("#Variables=%zu", num_variables);
+  log_debug("#Clauses=%zu", num_clauses);
+
+  log_formula();
 
   // Sanity check the number of clauses
   YASER_ASSERT(clause_pointer, ==, num_clauses);
