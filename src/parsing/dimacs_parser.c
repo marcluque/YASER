@@ -34,7 +34,7 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
   unit_clause_stack_init(init_num_clauses);
 }
 
-static void log_formula(void) {
+static void print_formula(void) {
 #if defined(YASER_DEBUG)
   char* formula_out = malloc(10 * num_literals * sizeof(char));
   YASER_CHECK_MALLOC(formula_out);
@@ -138,7 +138,7 @@ void dimacs_parse_file(const char* const file_path) {
   log_debug("#Variables=%zu", num_variables);
   log_debug("#Clauses=%zu", num_clauses);
 
-  log_formula();
+  print_formula();
 
   // Sanity check the number of clauses
   YASER_ASSERT(clause_pointer, ==, num_clauses);
