@@ -79,41 +79,41 @@
              
   <section id="valgrind">
 <span id="reports-valgrind"></span><h1>Valgrind<a class="headerlink" href="#valgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3124== Memcheck, a memory error detector
-==3124== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Julian Seward et al.
-==3124== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3124== Command: ./yaser
-==3124== 
-==3124== Syscall param openat(filename) points to uninitialised byte(s)
-==3124==    at 0x496AEAB: open (open64.c:48)
-==3124==    by 0x48ED195: _IO_file_open (fileops.c:189)
-==3124==    by 0x48ED459: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
-==3124==    by 0x48DFB0D: __fopen_internal (iofopen.c:75)
-==3124==    by 0x48DFB0D: fopen@@GLIBC_2.2.5 (iofopen.c:86)
-==3124==    by 0x10D7C0: dimacs_parse_file (dimacs_parser.c:81)
-==3124==    by 0x10D1E9: main (main.c:49)
-==3124==  Address 0x4a4f040 is 0 bytes inside a block of size 127 alloc&#39;d
-==3124==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3124==    by 0x10D118: main (main.c:36)
-==3124== 
-[12:13:02][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
-==3124== 
-==3124== HEAP SUMMARY:
-==3124==     in use at exit: 127 bytes in 1 blocks
-==3124==   total heap usage: 11 allocs, 10 frees, 13,472 bytes allocated
-==3124== 
-==3124== LEAK SUMMARY:
-==3124==    definitely lost: 0 bytes in 0 blocks
-==3124==    indirectly lost: 0 bytes in 0 blocks
-==3124==      possibly lost: 0 bytes in 0 blocks
-==3124==    still reachable: 127 bytes in 1 blocks
-==3124==         suppressed: 0 bytes in 0 blocks
-==3124== Reachable blocks (those to which a pointer was found) are not shown.
-==3124== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==3124== 
-==3124== Use --track-origins=yes to see where uninitialised values come from
-==3124== For lists of detected and suppressed errors, rerun with: -s
-==3124== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3142== Memcheck, a memory error detector
+==3142== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Julian Seward et al.
+==3142== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3142== Command: ./yaser
+==3142== 
+==3142== Syscall param openat(filename) points to uninitialised byte(s)
+==3142==    at 0x496AEAB: open (open64.c:48)
+==3142==    by 0x48ED195: _IO_file_open (fileops.c:189)
+==3142==    by 0x48ED459: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
+==3142==    by 0x48DFB0D: __fopen_internal (iofopen.c:75)
+==3142==    by 0x48DFB0D: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==3142==    by 0x10D7C3: dimacs_parse_file (dimacs_parser.c:81)
+==3142==    by 0x10D1EC: main (main.c:49)
+==3142==  Address 0x4a4f040 is 0 bytes inside a block of size 128 alloc&#39;d
+==3142==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3142==    by 0x10D11B: main (main.c:36)
+==3142== 
+[12:18:04][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
+==3142== 
+==3142== HEAP SUMMARY:
+==3142==     in use at exit: 128 bytes in 1 blocks
+==3142==   total heap usage: 11 allocs, 10 frees, 13,473 bytes allocated
+==3142== 
+==3142== LEAK SUMMARY:
+==3142==    definitely lost: 0 bytes in 0 blocks
+==3142==    indirectly lost: 0 bytes in 0 blocks
+==3142==      possibly lost: 0 bytes in 0 blocks
+==3142==    still reachable: 128 bytes in 1 blocks
+==3142==         suppressed: 0 bytes in 0 blocks
+==3142== Reachable blocks (those to which a pointer was found) are not shown.
+==3142== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==3142== 
+==3142== Use --track-origins=yes to see where uninitialised values come from
+==3142== For lists of detected and suppressed errors, rerun with: -s
+==3142== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
 </pre></div>
 </div>
 </section>
