@@ -1,17 +1,17 @@
 =================================================================
-==1893==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60c0000000c0 at pc 0x00000046ae8b bp 0x7ffc2b7ebf50 sp 0x7ffc2b7eb710
+==1921==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x60c0000000c0 at pc 0x00000046ae8b bp 0x7ffc5cdb9ef0 sp 0x7ffc5cdb96b0
 READ of size 129 at 0x60c0000000c0 thread T0
     #0 0x46ae8a in fopen (/home/runner/work/YASER/YASER/a.out+0x46ae8a)
     #1 0x4cf8ff in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:81:16
     #2 0x4c8633 in main /home/runner/work/YASER/YASER/./src/main.c:49:3
-    #3 0x7f5d07db90b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #3 0x7f45e3b730b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
     #4 0x41c2cd in _start (/home/runner/work/YASER/YASER/a.out+0x41c2cd)
 
 0x60c0000000c0 is located 0 bytes to the right of 128-byte region [0x60c000000040,0x60c0000000c0)
 allocated by thread T0 here:
     #0 0x49752d in malloc (/home/runner/work/YASER/YASER/a.out+0x49752d)
     #1 0x4c858c in main /home/runner/work/YASER/YASER/./src/main.c:36:21
-    #2 0x7f5d07db90b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
+    #2 0x7f45e3b730b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)
 
 SUMMARY: AddressSanitizer: heap-buffer-overflow (/home/runner/work/YASER/YASER/a.out+0x46ae8a) in fopen
 Shadow bytes around the buggy address:
@@ -46,4 +46,4 @@ Shadow byte legend (one shadow byte represents 8 application bytes):
   Left alloca redzone:     ca
   Right alloca redzone:    cb
   Shadow gap:              cc
-==1893==ABORTING
+==1921==ABORTING
