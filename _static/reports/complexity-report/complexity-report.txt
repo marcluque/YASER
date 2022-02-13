@@ -22,38 +22,39 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       7       5   ./src/dpll.c(6): update_assignment
     1       6       6   ./src/conflicts/clause_resolution.c(24): resolvent_variable_table_clear
     1       8       6   ./src/watched-literals/clause_literal_map.c(8): clause_literal_map_clear
-    1       8       6   ./src/watched-literals/clause_literal_map.c(30): clause_literal_map_get
-    1       8       6   ./src/watched-literals/watched_literals.c(24): watched_literals_init
+    1       8       6   ./src/watched-literals/clause_literal_map.c(31): clause_literal_map_get
     1       8       6   ./src/conflicts/conflict_resolution.c(8): resolve_conflict
     1      12       6   ./src/global/cleanup.c(6): cleanup_all
-    1       8       7   ./src/watched-literals/clause_literal_map.c(19): clause_literal_map_add
     1       8       7   ./src/watched-literals/watched_literal_clause_map.c(9): watched_literal_clause_map_clear
     1       8       7   ./src/conflicts/clause_resolution.c(13): resolvent_literal_table_add
     1       8       7   ./src/parsing/dimacs_parser.c(10): init
     1       9       7   ./src/dpll.c(26): decide
     1       9       8   ./src/global/formula.c(13): formula_init
-    1       9       8   ./src/dpll.c(38): backtrack
+    1       9       8   ./src/watched-literals/clause_literal_map.c(19): clause_literal_map_add
     1       9       8   ./src/assignments/assignment_stack.c(35): assignment_stack_push
-    1      16      11   ./src/watched-literals/watched_literals.c(76): watched_literals_check
+    1      10       8   ./src/dpll.c(38): backtrack
+    1      16      11   ./src/watched-literals/watched_literals.c(87): watched_literals_check
     1      24      18   ./src/logging/log.c(37): log_error_
     1      25      19   ./src/logging/log.c(9): log_debug_
+    2      11      10   ./src/watched-literals/watched_literals.c(24): watched_literals_init
     2      14      11   ./src/watched-literals/watched_literals.c(7): find_new_literal
-    2      16      14   ./src/dpll.c(50): dpll
+    2      16      14   ./src/dpll.c(51): dpll
     2      17      16   ./src/main.c(7): parse_flag
     2      19      16   ./src/watched-literals/watched_literal_clause_map.c(20): watched_literal_clause_map_add
     2      23      17   ./src/main.c(27): main
-    2      38      23   ./src/watched-literals/watched_literals.c(35): check_watched_literal_partner
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
-    8      64      52   ./src/parsing/dimacs_parser.c(21): dimacs_parse_file
+    3      44      28   ./src/watched-literals/watched_literals.c(40): check_watched_literal_partner
+    3      37      30   ./src/parsing/dimacs_parser.c(21): print_formula
+    8      67      54   ./src/parsing/dimacs_parser.c(61): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         366 ************************************************************
+    0-9         408 ************************************************************
 
-Scored procedure ct:       45
-Non-comment line ct:      366
-Average line score:         2
+Scored procedure ct:       46
+Non-comment line ct:      408
+Average line score:         3
 25%-ile score:              1 (75% in higher score procs)
-50%-ile score:              1 (half in higher score procs)
-75%-ile score:              2 (25% in higher score procs)
+50%-ile score:              2 (half in higher score procs)
+75%-ile score:              3 (25% in higher score procs)
 Highest score:              8 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
