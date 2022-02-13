@@ -8,6 +8,7 @@
 #include "watched-literals/watched_literals.h"
 #include "global/formula.h"
 #include "watched-literals/sat_clause_set.h"
+#include "conflicts/conflict_resolution.h"
 
 static void update_assignment(const clause_index clause, const literal l) {
   // Trail -> entries (l, v, b): assigning v to l, b == true <=> negated l is visited
@@ -24,6 +25,10 @@ static bool bcp(void) {
   while (!unit_clause_stack_empty()) {
     UnitClause* unit_clause = unit_clause_stack_pop();
     update_assignment(unit_clause->clause, unit_clause->l);
+
+    if (conflict_present) {
+      return false;
+    }
   }
 
   return sat_clause_set_exists_unsat();

@@ -40,9 +40,9 @@ void watched_literals_init(void) {
     watched_literal_clause_map_add(formula[clauses[i]], i);
     if (clauses[i + 1] - clauses[i] > 1) {
       watched_literal_clause_map_add(formula[clauses[i] + 1], i);
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]});
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]}, false);
     } else {
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]]});
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]]}, true);
     }
   }
 
@@ -90,6 +90,7 @@ static void check_watched_literal_partner(const clause_index clause, const liter
     unit_clause_stack_push(clause, partner_literal);
   } else if (assignment_map_is_unsat(partner_literal)) {
     // Clause is conflicting -> resolve
+    log_debug("Clause %lu is conflicting", clause);
     conflict_present = true;
     // get variable from assignment stack
     // AssignmentStackItem* assignment = assignment_stack_pop();
