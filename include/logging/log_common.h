@@ -28,8 +28,12 @@
 #define MAX_LEN_BASENAME    (64 - 1)
 #define MAX_LEN_TIME_BUFFER (10U)
 
-static char* get_time(char* time_buffer) {
-  strftime(time_buffer, MAX_LEN_TIME_BUFFER, "%H:%M:%S", localtime(&(time_t){time(0)}));
+static char* get_time(char* const time_buffer) {
+  time_t current_time;
+  struct tm local_time;
+  time(&current_time);
+  localtime_r(&current_time, &local_time);
+  snprintf(time_buffer, MAX_LEN_TIME_BUFFER, "%02d:%02d:%02d", local_time.tm_hour, local_time.tm_min, local_time.tm_sec);
   return time_buffer;
 }
 
