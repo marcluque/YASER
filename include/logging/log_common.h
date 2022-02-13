@@ -21,7 +21,7 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 #define DEBUG_ID                 ANSI_COLOR_CYAN "DEBUG" ANSI_COLOR_RESET
-#define INFO_ID                 ANSI_COLOR_GREEN "INFO" ANSI_COLOR_RESET
+#define INFO_ID                  ANSI_COLOR_GREEN "INFO" ANSI_COLOR_RESET
 #define ERROR_ID                 ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
 #define COMMON_FORMAT(id, color) "[%s][YASER - " id "][%s]: " color
 
@@ -34,7 +34,8 @@ static char* get_time(char* const time_buffer) {
   struct tm local_time;
   time(&current_time);
   localtime_r(&current_time, &local_time);
-  snprintf(time_buffer, MAX_LEN_TIME_BUFFER, "%02d:%02d:%02d", local_time.tm_hour, local_time.tm_min, local_time.tm_sec);
+  snprintf(time_buffer, MAX_LEN_TIME_BUFFER, "%02d:%02d:%02d", local_time.tm_hour, local_time.tm_min,
+           local_time.tm_sec);
   return time_buffer;
 }
 

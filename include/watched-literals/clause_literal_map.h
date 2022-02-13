@@ -38,7 +38,8 @@ typedef struct {
 
 void clause_literal_map_clear(void);
 
-ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const literal* watched_literals, bool is_unit_clause);
+ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const literal* watched_literals,
+                                          bool is_unit_clause);
 
 ATTR_PURE ClauseLiteralItem* clause_literal_map_get(clause_index clause);
 

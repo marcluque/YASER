@@ -88,9 +88,9 @@ void dimacs_parse_file(const char* const file_path) {
   log_debug("Successfully opened file (%s)", file_path);
 
   bool done_reading_header = false;
-  size_t len = 0;
-  char* line = NULL;
-  ssize_t read = 0;
+  size_t len               = 0;
+  char* line               = NULL;
+  ssize_t read             = 0;
 
   while (!done_reading_header && read != -1) {
     read = getline(&line, &len, file);
@@ -116,7 +116,7 @@ void dimacs_parse_file(const char* const file_path) {
   const char* delim               = " ";
   while (getline(&line, &len, file) != -1) {
     char* line_copy = line;
-    char* token = strtok(line_copy, delim);
+    char* token     = strtok(line_copy, delim);
     while (token != 0 && token[0] != '0') {
       formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
       token                    = strtok((char*) 0, delim);

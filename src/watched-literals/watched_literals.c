@@ -56,7 +56,7 @@ static void check_watched_literal_partner(const clause_index clause, const liter
   YASER_ASSERT(negated_watched_literal, !=, INT_MAX);
 
   // Find partner literal of negated_watched_literal
-  ClauseLiteralItem* item = clause_literal_map_get(clause);
+  ClauseLiteralItem* item   = clause_literal_map_get(clause);
   literal* watched_literals = item->watched_literals;
 
   literal partner_literal;

@@ -12,12 +12,13 @@
 #define MAX_LEN_LOG_MESSAGE (2048 - 1)
 
 #define DEBUG_FORMAT COMMON_FORMAT(DEBUG_ID, ANSI_COLOR_CYAN) "%s" ANSI_COLOR_RESET
-#define INFO_FORMAT COMMON_FORMAT(INFO_ID, ANSI_COLOR_GREEN) "%s" ANSI_COLOR_RESET
+#define INFO_FORMAT  COMMON_FORMAT(INFO_ID, ANSI_COLOR_GREEN) "%s" ANSI_COLOR_RESET
 #define ERROR_FORMAT COMMON_FORMAT(ERROR_ID, ANSI_COLOR_RED) "%s" ANSI_COLOR_RESET
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-ATTR_NON_NULL static void log_output(const char* const file_path, const char* const format_string, va_list args, const char* const output_format) {
+ATTR_NON_NULL static void log_output(const char* const file_path, const char* const format_string, va_list args,
+                                     const char* const output_format) {
   char time_buffer[MAX_LEN_TIME_BUFFER];
   get_time(time_buffer);
 

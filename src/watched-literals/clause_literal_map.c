@@ -21,7 +21,8 @@ void clause_literal_map_clear(void) {
   }
 }
 
-void clause_literal_map_add(const clause_index clause, const literal* const watched_literals, const bool is_unit_clause) {
+void clause_literal_map_add(const clause_index clause, const literal* const watched_literals,
+                            const bool is_unit_clause) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
 

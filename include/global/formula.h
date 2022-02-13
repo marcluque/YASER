@@ -25,9 +25,13 @@ extern size_t num_variables;
 
 #define assignment_map_get(literal) (assignment_map[abs(literal)])
 
-#define assignment_map_is_sat(literal) (((literal) > 0 && assignment_map_get(literal) == VALUE_TRUE) || ((literal) < 0 && assignment_map_get(literal) == VALUE_FALSE))
+#define assignment_map_is_sat(literal)                                                                            \
+  (((literal) > 0 && assignment_map_get(literal) == VALUE_TRUE)                                                   \
+   || ((literal) < 0 && assignment_map_get(literal) == VALUE_FALSE))
 
-#define assignment_map_is_unsat(literal) (((literal) > 0 && assignment_map_get(literal) == VALUE_FALSE) || ((literal) < 0 && assignment_map_get(literal) == VALUE_TRUE))
+#define assignment_map_is_unsat(literal)                                                                          \
+  (((literal) > 0 && assignment_map_get(literal) == VALUE_FALSE)                                                  \
+   || ((literal) < 0 && assignment_map_get(literal) == VALUE_TRUE))
 
 #define assignment_map_set(literal, value) (assignment_map[abs(literal)] = (value))
 
