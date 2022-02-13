@@ -16,12 +16,15 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       6       3   ./src/assignments/assignment_stack.c(47): assignment_stack_pop
     1       4       4   ./src/assignments/assignment_stack.c(10): assignment_stack_init
     1       4       4   ./src/assignments/unit_clause_stack.c(10): unit_clause_stack_init
+    1       6       4   ./src/logging/log.c(42): log_info_
+    1       6       4   ./src/logging/log.c(51): log_error_
     1       5       5   ./src/assignments/unit_clause_stack.c(33): unit_clause_stack_push
     1       6       5   ./src/watched-literals/watched_literal_clause_map.c(42): watched_literal_clause_map_get
+    1       7       5   ./src/logging/log.c(32): log_debug_
     1       7       5   ./src/dpll.c(6): update_assignment
     1       6       6   ./src/conflicts/clause_resolution.c(24): resolvent_variable_table_clear
     1       8       6   ./src/watched-literals/clause_literal_map.c(8): clause_literal_map_clear
-    1       8       6   ./src/watched-literals/clause_literal_map.c(33): clause_literal_map_get
+    1       8       6   ./src/watched-literals/clause_literal_map.c(34): clause_literal_map_get
     1       8       6   ./src/conflicts/conflict_resolution.c(8): resolve_conflict
     1      12       6   ./src/global/cleanup.c(6): cleanup_all
     1       8       7   ./src/watched-literals/watched_literal_clause_map.c(9): watched_literal_clause_map_clear
@@ -31,11 +34,10 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1       9       8   ./src/assignments/assignment_stack.c(35): assignment_stack_push
     1      10       8   ./src/dpll.c(17): bcp
     1      10       8   ./src/dpll.c(42): backtrack
-    1      11      10   ./src/watched-literals/clause_literal_map.c(19): clause_literal_map_add
+    1      11      10   ./src/watched-literals/clause_literal_map.c(20): clause_literal_map_add
     1      14      10   ./src/global/formula.c(13): formula_init
     1      16      11   ./src/watched-literals/watched_literals.c(88): watched_literals_check
-    1      24      18   ./src/logging/log.c(37): log_error_
-    1      25      19   ./src/logging/log.c(9): log_debug_
+    1      19      15   ./src/logging/log.c(10): log_output
     2      11      10   ./src/watched-literals/watched_literals.c(24): watched_literals_init
     2      14      11   ./src/watched-literals/watched_literals.c(7): find_new_literal
     2      16      14   ./src/dpll.c(55): dpll
@@ -49,11 +51,11 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         418 ************************************************************
+    0-9         409 ************************************************************
 
-Scored procedure ct:       46
-Non-comment line ct:      418
-Average line score:         2
+Scored procedure ct:       48
+Non-comment line ct:      409
+Average line score:         3
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              2 (half in higher score procs)
 75%-ile score:              3 (25% in higher score procs)
