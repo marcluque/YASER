@@ -136,9 +136,9 @@ void dimacs_parse_file(const char* const file_path) {
   clauses[clause_pointer] = last_clause_pointer;
 
   num_literals = literal_pointer;
-  log_debug("#Literals=%zu (not distinct)", num_literals);
-  log_debug("#Variables=%zu", num_variables);
-  log_debug("#Clauses=%zu", num_clauses);
+  log_info("#Literals=%zu (not distinct)", num_literals);
+  log_info("#Variables=%zu", num_variables);
+  log_info("#Clauses=%zu", num_clauses);
 
   print_formula();
 

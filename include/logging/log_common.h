@@ -21,6 +21,7 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 #define DEBUG_ID                 ANSI_COLOR_CYAN "DEBUG" ANSI_COLOR_RESET
+#define INFO_ID                 ANSI_COLOR_GREEN "INFO" ANSI_COLOR_RESET
 #define ERROR_ID                 ANSI_COLOR_RED "ERROR" ANSI_COLOR_RESET
 #define COMMON_FORMAT(id, color) "[%s][YASER - " id "][%s]: " color
 

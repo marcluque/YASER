@@ -13,6 +13,10 @@ ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_debug_(const char* file_path, con
 
 #define log_debug(...) log_debug_(__FILE__, __VA_ARGS__)
 
+ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_info_(const char* file_path, const char* info_format, ...);
+
+#define log_info(...) log_info_(__FILE__, __VA_ARGS__)
+
 ATTR_NON_NULL ATTR_HIDDEN ATTR_FORMAT void log_error_(const char* file_path, const char* error_format, ...);
 
 #define log_error(...) log_error_(__FILE__, __VA_ARGS__)

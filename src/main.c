@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
   watched_literals_init();
   log_debug("Initialization done...");
 
-  log_debug("Formula is %s", dpll() ? "SAT" : "UNSAT");
+  log_info("RESULT: %s", dpll() ? "SAT" : "UNSAT");
 
   free(file_path);
   cleanup_all();
