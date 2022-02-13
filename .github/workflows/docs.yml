@@ -46,7 +46,7 @@ jobs:
         continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=address -O1 -fno-omit-frame-pointer -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option -g
-          ./a.out &> address-sanitizer-report.txt
+          ./a.out -i satlib/pigeonhole/pigeonhole-1.cnf &> address-sanitizer-report.txt
           cat address-sanitizer-report.txt
 
       - name: Upload address sanitizer report
@@ -68,7 +68,7 @@ jobs:
         continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=memory -fPIE -pie -fno-omit-frame-pointer -g -O2 -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option
-          ./a.out &> memory-sanitizer-report.txt
+          ./a.out -i satlib/pigeonhole/pigeonhole-1.cnf &> memory-sanitizer-report.txt
           cat memory-sanitizer-report.txt
 
       - name: Upload memory sanitizer report
@@ -90,7 +90,7 @@ jobs:
         continue-on-error: true
         run: |
           find ./src -iname '*.c' | xargs clang-12 -fsanitize=undefined -I external/uthash/src -I include -DNDEBUG=1 -Wno-unknown-warning-option 
-          ./a.out &> ub-sanitizer-report.txt
+          ./a.out -i satlib/pigeonhole/pigeonhole-1.cnf &> ub-sanitizer-report.txt
           cat ub-sanitizer-report.txt
 
       - name: Upload UB sanitizer report
@@ -117,7 +117,7 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DDONT_LINK_TCMALLOC=1 .
           make -j 2
-          valgrind --leak-check=yes ./yaser &> valgrind-report.txt
+          valgrind --leak-check=yes ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf &> valgrind-report.txt
           cat valgrind-report.txt
 
       - name: Upload valgrind report
@@ -229,7 +229,7 @@ jobs:
       - name: Run gcc with profiling flags
         run: |
           find src -iname '*.c' | xargs gcc -w -fno-default-inline -fno-inline -fno-inline-functions -fno-inline-functions-called-once -fno-optimize-sibling-calls -fno-omit-frame-pointer -DNDEBUG -DNYASER_DEBUG -g -pg -O2 -std=c11 -Iexternal/uthash/src -Iinclude -o yaser
-          ./yaser || true
+          ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf || true
 
       - name: Run gprof2dot
         run: |
@@ -263,7 +263,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} -DOPTIMIZE=1 -DDONT_LINK_TCMALLOC=1 .
           make -j 2
           mkdir callgrind-report
-          valgrind --tool=callgrind --cache-sim=yes --branch-sim=yes ./yaser &> callgrind-report/callgrind-report.txt
+          valgrind --tool=callgrind --cache-sim=yes --branch-sim=yes ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf &> callgrind-report/callgrind-report.txt
           cat callgrind-report/callgrind-report.txt
 
       - name: Run gprof2dot
