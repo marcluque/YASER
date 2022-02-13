@@ -79,41 +79,127 @@
              
   <section id="valgrind">
 <span id="reports-valgrind"></span><h1>Valgrind<a class="headerlink" href="#valgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3113== Memcheck, a memory error detector
-==3113== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Julian Seward et al.
-==3113== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3113== Command: ./yaser
-==3113== 
-==3113== Syscall param openat(filename) points to uninitialised byte(s)
-==3113==    at 0x496AEAB: open (open64.c:48)
-==3113==    by 0x48ED195: _IO_file_open (fileops.c:189)
-==3113==    by 0x48ED459: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
-==3113==    by 0x48DFB0D: __fopen_internal (iofopen.c:75)
-==3113==    by 0x48DFB0D: fopen@@GLIBC_2.2.5 (iofopen.c:86)
-==3113==    by 0x10D8A5: dimacs_parse_file (dimacs_parser.c:82)
-==3113==    by 0x10D220: main (main.c:49)
-==3113==  Address 0x4a4f040 is 0 bytes inside a block of size 128 alloc&#39;d
-==3113==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3113==    by 0x10D14F: main (main.c:36)
-==3113== 
-[16:03:48][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
-==3113== 
-==3113== HEAP SUMMARY:
-==3113==     in use at exit: 128 bytes in 1 blocks
-==3113==   total heap usage: 11 allocs, 10 frees, 13,473 bytes allocated
-==3113== 
-==3113== LEAK SUMMARY:
-==3113==    definitely lost: 0 bytes in 0 blocks
-==3113==    indirectly lost: 0 bytes in 0 blocks
-==3113==      possibly lost: 0 bytes in 0 blocks
-==3113==    still reachable: 128 bytes in 1 blocks
-==3113==         suppressed: 0 bytes in 0 blocks
-==3113== Reachable blocks (those to which a pointer was found) are not shown.
-==3113== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==3113== 
-==3113== Use --track-origins=yes to see where uninitialised values come from
-==3113== For lists of detected and suppressed errors, rerun with: -s
-==3113== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3110== Memcheck, a memory error detector
+==3110== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Julian Seward et al.
+==3110== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3110== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
+==3110== 
+==3110== Invalid write of size 8
+==3110==    at 0x10DC0E: dimacs_parse_file (dimacs_parser.c:136)
+==3110==    by 0x10D220: main (main.c:49)
+==3110==  Address 0x4a53dd8 is 0 bytes after a block of size 24 alloc&#39;d
+==3110==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C5AA: formula_init (formula.c:24)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid read of size 8
+==3110==    at 0x10D6C6: print_formula (dimacs_parser.c:51)
+==3110==    by 0x10DC89: dimacs_parse_file (dimacs_parser.c:143)
+==3110==    by 0x10D220: main (main.c:49)
+==3110==  Address 0x4a53dd8 is 0 bytes after a block of size 24 alloc&#39;d
+==3110==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C5AA: formula_init (formula.c:24)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid read of size 8
+==3110==    at 0x1127BF: watched_literals_init (watched_literals.c:41)
+==3110==    by 0x10D225: main (main.c:50)
+==3110==  Address 0x4a53dd8 is 0 bytes after a block of size 24 alloc&#39;d
+==3110==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C5AA: formula_init (formula.c:24)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid write of size 4
+==3110==    at 0x10C03D: update_assignment (dpll.c:17)
+==3110==    by 0x10C086: bcp (dpll.c:27)
+==3110==    by 0x10C158: dpll (dpll.c:64)
+==3110==    by 0x10D242: main (main.c:53)
+==3110==  Address 0x4a53d78 is 0 bytes after a block of size 8 alloc&#39;d
+==3110==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C530: formula_init (formula.c:22)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid read of size 8
+==3110==    at 0x112726: find_new_literal (watched_literals.c:23)
+==3110==    by 0x112C62: check_watched_literal_partner (watched_literals.c:73)
+==3110==    by 0x112FDC: watched_literals_check (watched_literals.c:116)
+==3110==    by 0x10C054: update_assignment (dpll.c:21)
+==3110==    by 0x10C086: bcp (dpll.c:27)
+==3110==    by 0x10C158: dpll (dpll.c:64)
+==3110==    by 0x10D242: main (main.c:53)
+==3110==  Address 0x4a53dd8 is 0 bytes after a block of size 24 alloc&#39;d
+==3110==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C5AA: formula_init (formula.c:24)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid read of size 4
+==3110==    at 0x112616: find_new_literal (watched_literals.c:24)
+==3110==    by 0x112C62: check_watched_literal_partner (watched_literals.c:73)
+==3110==    by 0x112FDC: watched_literals_check (watched_literals.c:116)
+==3110==    by 0x10C054: update_assignment (dpll.c:21)
+==3110==    by 0x10C086: bcp (dpll.c:27)
+==3110==    by 0x10C158: dpll (dpll.c:64)
+==3110==    by 0x10D242: main (main.c:53)
+==3110==  Address 0x4a53d78 is 0 bytes after a block of size 8 alloc&#39;d
+==3110==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C530: formula_init (formula.c:22)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== Invalid read of size 4
+==3110==    at 0x1126FA: find_new_literal (watched_literals.c:28)
+==3110==    by 0x112C62: check_watched_literal_partner (watched_literals.c:73)
+==3110==    by 0x112FDC: watched_literals_check (watched_literals.c:116)
+==3110==    by 0x10C054: update_assignment (dpll.c:21)
+==3110==    by 0x10C086: bcp (dpll.c:27)
+==3110==    by 0x10C158: dpll (dpll.c:64)
+==3110==    by 0x10D242: main (main.c:53)
+==3110==  Address 0x4a53d78 is 0 bytes after a block of size 8 alloc&#39;d
+==3110==    at 0x483DD99: calloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10C530: formula_init (formula.c:22)
+==3110==    by 0x10D4CA: init (dimacs_parser.c:32)
+==3110==    by 0x10DA42: dimacs_parse_file (dimacs_parser.c:102)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+[16:08:43][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
+[16:08:43][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36m#Literals=4 (not distinct)[0m
+[16:08:43][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36m#Variables=2[0m
+[16:08:43][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36m#Clauses=3[0m
+[16:08:43][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
+[16:08:43][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
+[16:08:43][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
+[16:08:43][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
+[16:08:43][YASER - [36mDEBUG[0m][main.c]: [36mFormula is UNSAT[0m
+==3110== 
+==3110== HEAP SUMMARY:
+==3110==     in use at exit: 1,024 bytes in 1 blocks
+==3110==   total heap usage: 64 allocs, 63 frees, 54,302 bytes allocated
+==3110== 
+==3110== 1,024 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==3110==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3110==    by 0x10D926: dimacs_parse_file (dimacs_parser.c:92)
+==3110==    by 0x10D220: main (main.c:49)
+==3110== 
+==3110== LEAK SUMMARY:
+==3110==    definitely lost: 1,024 bytes in 1 blocks
+==3110==    indirectly lost: 0 bytes in 0 blocks
+==3110==      possibly lost: 0 bytes in 0 blocks
+==3110==    still reachable: 0 bytes in 0 blocks
+==3110==         suppressed: 0 bytes in 0 blocks
+==3110== 
+==3110== For lists of detected and suppressed errors, rerun with: -s
+==3110== ERROR SUMMARY: 10 errors from 8 contexts (suppressed: 0 from 0)
 </pre></div>
 </div>
 </section>
