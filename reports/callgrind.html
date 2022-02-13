@@ -80,39 +80,39 @@
              
   <section id="callgrind">
 <span id="reports-callgrind"></span><h1>Callgrind<a class="headerlink" href="#callgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3694== Callgrind, a call-graph generating cache profiler
-==3694== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
-==3694== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3694== Command: ./yaser
-==3694== 
---3694-- warning: L3 cache found, using its data for the LL simulation.
---3694-- warning: specified LL cache: line_size 64  assoc 20  total_size 31,457,280
---3694-- warning: simulated LL cache: line_size 64  assoc 30  total_size 31,457,280
-==3694== For interactive control, run &#39;callgrind_control -h&#39;.
-[14:00:46][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
-==3694== 
-==3694== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
-==3694== Collected : 250862 56775 15946 1547 2798 698 1504 2189 630 51136 5883 467 199
-==3694== 
-==3694== I   refs:      250,862
-==3694== I1  misses:      1,547
-==3694== LLi misses:      1,504
-==3694== I1  miss rate:    0.62%
-==3694== LLi miss rate:    0.60%
-==3694== 
-==3694== D   refs:       72,721  (56,775 rd + 15,946 wr)
-==3694== D1  misses:      3,496  ( 2,798 rd +    698 wr)
-==3694== LLd misses:      2,819  ( 2,189 rd +    630 wr)
-==3694== D1  miss rate:     4.8% (   4.9%   +    4.4%  )
-==3694== LLd miss rate:     3.9% (   3.9%   +    4.0%  )
-==3694== 
-==3694== LL refs:         5,043  ( 4,345 rd +    698 wr)
-==3694== LL misses:       4,323  ( 3,693 rd +    630 wr)
-==3694== LL miss rate:      1.3% (   1.2%   +    4.0%  )
-==3694== 
-==3694== Branches:       51,603  (51,136 cond +    467 ind)
-==3694== Mispredicts:     6,082  ( 5,883 cond +    199 ind)
-==3694== Mispred rate:     11.8% (  11.5%     +   42.6%   )
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3745== Callgrind, a call-graph generating cache profiler
+==3745== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
+==3745== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3745== Command: ./yaser
+==3745== 
+--3745-- warning: L3 cache found, using its data for the LL simulation.
+--3745-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
+--3745-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
+==3745== For interactive control, run &#39;callgrind_control -h&#39;.
+[16:04:04][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
+==3745== 
+==3745== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+==3745== Collected : 251092 56804 16090 1551 2793 696 1513 2187 631 51038 5901 485 205
+==3745== 
+==3745== I   refs:      251,092
+==3745== I1  misses:      1,551
+==3745== LLi misses:      1,513
+==3745== I1  miss rate:    0.62%
+==3745== LLi miss rate:    0.60%
+==3745== 
+==3745== D   refs:       72,894  (56,804 rd + 16,090 wr)
+==3745== D1  misses:      3,489  ( 2,793 rd +    696 wr)
+==3745== LLd misses:      2,818  ( 2,187 rd +    631 wr)
+==3745== D1  miss rate:     4.8% (   4.9%   +    4.3%  )
+==3745== LLd miss rate:     3.9% (   3.9%   +    3.9%  )
+==3745== 
+==3745== LL refs:         5,040  ( 4,344 rd +    696 wr)
+==3745== LL misses:       4,331  ( 3,700 rd +    631 wr)
+==3745== LL miss rate:      1.3% (   1.2%   +    3.9%  )
+==3745== 
+==3745== Branches:       51,523  (51,038 cond +    485 ind)
+==3745== Mispredicts:     6,106  ( 5,901 cond +    205 ind)
+==3745== Mispred rate:     11.9% (  11.6%     +   42.3%   )
 </pre></div>
 </div>
 <img alt="gprof report" src="../_images/callgrind-report.png" />

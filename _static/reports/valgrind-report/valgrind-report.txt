@@ -1,35 +1,35 @@
-==3102== Memcheck, a memory error detector
-==3102== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==3102== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3102== Command: ./yaser
-==3102== 
-==3102== Syscall param openat(filename) points to uninitialised byte(s)
-==3102==    at 0x496AEAB: open (open64.c:48)
-==3102==    by 0x48ED195: _IO_file_open (fileops.c:189)
-==3102==    by 0x48ED459: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
-==3102==    by 0x48DFB0D: __fopen_internal (iofopen.c:75)
-==3102==    by 0x48DFB0D: fopen@@GLIBC_2.2.5 (iofopen.c:86)
-==3102==    by 0x10D85C: dimacs_parse_file (dimacs_parser.c:82)
-==3102==    by 0x10D1EC: main (main.c:49)
-==3102==  Address 0x4a4f040 is 0 bytes inside a block of size 128 alloc'd
-==3102==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3102==    by 0x10D11B: main (main.c:36)
-==3102== 
-[14:00:35][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
-==3102== 
-==3102== HEAP SUMMARY:
-==3102==     in use at exit: 128 bytes in 1 blocks
-==3102==   total heap usage: 11 allocs, 10 frees, 13,473 bytes allocated
-==3102== 
-==3102== LEAK SUMMARY:
-==3102==    definitely lost: 0 bytes in 0 blocks
-==3102==    indirectly lost: 0 bytes in 0 blocks
-==3102==      possibly lost: 0 bytes in 0 blocks
-==3102==    still reachable: 128 bytes in 1 blocks
-==3102==         suppressed: 0 bytes in 0 blocks
-==3102== Reachable blocks (those to which a pointer was found) are not shown.
-==3102== To see them, rerun with: --leak-check=full --show-leak-kinds=all
-==3102== 
-==3102== Use --track-origins=yes to see where uninitialised values come from
-==3102== For lists of detected and suppressed errors, rerun with: -s
-==3102== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==3113== Memcheck, a memory error detector
+==3113== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3113== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3113== Command: ./yaser
+==3113== 
+==3113== Syscall param openat(filename) points to uninitialised byte(s)
+==3113==    at 0x496AEAB: open (open64.c:48)
+==3113==    by 0x48ED195: _IO_file_open (fileops.c:189)
+==3113==    by 0x48ED459: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:281)
+==3113==    by 0x48DFB0D: __fopen_internal (iofopen.c:75)
+==3113==    by 0x48DFB0D: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==3113==    by 0x10D8A5: dimacs_parse_file (dimacs_parser.c:82)
+==3113==    by 0x10D220: main (main.c:49)
+==3113==  Address 0x4a4f040 is 0 bytes inside a block of size 128 alloc'd
+==3113==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3113==    by 0x10D14F: main (main.c:36)
+==3113== 
+[16:03:48][YASER - [31mERROR[0m][dimacs_parser.c]: [31mNo such file or directory[0m
+==3113== 
+==3113== HEAP SUMMARY:
+==3113==     in use at exit: 128 bytes in 1 blocks
+==3113==   total heap usage: 11 allocs, 10 frees, 13,473 bytes allocated
+==3113== 
+==3113== LEAK SUMMARY:
+==3113==    definitely lost: 0 bytes in 0 blocks
+==3113==    indirectly lost: 0 bytes in 0 blocks
+==3113==      possibly lost: 0 bytes in 0 blocks
+==3113==    still reachable: 128 bytes in 1 blocks
+==3113==         suppressed: 0 bytes in 0 blocks
+==3113== Reachable blocks (those to which a pointer was found) are not shown.
+==3113== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==3113== 
+==3113== Use --track-origins=yes to see where uninitialised values come from
+==3113== For lists of detected and suppressed errors, rerun with: -s
+==3113== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
