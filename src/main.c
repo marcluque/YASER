@@ -8,7 +8,6 @@
 #include "global/cleanup.h"
 #include "logging/log.h"
 #include "global/yaser.h"
-#include "global/yaser.h"
 
 #define MAX_LEN_FILE_PATH (128U)
 
@@ -25,7 +24,8 @@ static void parse_flag(const int argc, const char* const* const argv, const int 
                 MAX_LEN_FILE_PATH);
       YASER_EXIT();
     }
-    strncpy(file_path, argv[i + 1], MAX_LEN_FILE_PATH);
+    strncpy(file_path, argv[i + 1], MAX_LEN_FILE_PATH - 1);
+    file_path[file_path_len] = '\0';
   } else {
     log_error("unknown flag %c", argv[i][0]);
     YASER_EXIT();
