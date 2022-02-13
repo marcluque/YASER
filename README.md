@@ -1,6 +1,16 @@
 ![default_2 (2)](https://user-images.githubusercontent.com/33261455/152163475-9d24febc-723a-4390-97ba-fa11e133f15c.png)
 
 [![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=bugs)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=coverage)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=marcluque_YASER&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=marcluque_YASER)
 
 ## WORK IN PROGRESS
 
