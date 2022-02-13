@@ -89,8 +89,7 @@ void dimacs_parse_file(const char* const file_path) {
 
   bool done_reading_header = false;
   size_t len = 0;
-  char* line = malloc(MAX_LINE_LENGTH * sizeof(char));
-  YASER_CHECK_MALLOC(line);
+  char* line = NULL;
   ssize_t read = 0;
 
   while (!done_reading_header && read != -1) {
@@ -116,7 +115,8 @@ void dimacs_parse_file(const char* const file_path) {
   formula_pos literal_pointer     = 0;
   const char* delim               = " ";
   while (getline(&line, &len, file) != -1) {
-    char* token = strtok(line, delim);
+    char* line_copy = line;
+    char* token = strtok(line_copy, delim);
     while (token != 0 && token[0] != '0') {
       formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
       token                    = strtok((char*) 0, delim);
@@ -145,6 +145,7 @@ void dimacs_parse_file(const char* const file_path) {
   // Sanity check the number of clauses
   YASER_ASSERT(clause_pointer, ==, num_clauses);
 
+  // Use the previously saved address to free the line buffer
   free(line);
   fclose(file);
 }

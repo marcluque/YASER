@@ -28,7 +28,9 @@ void clause_literal_map_add(const clause_index clause, const literal* const watc
   ClauseLiteralItem* item   = malloc(sizeof(ClauseLiteralItem));
   item->clause              = clause;
   item->watched_literals[0] = watched_literals[0];
-  item->watched_literals[1] = watched_literals[1];
+  if (!is_unit_clause) {
+    item->watched_literals[1] = watched_literals[1];
+  }
   item->is_unit_clause = is_unit_clause;
   HASH_ADD(hh, clause_map, clause, sizeof(clause_index), item);
 }
