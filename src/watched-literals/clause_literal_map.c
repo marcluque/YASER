@@ -21,7 +21,7 @@ void clause_literal_map_clear(void) {
   }
 }
 
-void clause_literal_map_add(const clause_index clause, const literal* const watched_literals) {
+void clause_literal_map_add(const clause_index clause, const literal* const watched_literals, const bool is_unit_clause) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
 
@@ -29,10 +29,11 @@ void clause_literal_map_add(const clause_index clause, const literal* const watc
   item->clause              = clause;
   item->watched_literals[0] = watched_literals[0];
   item->watched_literals[1] = watched_literals[1];
+  item->is_unit_clause = is_unit_clause;
   HASH_ADD(hh, clause_map, clause, sizeof(clause_index), item);
 }
 
-literal* clause_literal_map_get(const clause_index clause) {
+ClauseLiteralItem* clause_literal_map_get(const clause_index clause) {
   assert(clause < NOT_FOUND);
   assert(clause < num_clauses);
 
@@ -40,5 +41,5 @@ literal* clause_literal_map_get(const clause_index clause) {
   HASH_FIND(hh, clause_map, &clause, sizeof(clause_index), item);
   YASER_ASSERT(item, !=, NULL);
 
-  return item->watched_literals;
+  return item;
 }

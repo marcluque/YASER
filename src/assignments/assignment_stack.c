@@ -44,7 +44,7 @@ void assignment_stack_push(const literal l, const value v, const bool visited) {
 
   assignment_stack[assignment_sp].l         = l;
   assignment_stack[assignment_sp].value     = v;
-  assignment_stack[assignment_sp].satisfied = (l > 0 && v == 1) || (l < 0 && v == 0);
+  assignment_stack[assignment_sp].satisfied = (l > 0 && v == VALUE_TRUE) || (l < 0 && v == VALUE_FALSE);
   assignment_stack[assignment_sp].visited   = visited;
   ++assignment_sp;
 }

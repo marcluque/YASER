@@ -8,8 +8,9 @@
 #define YASER_CLAUSE_LITERAL_MAP_H
 
 #include "global/defines.h"
-#include "uthash.h"
 #include "global/attributes.h"
+#include "uthash.h"
+#include <stdbool.h>
 
 typedef struct {
   /**
@@ -27,13 +28,18 @@ typedef struct {
   /**
    *
    */
+  bool is_unit_clause;
+
+  /**
+   *
+   */
   UT_hash_handle hh;
 } ClauseLiteralItem;
 
 void clause_literal_map_clear(void);
 
-ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const literal* watched_literals);
+ATTR_NON_NULL void clause_literal_map_add(clause_index clause, const literal* watched_literals, bool is_unit_clause);
 
-ATTR_PURE literal* clause_literal_map_get(clause_index clause);
+ATTR_PURE ClauseLiteralItem* clause_literal_map_get(clause_index clause);
 
 #endif // YASER_CLAUSE_LITERAL_MAP_H
