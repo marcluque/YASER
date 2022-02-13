@@ -21,11 +21,11 @@ ATTR_PURE static literal find_new_literal(const clause_index clause, const liter
   YASER_ASSERT(clause, <, num_clauses);
 
   for (formula_pos i = clauses[clause]; i < clauses[clause + 1]; ++i) {
-    value assignment = assignment_map_get(formula[clauses[clause] + i]);
+    value assignment = assignment_map_get(formula[i]);
 
-    if (partner_literal != formula[clauses[clause] + i] && assignment == VALUE_UNASSIGNED) {
+    if (partner_literal != formula[i] && assignment == VALUE_UNASSIGNED) {
       return formula[clauses[clause] + i];
-    } else if (assignment == VALUE_TRUE) {
+    } else if (assignment_map_is_sat(formula[i])) {
       return CLAUSE_ALREADY_SAT;
     }
   }
@@ -34,12 +34,15 @@ ATTR_PURE static literal find_new_literal(const clause_index clause, const liter
 }
 
 void watched_literals_init(void) {
+  // The function takes care of collecting clauses for equal literals (e.g., l_1 -> {c_1, c_2})
+
   for (clause_index i = 0; i < num_clauses; ++i) {
-    // If the clause has one literal, we skip it since preprocessing (input file parsing) takes care of it
+    watched_literal_clause_map_add(formula[clauses[i]], i);
     if (clauses[i + 1] - clauses[i] > 1) {
-      // The function takes care of collecting clauses for equal literals (e.g., l_1 -> {c_1, c_2})
-      watched_literal_clause_map_add(formula[clauses[i]], i);
       watched_literal_clause_map_add(formula[clauses[i] + 1], i);
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]});
+    } else {
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]]});
     }
   }
 
@@ -53,12 +56,18 @@ static void check_watched_literal_partner(const clause_index clause, const liter
   YASER_ASSERT(negated_watched_literal, !=, INT_MAX);
 
   // Find partner literal of negated_watched_literal
-  literal* watched_literals = clause_literal_map_get(clause);
-  literal partner_literal   = watched_literals[0] == negated_watched_literal ? watched_literals[1]
-                                                                             : watched_literals[0];
+  ClauseLiteralItem* item = clause_literal_map_get(clause);
+  literal* watched_literals = item->watched_literals;
+
+  literal partner_literal;
+  if (item->is_unit_clause) {
+    partner_literal = watched_literals[0];
+  } else {
+    partner_literal = watched_literals[0] == negated_watched_literal ? watched_literals[1] : watched_literals[0];
+  }
 
   literal new_literal;
-  if (assignment_map_get(partner_literal) == VALUE_TRUE) {
+  if (assignment_map_is_sat(partner_literal)) {
     // clause satisfied
     sat_clause_set_add(clause);
   } else if ((new_literal = find_new_literal(clause, partner_literal)) != NOT_FOUND_IN_CLAUSE) {
@@ -79,7 +88,7 @@ static void check_watched_literal_partner(const clause_index clause, const liter
   } else if (assignment_map_get(partner_literal) == VALUE_UNASSIGNED) {
     // Clause is unit, partner_literal is unassigned
     unit_clause_stack_push(clause, partner_literal);
-  } else if (assignment_map_get(partner_literal) == VALUE_FALSE) {
+  } else if (assignment_map_is_unsat(partner_literal)) {
     // Clause is conflicting -> resolve
     conflict_present = true;
     // get variable from assignment stack
