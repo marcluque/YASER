@@ -81,11 +81,11 @@
   <section id="memory-sanitizer">
 <span id="reports-memory-san"></span><h1>Memory Sanitizer<a class="headerlink" href="#memory-sanitizer" title="Permalink to this headline"></a></h1>
 <div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="n">Uninitialized</span> <span class="n">bytes</span> <span class="n">in</span> <span class="n">__interceptor_fopen</span> <span class="n">at</span> <span class="n">offset</span> <span class="mi">0</span> <span class="n">inside</span> <span class="p">[</span><span class="mh">0x708000000000</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="o">==</span><span class="mi">1835</span><span class="o">==</span><span class="nl">WARNING</span><span class="p">:</span> <span class="nl">MemorySanitizer</span><span class="p">:</span> <span class="n">use</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">uninitialized</span><span class="o">-</span><span class="n">value</span>
-    <span class="cp">#0 0x557421683272 in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:81:16</span>
-    <span class="cp">#1 0x55742167d56f in main /home/runner/work/YASER/YASER/./src/main.c:49:3</span>
-    <span class="cp">#2 0x7f2a08f080b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
-    <span class="cp">#3 0x55742160124d in _start (/home/runner/work/YASER/YASER/a.out+0x1e24d)</span>
+<span class="o">==</span><span class="mi">1868</span><span class="o">==</span><span class="nl">WARNING</span><span class="p">:</span> <span class="nl">MemorySanitizer</span><span class="p">:</span> <span class="n">use</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">uninitialized</span><span class="o">-</span><span class="n">value</span>
+    <span class="cp">#0 0x563627623292 in dimacs_parse_file /home/runner/work/YASER/YASER/./src/parsing/dimacs_parser.c:81:16</span>
+    <span class="cp">#1 0x56362761d585 in main /home/runner/work/YASER/YASER/./src/main.c:49:3</span>
+    <span class="cp">#2 0x7fc95f8ce0b2 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x270b2)</span>
+    <span class="cp">#3 0x5636275a124d in _start (/home/runner/work/YASER/YASER/a.out+0x1e24d)</span>
 
 <span class="nl">SUMMARY</span><span class="p">:</span> <span class="nl">MemorySanitizer</span><span class="p">:</span> <span class="n">use</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">uninitialized</span><span class="o">-</span><span class="n">value</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">runner</span><span class="o">/</span><span class="n">work</span><span class="o">/</span><span class="n">YASER</span><span class="o">/</span><span class="n">YASER</span><span class="o">/</span><span class="p">.</span><span class="o">/</span><span class="n">src</span><span class="o">/</span><span class="n">parsing</span><span class="o">/</span><span class="n">dimacs_parser</span><span class="p">.</span><span class="nl">c</span><span class="p">:</span><span class="mi">81</span><span class="o">:</span><span class="mi">16</span> <span class="n">in</span> <span class="n">dimacs_parse_file</span>
 <span class="n">Exiting</span>
