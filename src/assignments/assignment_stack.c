@@ -4,9 +4,9 @@
 
 #include "assignments/assignment_stack.h"
 #include "global/formula.h"
+#include "global/yaser.h"
 #include <sys/types.h>
 #include <malloc.h>
-#include <assert.h>
 
 static AssignmentStackItem* assignment_stack = NULL;
 static size_t assignment_stack_initial_size  = 0;
@@ -15,7 +15,7 @@ static ssize_t assignment_sp                 = -1;
 void assignment_stack_init(const size_t stack_size) {
   assignment_stack_initial_size = stack_size;
   assignment_stack              = malloc(sizeof(AssignmentStackItem) * stack_size);
-  assert(assignment_stack != NULL);
+  YASER_CHECK_MALLOC(assignment_stack);
   assignment_sp = 0;
 }
 
@@ -38,9 +38,9 @@ bool assignment_stack_full(void) {
 }
 
 void assignment_stack_push(const literal l, const value v, const bool visited) {
-  assert(assignment_stack != NULL);
-  assert(!assignment_stack_full());
-  assert(v != VALUE_UNASSIGNED);
+  YASER_ASSERT(assignment_stack, !=, NULL);
+  YASER_ASSERT(assignment_stack_full(), ==, false);
+  YASER_ASSERT(v, !=, VALUE_UNASSIGNED);
 
   assignment_stack[assignment_sp].l         = l;
   assignment_stack[assignment_sp].value     = v;
@@ -50,8 +50,8 @@ void assignment_stack_push(const literal l, const value v, const bool visited) {
 }
 
 AssignmentStackItem* assignment_stack_pop(void) {
-  assert(assignment_stack != NULL);
-  assert(!assignment_stack_empty());
+  YASER_ASSERT(assignment_stack, !=, NULL);
+  YASER_ASSERT(assignment_stack_empty(), ==, false);
 
   // TODO: Maybe needs to store clause here too
 
