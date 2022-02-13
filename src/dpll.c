@@ -23,7 +23,7 @@ static void update_assignment(const clause_index clause, const literal l) {
 
 static bool bcp(void) {
   while (!unit_clause_stack_empty()) {
-    UnitClause* unit_clause = unit_clause_stack_pop();
+    const UnitClause* unit_clause = unit_clause_stack_pop();
     update_assignment(unit_clause->clause, unit_clause->l);
 
     if (conflict_present) {
@@ -48,7 +48,7 @@ static bool decide(void) {
 
 static bool backtrack(void) {
   while (assignment_stack_empty()) {
-    AssignmentStackItem* item = assignment_stack_pop();
+    const AssignmentStackItem* item = assignment_stack_pop();
     if (!item->visited) {
       assignment_stack_push(item->l, item->value, true);
       // TODO: Reset watched literals and set them again

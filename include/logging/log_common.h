@@ -36,7 +36,9 @@ static char* get_time(char* time_buffer) {
 static void get_basename(const char* const file_path, char* const basename_buffer) {
   size_t len = strlen(file_path);
   size_t i   = len - 1;
-  for (; file_path[i] != '/'; --i) {}
+  for (; file_path[i] != '/'; --i) {
+    /* Search for first occurrence of / */
+  }
 
   len = len - 1 - i;
   // We don't assert since yaser_assert relies on the log

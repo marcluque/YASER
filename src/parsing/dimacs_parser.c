@@ -36,6 +36,7 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
 
 static void print_formula(void) {
 #if defined(YASER_DEBUG)
+  YASER_ASSERT(num_literals, !=, 0);
   char* formula_out = malloc(10 * num_literals * sizeof(char));
   YASER_CHECK_MALLOC(formula_out);
   formula_out[0] = '(';
@@ -87,12 +88,14 @@ void dimacs_parse_file(const char* const file_path) {
   log_debug("Successfully opened file (%s)", file_path);
 
   bool done_reading_header = false;
-  ssize_t read;
   size_t len = 0;
   char* line = malloc(MAX_LINE_LENGTH * sizeof(char));
   YASER_CHECK_MALLOC(line);
+  ssize_t read = 0;
 
-  while (!done_reading_header && (read = getline(&line, &len, file)) != -1) {
+  while (!done_reading_header && read != -1) {
+    read = getline(&line, &len, file);
+
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
         case 'p':
@@ -101,7 +104,6 @@ void dimacs_parse_file(const char* const file_path) {
           break;
         case 'c':
           break;
-        case ' ':
         default:
           continue;
       }
