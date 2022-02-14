@@ -7,6 +7,7 @@
 #include "global/defines.h"
 #include "global/formula.h"
 #include "uthash.h"
+#include "global/yaser.h"
 
 static SatClauseItem* sat_clause_set = NULL;
 
@@ -21,7 +22,7 @@ bool sat_clause_set_contains(clause_index clause) {
 }
 
 void sat_clause_set_add(clause_index clause) {
-  // TODO: Make sure that clause is not already in set!!
+  YASER_ASSERT(sat_clause_set_contains(clause), ==, false);
 
   clause_count++;
 }
