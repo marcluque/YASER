@@ -7,6 +7,8 @@
 #ifndef YASER_LOG_COMMON_H
 #define YASER_LOG_COMMON_H
 
+#include "global/yaser.h"
+#include "log.h"
 #include <stddef.h>
 #include <string.h>
 #include <stdio.h>
@@ -40,7 +42,11 @@ static char* get_time(char* const time_buffer) {
 }
 
 static void get_basename(const char* const file_path, char* const basename_buffer) {
-  size_t len = strlen(file_path);
+  size_t len = strnlen(file_path, MAX_LEN_BASENAME);
+  if (len == MAX_LEN_BASENAME) {
+    // TODO: Print some error
+  }
+
   size_t i   = len - 1;
   for (; file_path[i] != '/'; --i) {
     /* Search for first occurrence of / */
