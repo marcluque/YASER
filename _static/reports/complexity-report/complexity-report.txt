@@ -46,8 +46,8 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     2      23      17   ./src/main.c(28): main
     3      30      24   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
     3      45      29   ./src/watched-literals/watched_literals.c(40): check_watched_literal_partner
-    3      41      32   ./src/parsing/dimacs_parser.c(17): print_formula
-    8      72      56   ./src/parsing/dimacs_parser.c(61): dimacs_parse_file
+    3      42      32   ./src/parsing/dimacs_parser.c(17): print_formula
+    8      72      56   ./src/parsing/dimacs_parser.c(62): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
