@@ -31,9 +31,10 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
 static void print_formula(void) {
 #if defined(YASER_DEBUG)
   YASER_ASSERT(num_literals, !=, 0);
-  // 5 * accounts for "(", ")", ∧, ∨, and ¬ in the formula output
-  // The over-approximation is that every literal has each symbol
-  char* formula_out = malloc(5 * num_literals * sizeof(char));
+  // 5 * accounts for "(", ")", ∧, ∨, and ¬ in the formula output.
+  // The over-approximation is that every literal has each symbol and each symbol
+  // uses 2 bytes, hence a factor of 5 * 2
+  char* formula_out = malloc(10 * num_literals * sizeof(char));
   YASER_CHECK_MALLOC(formula_out);
   formula_out[0] = '(';
 
