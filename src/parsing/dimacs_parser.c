@@ -9,7 +9,6 @@
 #include "assignments/unit_clause_stack.h"
 #include "logging/log.h"
 #include "global/yaser.h"
-#include "global/yaser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -17,11 +16,6 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <limits.h>
-
-/**
- * Defines how many literals we allow in one clause
- */
-#define MAX_LINE_LENGTH (1024U)
 
 static void init(size_t init_num_variables, size_t init_num_clauses) {
   if (init_num_variables > ULLONG_MAX) {
@@ -94,6 +88,7 @@ void dimacs_parse_file(const char* const file_path) {
 
   while (!done_reading_header && read != -1) {
     read = getline(&line, &len, file);
+    YASER_ASSERT(line, !=, NULL);
 
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
@@ -115,6 +110,8 @@ void dimacs_parse_file(const char* const file_path) {
   formula_pos literal_pointer     = 0;
   const char* delim               = " ";
   while (getline(&line, &len, file) != -1) {
+    YASER_ASSERT(line, !=, NULL);
+
     char* line_copy = line;
     char* token     = strtok(line_copy, delim);
     while (token != 0 && token[0] != '0') {

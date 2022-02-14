@@ -48,5 +48,7 @@ ClauseArray watched_literal_clause_map_get(literal watched_literal) {
 
   WatchedLiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_clause_map, &watched_literal, sizeof(literal), item);
+  YASER_ASSERT(item, !=, NULL);
+
   return item->clauses;
 }
