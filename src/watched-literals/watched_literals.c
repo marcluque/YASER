@@ -42,7 +42,7 @@ ATTR_PURE ATTR_HOT static literal find_new_literal(const clause_index clause, co
     value assignment = assignment_map_get(formula[i]);
 
     if (partner_literal != formula[i] && assignment == VALUE_UNASSIGNED) {
-      return formula[clauses[clause] + i];
+      return formula[i];
     } else if (assignment_map_is_sat(formula[i])) {
       return CLAUSE_ALREADY_SAT;
     }
