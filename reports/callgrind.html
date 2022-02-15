@@ -80,45 +80,47 @@
              
   <section id="callgrind">
 <span id="reports-callgrind"></span><h1>Callgrind<a class="headerlink" href="#callgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3732== Callgrind, a call-graph generating cache profiler
-==3732== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
-==3732== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3732== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
-==3732== 
---3732-- warning: L3 cache found, using its data for the LL simulation.
-==3732== For interactive control, run &#39;callgrind_control -h&#39;.
-[18:21:16][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
-[18:21:16][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
-[18:21:16][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
-[18:21:16][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
-[18:21:16][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
-[18:21:16][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
-[18:21:16][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
-[18:21:16][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
-[18:21:16][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
-==3732== 
-==3732== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
-==3732== Collected : 317864 70464 26254 1829 2702 765 1701 2201 701 60320 7069 1213 265
-==3732== 
-==3732== I   refs:      317,864
-==3732== I1  misses:      1,829
-==3732== LLi misses:      1,701
-==3732== I1  miss rate:    0.58%
-==3732== LLi miss rate:    0.54%
-==3732== 
-==3732== D   refs:       96,718  (70,464 rd + 26,254 wr)
-==3732== D1  misses:      3,467  ( 2,702 rd +    765 wr)
-==3732== LLd misses:      2,902  ( 2,201 rd +    701 wr)
-==3732== D1  miss rate:     3.6% (   3.8%   +    2.9%  )
-==3732== LLd miss rate:     3.0% (   3.1%   +    2.7%  )
-==3732== 
-==3732== LL refs:         5,296  ( 4,531 rd +    765 wr)
-==3732== LL misses:       4,603  ( 3,902 rd +    701 wr)
-==3732== LL miss rate:      1.1% (   1.0%   +    2.7%  )
-==3732== 
-==3732== Branches:       61,533  (60,320 cond +  1,213 ind)
-==3732== Mispredicts:     7,334  ( 7,069 cond +    265 ind)
-==3732== Mispred rate:     11.9% (  11.7%     +   21.8%   )
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3673== Callgrind, a call-graph generating cache profiler
+==3673== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
+==3673== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3673== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
+==3673== 
+--3673-- warning: L3 cache found, using its data for the LL simulation.
+--3673-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
+--3673-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
+==3673== For interactive control, run &#39;callgrind_control -h&#39;.
+[18:23:24][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
+[18:23:24][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
+[18:23:24][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
+[18:23:24][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
+[18:23:24][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
+[18:23:24][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
+[18:23:24][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
+[18:23:24][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
+[18:23:24][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
+==3673== 
+==3673== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+==3673== Collected : 318384 70559 26256 1827 2816 770 1700 2203 701 60473 7076 1213 265
+==3673== 
+==3673== I   refs:      318,384
+==3673== I1  misses:      1,827
+==3673== LLi misses:      1,700
+==3673== I1  miss rate:    0.57%
+==3673== LLi miss rate:    0.53%
+==3673== 
+==3673== D   refs:       96,815  (70,559 rd + 26,256 wr)
+==3673== D1  misses:      3,586  ( 2,816 rd +    770 wr)
+==3673== LLd misses:      2,904  ( 2,203 rd +    701 wr)
+==3673== D1  miss rate:     3.7% (   4.0%   +    2.9%  )
+==3673== LLd miss rate:     3.0% (   3.1%   +    2.7%  )
+==3673== 
+==3673== LL refs:         5,413  ( 4,643 rd +    770 wr)
+==3673== LL misses:       4,604  ( 3,903 rd +    701 wr)
+==3673== LL miss rate:      1.1% (   1.0%   +    2.7%  )
+==3673== 
+==3673== Branches:       61,686  (60,473 cond +  1,213 ind)
+==3673== Mispredicts:     7,341  ( 7,076 cond +    265 ind)
+==3673== Mispred rate:     11.9% (  11.7%     +   21.8%   )
 </pre></div>
 </div>
 <img alt="gprof report" src="../_images/callgrind-report.png" />
