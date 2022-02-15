@@ -35,7 +35,6 @@
         get_time(time_buffer_);                                                                                   \
         printf(FORMAT(ERROR_ID, ANSI_COLOR_RED) " malloc failed\n" ANSI_COLOR_RESET, time_buffer_, basename_,     \
                __LINE__);                                                                                         \
-        cleanup_all();                                                                                            \
         YASER_EXIT();                                                                                             \
       }                                                                                                           \
     } while (0)
@@ -53,8 +52,6 @@
                                      ANSI_COLOR_YELLOW) " \"%s\" does not hold: %d %s %d\n" ANSI_COLOR_RESET;     \
         printf(format_, time_buffer_, basename_, __LINE__, #left_ " " #operator_ " " #right_, left_, #operator_,  \
                right_);                                                                                           \
-                                                                                                                  \
-        cleanup_all();                                                                                            \
         YASER_EXIT();                                                                                             \
       }                                                                                                           \
     } while (0)
