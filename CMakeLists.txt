@@ -5,7 +5,7 @@ set(PRODUCT_NAME yaser)
 set(CMAKE_C_STANDARD 11)
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
-    message("[YASER] Using special yaser debug mode (NOT NDEBUG)")
+    message("[YASER] Using yaser debug mode (NOT NDEBUG)")
     add_definitions(-DYASER_DEBUG)
 endif()
 
@@ -49,13 +49,14 @@ else()
             -Wmissing-include-dirs
             -Wformat-security
             -Wnonnull
+            -Wvla
     )
 
     if(NOT DEFINED OPTIMIZE)
-        message("Using -O0 -g")
+        message("[YASER] Using -O0 -g")
         add_compile_options(-O0 -g)
     else()
-        message("Using -O3")
+        message("[YASER] Using -O3")
         add_compile_options(-O3)
     endif()
 
