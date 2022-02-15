@@ -9,8 +9,8 @@
 
 #include "global/defines.h"
 
-void watched_literals_init(void);
+ATTR_COLD void watched_literals_init(void);
 
-void watched_literals_check(literal watched_literal);
+ATTR_HOT void watched_literals_check(literal watched_literal);
 
 #endif // YASER_WATCHED_LITERALS_H

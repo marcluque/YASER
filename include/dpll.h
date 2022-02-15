@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-bool dpll(void);
+// TODO: Test whether flatten actually helps here and doesn't worsen, e.g., cache locality
+ATTR_FLATTEN ATTR_HOT bool dpll(void);
 
 #endif // YASER_DPLL_H

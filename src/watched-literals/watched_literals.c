@@ -15,7 +15,23 @@
 
 #define CLAUSE_ALREADY_SAT (INT_MAX - 1)
 
-ATTR_PURE static literal find_new_literal(const clause_index clause, const literal partner_literal) {
+void watched_literals_init(void) {
+  // The function takes care of collecting clauses for equal literals (e.g., l_1 -> {c_1, c_2})
+
+  for (clause_index i = 0; i < num_clauses; ++i) {
+    watched_literal_clause_map_add(formula[clauses[i]], i);
+    if (clauses[i + 1] - clauses[i] > 1) {
+      watched_literal_clause_map_add(formula[clauses[i] + 1], i);
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]}, false);
+    } else {
+      clause_literal_map_add(i, (literal[]){formula[clauses[i]]}, true);
+    }
+  }
+
+  log_debug("Watched Literals are initialized...");
+}
+
+ATTR_PURE ATTR_HOT static literal find_new_literal(const clause_index clause, const literal partner_literal) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
   YASER_ASSERT(partner_literal, !=, INVALID_LITERAL);
@@ -35,23 +51,7 @@ ATTR_PURE static literal find_new_literal(const clause_index clause, const liter
   return NOT_FOUND_IN_CLAUSE;
 }
 
-void watched_literals_init(void) {
-  // The function takes care of collecting clauses for equal literals (e.g., l_1 -> {c_1, c_2})
-
-  for (clause_index i = 0; i < num_clauses; ++i) {
-    watched_literal_clause_map_add(formula[clauses[i]], i);
-    if (clauses[i + 1] - clauses[i] > 1) {
-      watched_literal_clause_map_add(formula[clauses[i] + 1], i);
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]}, false);
-    } else {
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]]}, true);
-    }
-  }
-
-  log_debug("Watched Literals are initialized...");
-}
-
-static void check_watched_literal_partner(const clause_index clause, const literal negated_watched_literal) {
+ATTR_HOT static void check_watched_literal_partner(const clause_index clause, const literal negated_watched_literal) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
   YASER_ASSERT(negated_watched_literal, !=, INVALID_LITERAL);

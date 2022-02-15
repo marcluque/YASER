@@ -17,7 +17,7 @@
 #include <sys/types.h>
 #include <limits.h>
 
-static void init(size_t init_num_variables, size_t init_num_clauses) {
+ATTR_COLD static void init(size_t init_num_variables, size_t init_num_clauses) {
   if (init_num_variables > ULLONG_MAX) {
     log_error("number of variables exceeds %llu", ULLONG_MAX);
     YASER_EXIT();
@@ -28,7 +28,7 @@ static void init(size_t init_num_variables, size_t init_num_clauses) {
   unit_clause_stack_init(init_num_clauses);
 }
 
-static void print_formula(void) {
+ATTR_COLD static void print_formula(void) {
 #if defined(YASER_DEBUG)
   YASER_ASSERT(num_literals, !=, 0);
   // 5 * accounts for "(", ")", ∧, ∨, and ¬ in the formula output.
