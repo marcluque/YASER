@@ -45,6 +45,10 @@ extern size_t num_clauses;
 
 #define ITERATE_CLAUSE(clause) for (formula_pos i = clauses[(clause)]; i < clauses[(clause) + 1]; ++i)
 
+#define NOT_FOUND_IN_CLAUSE (INT_MAX)
+
+#define INVALID_LITERAL  (0U)
+
 void formula_init(size_t num_variables_param, size_t num_clauses_param);
 
 void formula_clear(void);

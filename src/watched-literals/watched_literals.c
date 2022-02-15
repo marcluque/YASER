@@ -13,12 +13,14 @@
 #include "sat_clause_set.h"
 #include <limits.h>
 
-#define NOT_FOUND_IN_CLAUSE (INT_MAX)
-#define CLAUSE_ALREADY_SAT  (0U)
+#define CLAUSE_ALREADY_SAT (INT_MAX - 1)
 
 ATTR_PURE static literal find_new_literal(const clause_index clause, const literal partner_literal) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
+  YASER_ASSERT(partner_literal, !=, INVALID_LITERAL);
+  YASER_ASSERT(partner_literal, !=, CLAUSE_ALREADY_SAT);
+  YASER_ASSERT(partner_literal, !=, NOT_FOUND_IN_CLAUSE);
 
   for (formula_pos i = clauses[clause]; i < clauses[clause + 1]; ++i) {
     value assignment = assignment_map_get(formula[i]);
@@ -52,8 +54,9 @@ void watched_literals_init(void) {
 static void check_watched_literal_partner(const clause_index clause, const literal negated_watched_literal) {
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_clauses);
-  YASER_ASSERT(negated_watched_literal, !=, 0);
-  YASER_ASSERT(negated_watched_literal, !=, INT_MAX);
+  YASER_ASSERT(negated_watched_literal, !=, INVALID_LITERAL);
+  YASER_ASSERT(negated_watched_literal, !=, CLAUSE_ALREADY_SAT);
+  YASER_ASSERT(negated_watched_literal, !=, NOT_FOUND_IN_CLAUSE);
 
   // Find partner literal of negated_watched_literal
   ClauseLiteralItem* item   = clause_literal_map_get(clause);
@@ -98,8 +101,9 @@ static void check_watched_literal_partner(const clause_index clause, const liter
 }
 
 void watched_literals_check(const literal watched_literal) {
-  YASER_ASSERT(watched_literal, !=, 0);
-  YASER_ASSERT(watched_literal, !=, INT_MAX);
+  YASER_ASSERT(watched_literal, !=, INVALID_LITERAL);
+  YASER_ASSERT(watched_literal, !=, CLAUSE_ALREADY_SAT);
+  YASER_ASSERT(watched_literal, !=, NOT_FOUND_IN_CLAUSE);
 
   // Find all clauses that contain the negated watched literal (i.e., formula[watched_literal])
   literal negated_watched_literal = -watched_literal;

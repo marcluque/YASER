@@ -21,8 +21,8 @@ void watched_literal_clause_map_clear(void) {
 }
 
 void watched_literal_clause_map_add(literal watched_literal, clause_index clause) {
-  YASER_ASSERT(watched_literal, !=, 0);
-  YASER_ASSERT(watched_literal, !=, INT_MAX);
+  YASER_ASSERT(watched_literal, !=, INVALID_LITERAL);
+  YASER_ASSERT(watched_literal, !=, NOT_FOUND_IN_CLAUSE);
   YASER_ASSERT(clause, <, NOT_FOUND);
   YASER_ASSERT(clause, <, num_literals);
 
@@ -43,8 +43,8 @@ void watched_literal_clause_map_add(literal watched_literal, clause_index clause
 }
 
 ClauseArray watched_literal_clause_map_get(literal watched_literal) {
-  YASER_ASSERT(watched_literal, !=, 0);
-  YASER_ASSERT(watched_literal, !=, INT_MAX);
+  YASER_ASSERT(watched_literal, !=, INVALID_LITERAL);
+  YASER_ASSERT(watched_literal, !=, NOT_FOUND_IN_CLAUSE);
 
   WatchedLiteralClauseItem* item;
   HASH_FIND(hh, watched_literal_clause_map, &watched_literal, sizeof(literal), item);

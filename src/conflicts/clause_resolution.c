@@ -71,9 +71,10 @@ literal* clause_resolution_build_resolvent(const clause_index clause_1, const cl
   literal* resolvent = (literal*) malloc(num_resolvent_literals * sizeof(int));
   YASER_CHECK_MALLOC(resolvent);
 
+  int counter = 0;
   for (ResolventItem* item = resolvent_variable_table; item != NULL; item = (ResolventItem*) (item->hh.next)) {
-    resolvent[literal_counter] = item->l;
-    ++literal_counter;
+    resolvent[counter] = item->l;
+    ++counter;
   }
 
   resolvent_variable_table_clear();

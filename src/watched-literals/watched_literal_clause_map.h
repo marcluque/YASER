@@ -31,6 +31,6 @@ void watched_literal_clause_map_clear(void);
 
 void watched_literal_clause_map_add(literal watched_literal, clause_index clause);
 
-ClauseArray watched_literal_clause_map_get(literal watched_literal);
+ATTR_PURE ClauseArray watched_literal_clause_map_get(literal watched_literal);
 
 #endif // YASER_WATCHED_LITERAL_CLAUSE_MAP_H
