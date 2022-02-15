@@ -1,0 +1,4 @@
+[10:23:43][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
+[10:23:43][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
+[10:23:43][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
+[10:23:43][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m

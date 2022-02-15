@@ -36,25 +36,25 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1      10       8   ./src/dpll.c(42): backtrack
     1      11      10   ./src/watched-literals/clause_literal_map.c(20): clause_literal_map_add
     1      14      10   ./src/global/formula.c(13): formula_init
-    1      16      11   ./src/watched-literals/watched_literals.c(88): watched_literals_check
+    1      17      12   ./src/watched-literals/watched_literals.c(92): watched_literals_check
     1      19      15   ./src/logging/log.c(10): log_output
-    2      11      10   ./src/watched-literals/watched_literals.c(24): watched_literals_init
-    2      14      11   ./src/watched-literals/watched_literals.c(7): find_new_literal
+    2      11      10   ./src/watched-literals/watched_literals.c(27): watched_literals_init
     2      16      14   ./src/dpll.c(55): dpll
+    2      17      14   ./src/watched-literals/watched_literals.c(7): find_new_literal
     2      19      16   ./src/watched-literals/watched_literal_clause_map.c(20): watched_literal_clause_map_add
     2      18      17   ./src/main.c(7): parse_flag
     2      23      17   ./src/main.c(28): main
-    3      45      29   ./src/watched-literals/watched_literals.c(40): check_watched_literal_partner
-    3      42      32   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
+    3      46      30   ./src/watched-literals/watched_literals.c(43): check_watched_literal_partner
     3      42      32   ./src/parsing/dimacs_parser.c(17): print_formula
+    3      43      33   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
     8      73      57   ./src/parsing/dimacs_parser.c(62): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         423 ************************************************************
+    0-9         429 ************************************************************
 
 Scored procedure ct:       48
-Non-comment line ct:      423
+Non-comment line ct:      429
 Average line score:         3
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              2 (half in higher score procs)
