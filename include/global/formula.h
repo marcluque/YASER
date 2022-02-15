@@ -44,6 +44,8 @@ extern size_t num_variables;
 extern formula_pos* clauses;
 extern size_t num_clauses;
 
+#define ITERATE_CLAUSE(clause) for (formula_pos i = clauses[(clause)]; i < clauses[(clause) + 1]; ++i)
+
 void formula_init(size_t num_variables_param, size_t num_clauses_param);
 
 void formula_clear(void);
