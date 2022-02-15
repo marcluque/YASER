@@ -36,10 +36,9 @@ extern size_t num_variables;
 #define assignment_map_set(literal, value) (assignment_map[abs(literal)] = (value))
 
 /**
- * Each array entry stores the starting position of its clause in the formula array
- * To iterate over clause[i] we do the following: for (int i = 0; i < clause[i + 1]; ++i)
- * Hence the start of clause i is indicated by clause[i] (inclusive) and the end is indicated by clause[i + 1]
- * (exclusive)
+ * Each array entry stores the starting position of its clause in the formula array.
+ * We use ::ITERATE_CLAUSE for clause iteration.
+ * Hence the start of clause i is indicated by clause[i] (inclusive) and the end is indicated by clause[i + 1] (exclusive).
  */
 extern formula_pos* clauses;
 extern size_t num_clauses;
