@@ -117,10 +117,11 @@ void dimacs_parse_file(const char* const file_path) {
     YASER_ASSERT(line, !=, NULL);
 
     char* line_copy = line;
-    char* token     = strtok(line_copy, delim);
+    char* save_token;
+    const char* token     = strtok_r(line_copy, delim, &save_token);
     while (token != 0 && token[0] != '0') {
       formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
-      token                    = strtok((char*) 0, delim);
+      token                    = strtok_r((char*) 0, delim, &save_token);
       ++literal_pointer;
     }
 
