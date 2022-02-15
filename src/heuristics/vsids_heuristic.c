@@ -3,3 +3,6 @@
 //
 
 #include "heuristics/vsids_heuristic.h"
+
+static void doNothing(void) {
+  }

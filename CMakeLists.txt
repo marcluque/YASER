@@ -23,6 +23,8 @@ else()
             ### WARNINGS
             # Standrad GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
             -Wall
+            -Werror
+            -pedantic
             -Wextra
             -Wunused
             -Wno-unused-function
