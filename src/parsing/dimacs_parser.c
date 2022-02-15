@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <limits.h>
+#include <ctype.h>
 
 ATTR_COLD static void init(size_t init_num_variables, size_t init_num_clauses) {
   if (init_num_variables > ULLONG_MAX) {
@@ -34,7 +35,7 @@ ATTR_COLD static void print_formula(void) {
   // 5 * accounts for "(", ")", ∧, ∨, and ¬ in the formula output.
   // The over-approximation is that every literal has each symbol and each symbol
   // uses 2 bytes, hence a factor of 5 * 2
-  char* formula_out = malloc(10 * num_literals * sizeof(char));
+  char* formula_out = malloc(100 * num_literals * sizeof(char));
   YASER_CHECK_MALLOC(formula_out);
   formula_out[0] = '(';
 
@@ -96,10 +97,27 @@ void dimacs_parse_file(const char* const file_path) {
 
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
-        case 'p':
-          init((size_t) (line[i + 6] - '0'), (size_t) (line[i + 8] - '0'));
+        case 'p': {
+          // Tokenize line that contains number of variables and number of clauses
+
+          // Ignore first two tokens
+          char* save_token;
+          char* line_copy = line;
+          strtok_r(line_copy, " ", &save_token);
+          strtok_r((char*) 0, " ", &save_token);
+
+          // Get number of variables
+          const char* token = strtok_r((char*) 0, " ", &save_token);
+          size_t vars = (size_t) strtol(token, (char**) 0, 10);
+
+          // Get number of clauses
+          token = strtok_r((char*) 0, " ", &save_token);
+          size_t cls = (size_t) strtol(token, (char**) 0, 10);
+
+          init(vars, cls);
           done_reading_header = true;
           break;
+        }
         case 'c':
           break;
         default:
@@ -109,19 +127,29 @@ void dimacs_parse_file(const char* const file_path) {
     }
   }
 
+  // TODO: Do watched literal initialization while iterating over clauses
   clause_index clause_pointer     = 0;
   formula_pos last_clause_pointer = 0;
   formula_pos literal_pointer     = 0;
-  const char* delim               = " ";
   while (getline(&line, &len, file) != -1) {
     YASER_ASSERT(line, !=, NULL);
 
+    // Ignore line if it not starts with digits 1-9
+    if ((line[0] < '1' || line[0] > '9') && line[0] != '-' && line[0] != ' ') {
+      continue;
+    }
+
     char* line_copy = line;
+    while (isspace(*line_copy)) {
+      log_debug("detected");
+      ++line_copy;
+    }
+
     char* save_token;
-    const char* token     = strtok_r(line_copy, delim, &save_token);
+    const char* token     = strtok_r(line_copy, " ", &save_token);
     while (token != 0 && token[0] != '0') {
       formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
-      token                    = strtok_r((char*) 0, delim, &save_token);
+      token                    = strtok_r((char*) 0, " ", &save_token);
       ++literal_pointer;
     }
 
@@ -142,12 +170,16 @@ void dimacs_parse_file(const char* const file_path) {
   log_info("#Variables=%zu", num_variables);
   log_info("#Clauses=%zu", num_clauses);
 
-  print_formula();
-
-  // Sanity check the number of clauses
-  YASER_ASSERT(clause_pointer, ==, num_clauses);
+  if (num_literals <= 10) {
+    print_formula();
+  } else {
+    log_debug("Not printing formula since it has more than 10 literals");
+  }
 
   // Use the previously saved address to free the line buffer
   free(line);
   fclose(file);
+
+  // Sanity check the number of clauses
+  YASER_ASSERT(clause_pointer, ==, num_clauses);
 }
