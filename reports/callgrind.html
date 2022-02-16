@@ -80,50 +80,7 @@
              
   <section id="callgrind">
 <span id="reports-callgrind"></span><h1>Callgrind<a class="headerlink" href="#callgrind" title="Permalink to this headline"></a></h1>
-<div class="highlight-C notranslate"><div class="highlight"><pre><span></span>==3685== Callgrind, a call-graph generating cache profiler
-==3685== Copyright (C) 2002-2017, and GNU GPL&#39;d, by Josef Weidendorfer et al.
-==3685== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3685== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
-==3685== 
---3685-- warning: L3 cache found, using its data for the LL simulation.
---3685-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
---3685-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
-==3685== For interactive control, run &#39;callgrind_control -h&#39;.
-[10:51:19][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
-[10:51:19][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
-[10:51:19][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
-[10:51:19][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
-[10:51:19][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
-[10:51:19][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
-[10:51:19][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
-[10:51:19][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
-[10:51:19][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
-==3685== 
-==3685== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
-==3685== Collected : 318387 70580 26254 1832 2816 770 1700 2203 701 60474 7074 1213 265
-==3685== 
-==3685== I   refs:      318,387
-==3685== I1  misses:      1,832
-==3685== LLi misses:      1,700
-==3685== I1  miss rate:    0.58%
-==3685== LLi miss rate:    0.53%
-==3685== 
-==3685== D   refs:       96,834  (70,580 rd + 26,254 wr)
-==3685== D1  misses:      3,586  ( 2,816 rd +    770 wr)
-==3685== LLd misses:      2,904  ( 2,203 rd +    701 wr)
-==3685== D1  miss rate:     3.7% (   4.0%   +    2.9%  )
-==3685== LLd miss rate:     3.0% (   3.1%   +    2.7%  )
-==3685== 
-==3685== LL refs:         5,418  ( 4,648 rd +    770 wr)
-==3685== LL misses:       4,604  ( 3,903 rd +    701 wr)
-==3685== LL miss rate:      1.1% (   1.0%   +    2.7%  )
-==3685== 
-==3685== Branches:       61,687  (60,474 cond +  1,213 ind)
-==3685== Mispredicts:     7,339  ( 7,074 cond +    265 ind)
-==3685== Mispred rate:     11.9% (  11.7%     +   21.8%   )
-</pre></div>
-</div>
-<img alt="gprof report" src="../_images/callgrind-report.png" />
+<img alt="gprof report" src="_static/reports/callgrind-report/callgrind-report.png" />
 </section>
 
 
