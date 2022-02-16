@@ -20,8 +20,6 @@ else()
     add_compile_options(
             -std=c11
 
-            -ferror-limit=0
-
             ### WARNINGS
             # Standrad GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
             -Wall
@@ -74,7 +72,11 @@ else()
     endif()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        add_compile_options(-Weverything -Wno-unknown-warning-option -Wno-format-nonliteral)
+        add_compile_options(
+                -Weverything
+                -Wno-unknown-warning-option
+                -Wno-format-nonliteral
+                -ferror-limit=0)
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
         add_compile_options(
                 ### WARNINGS
@@ -89,6 +91,7 @@ else()
                 -Wsuggest-attribute=noreturn
                 -Wsuggest-attribute=format
                 -Wformat=1
+                -fmax-errors=0
         )
     endif()
 
