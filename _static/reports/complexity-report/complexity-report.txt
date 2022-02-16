@@ -1,5 +1,3 @@
-NOTE: proc dimacs_parse_file in file ./src/parsing/dimacs_parser.c line 62
-	nesting depth reached level 5
 Complexity Scores
 Score | ln-ct | nc-lns| file-name(line): proc-name
     0       1       1   ./src/watched-literals/sat_clause_set.c(24): sat_clause_set_exists_unsat
@@ -37,7 +35,9 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     1      10       8   ./src/dpll.c(17): bcp
     1      10       8   ./src/dpll.c(42): backtrack
     1      11      10   ./src/watched-literals/clause_literal_map.c(20): clause_literal_map_add
+    1      15      10   ./src/parsing/dimacs_parser.c(79): tokenize_header
     1      18      10   ./src/global/formula.c(13): formula_init
+    1      13      11   ./src/parsing/dimacs_parser.c(62): tokenize_clause
     1      17      12   ./src/watched-literals/watched_literals.c(92): watched_literals_check
     1      19      15   ./src/logging/log.c(10): log_output
     2      11      10   ./src/watched-literals/watched_literals.c(7): watched_literals_init
@@ -49,17 +49,16 @@ Score | ln-ct | nc-lns| file-name(line): proc-name
     3      46      30   ./src/watched-literals/watched_literals.c(43): check_watched_literal_partner
     3      42      32   ./src/parsing/dimacs_parser.c(17): print_formula
     3      43      33   ./src/conflicts/clause_resolution.c(33): clause_resolution_build_resolvent
-   13     104      76   ./src/parsing/dimacs_parser.c(62): dimacs_parse_file
+    8      76      55   ./src/parsing/dimacs_parser.c(100): dimacs_parse_file
 
 Complexity Histogram
 Score-Range  Lin-Ct
-    0-9         372 ************************************************************
-   10-19         76 ************
+    0-9         448 ************************************************************
 
-Scored procedure ct:       48
+Scored procedure ct:       50
 Non-comment line ct:      448
-Average line score:         4
+Average line score:         2
 25%-ile score:              1 (75% in higher score procs)
 50%-ile score:              2 (half in higher score procs)
 75%-ile score:              3 (25% in higher score procs)
-Highest score:             13 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
+Highest score:              8 (dimacs_parse_file() in ./src/parsing/dimacs_parser.c)
