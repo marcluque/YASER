@@ -20,6 +20,8 @@ else()
     add_compile_options(
             -std=c11
 
+            -ferror-limit=0
+
             ### WARNINGS
             # Standrad GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
             -Wall
@@ -36,6 +38,7 @@ else()
             -Wstack-protector
             -Wredundant-decls
             -Wpacked
+            -Wno-padded
             -Wmissing-declarations
             -Wmissing-prototypes
             -Wstrict-prototypes
@@ -52,6 +55,9 @@ else()
             -Wformat-security
             -Wnonnull
             -Wvla
+
+            # Has to be disabled because UTHash uses it
+            -Wno-implicit-fallthrough
     )
 
     if(NOT DEFINED OPTIMIZE)
@@ -68,7 +74,7 @@ else()
     endif()
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        add_compile_options(-Weverything -Wno-unknown-warning-option)
+        add_compile_options(-Weverything -Wno-unknown-warning-option -Wno-format-nonliteral)
     elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
         add_compile_options(
                 ### WARNINGS
