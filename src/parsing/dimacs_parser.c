@@ -77,6 +77,44 @@ ATTR_COLD static void print_formula(void) {
 #endif
 }
 
+ATTR_COLD static void tokenize_clause(char* const line, formula_pos* const literal_pointer) {
+  // Remove leading whitespaces
+  char* line_copy = line;
+  while (isspace(*line_copy)) {
+    ++line_copy;
+  }
+
+  // Write tokens into formula until line termination '0' is read
+  char* save_token;
+  const char* token     = strtok_r(line_copy, " ", &save_token);
+  while (token != 0 && token[0] != '0') {
+    formula[*literal_pointer] = (literal) strtol(token, (char**) 0, 10);
+    token                     = strtok_r((char*) 0, " ", &save_token);
+    ++(*literal_pointer);
+  }
+}
+
+ATTR_COLD static bool tokenize_header(char* const line) {
+  // Tokenize header line that contains number of variables and number of clauses
+
+  // Ignore first two tokens
+  char* save_token;
+  char* line_copy = line;
+  strtok_r(line_copy, " ", &save_token);
+  strtok_r((char*) 0, " ", &save_token);
+
+  // Get number of variables
+  const char* token = strtok_r((char*) 0, " ", &save_token);
+  size_t vars = (size_t) strtol(token, (char**) 0, 10);
+
+  // Get number of clauses
+  token = strtok_r((char*) 0, " ", &save_token);
+  size_t cls = (size_t) strtol(token, (char**) 0, 10);
+
+  init(vars, cls);
+  return true;
+}
+
 void dimacs_parse_file(const char* const file_path) {
   FILE* file = fopen(file_path, "r");
   if (file == 0) {
@@ -97,32 +135,15 @@ void dimacs_parse_file(const char* const file_path) {
 
     for (int i = 0; i < read; ++i) {
       switch (line[i]) {
-        case 'p': {
-          // Tokenize line that contains number of variables and number of clauses
-
-          // Ignore first two tokens
-          char* save_token;
-          char* line_copy = line;
-          strtok_r(line_copy, " ", &save_token);
-          strtok_r((char*) 0, " ", &save_token);
-
-          // Get number of variables
-          const char* token = strtok_r((char*) 0, " ", &save_token);
-          size_t vars = (size_t) strtol(token, (char**) 0, 10);
-
-          // Get number of clauses
-          token = strtok_r((char*) 0, " ", &save_token);
-          size_t cls = (size_t) strtol(token, (char**) 0, 10);
-
-          init(vars, cls);
-          done_reading_header = true;
+        case 'p':
+          done_reading_header = tokenize_header(line);
           break;
-        }
         case 'c':
           break;
         default:
           continue;
       }
+
       break;
     }
   }
@@ -134,24 +155,12 @@ void dimacs_parse_file(const char* const file_path) {
   while (getline(&line, &len, file) != -1) {
     YASER_ASSERT(line, !=, NULL);
 
-    // Ignore line if it not starts with digits 1-9
+    // Ignore line if it not starts with digits 1-9, a minus or a whitespace
     if ((line[0] < '1' || line[0] > '9') && line[0] != '-' && line[0] != ' ') {
       continue;
     }
 
-    char* line_copy = line;
-    while (isspace(*line_copy)) {
-      log_debug("detected");
-      ++line_copy;
-    }
-
-    char* save_token;
-    const char* token     = strtok_r(line_copy, " ", &save_token);
-    while (token != 0 && token[0] != '0') {
-      formula[literal_pointer] = (literal) strtol(token, (char**) 0, 10);
-      token                    = strtok_r((char*) 0, " ", &save_token);
-      ++literal_pointer;
-    }
+    tokenize_clause(line, &literal_pointer);
 
     clauses[clause_pointer] = last_clause_pointer;
     last_clause_pointer     = literal_pointer;
@@ -163,9 +172,10 @@ void dimacs_parse_file(const char* const file_path) {
 
     ++clause_pointer;
   }
-  clauses[clause_pointer] = last_clause_pointer;
 
+  clauses[clause_pointer] = last_clause_pointer;
   num_literals = literal_pointer;
+
   log_info("#Literals=%zu (not distinct)", num_literals);
   log_info("#Variables=%zu", num_variables);
   log_info("#Clauses=%zu", num_clauses);
