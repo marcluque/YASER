@@ -23,13 +23,16 @@
 - [X] Custom asserts
 - [X] Logging
 - [X] [DIMACS](https://people.sc.fsu.edu/~jburkardt/data/cnf/cnf.html) Parser
-- [ ] DIMACS Parser Tests
-- [ ] Clause resolution
-- [ ] Conflict resolution
+  - [ ] DIMACS Parser Tests
+- [ ] CDCL
+  - [ ] Clause learning
+  - [ ] Conflict resolution
+  - [ ] Conflict-driven backjumping
 - [ ] VSIDS heuristic
 - [ ] Watched Literals
+- [ ] Cardinality Constraints
 - [ ] Stats printing
-- [ ] As close as possible to 100% Code Coverage
+- [ ] Reach 100% Code Coverage
 
 ### CI
 
