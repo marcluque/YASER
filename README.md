@@ -28,9 +28,11 @@
   - [ ] Clause learning
   - [ ] Conflict resolution
   - [ ] Conflict-driven backjumping
+  - [ ] Deletion of learnt clauses with low activity score
 - [ ] VSIDS heuristic
+  - [ ] Activity scores  
 - [ ] Watched Literals
-- [ ] Cardinality Constraints
+- [ ] Cardinality constraints
 - [ ] Stats printing
 - [ ] Reach 100% Code Coverage
 
