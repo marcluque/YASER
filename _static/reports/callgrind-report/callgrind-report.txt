@@ -1,41 +1,41 @@
-==3629== Callgrind, a call-graph generating cache profiler
-==3629== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
-==3629== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3629== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
-==3629== 
---3629-- warning: L3 cache found, using its data for the LL simulation.
---3629-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
---3629-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
-==3629== For interactive control, run 'callgrind_control -h'.
-[11:34:59][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
-[11:34:59][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
-[11:34:59][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
-[11:34:59][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
-[11:34:59][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
-[11:34:59][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
-[11:34:59][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
-[11:34:59][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
-[11:34:59][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
-==3629== 
-==3629== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
-==3629== Collected : 320488 70714 26229 1796 2807 767 1674 2204 697 60682 7076 1214 283
-==3629== 
-==3629== I   refs:      320,488
-==3629== I1  misses:      1,796
-==3629== LLi misses:      1,674
-==3629== I1  miss rate:    0.56%
-==3629== LLi miss rate:    0.52%
-==3629== 
-==3629== D   refs:       96,943  (70,714 rd + 26,229 wr)
-==3629== D1  misses:      3,574  ( 2,807 rd +    767 wr)
-==3629== LLd misses:      2,901  ( 2,204 rd +    697 wr)
-==3629== D1  miss rate:     3.7% (   4.0%   +    2.9%  )
-==3629== LLd miss rate:     3.0% (   3.1%   +    2.7%  )
-==3629== 
-==3629== LL refs:         5,370  ( 4,603 rd +    767 wr)
-==3629== LL misses:       4,575  ( 3,878 rd +    697 wr)
-==3629== LL miss rate:      1.1% (   1.0%   +    2.7%  )
-==3629== 
-==3629== Branches:       61,896  (60,682 cond +  1,214 ind)
-==3629== Mispredicts:     7,359  ( 7,076 cond +    283 ind)
-==3629== Mispred rate:     11.9% (  11.7%     +   23.3%   )
+==3623== Callgrind, a call-graph generating cache profiler
+==3623== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==3623== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3623== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
+==3623== 
+--3623-- warning: L3 cache found, using its data for the LL simulation.
+--3623-- warning: specified LL cache: line_size 64  assoc 11  total_size 37,486,592
+--3623-- warning: simulated LL cache: line_size 64  assoc 18  total_size 37,748,736
+==3623== For interactive control, run 'callgrind_control -h'.
+[11:06:56][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
+[11:06:56][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
+[11:06:56][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
+[11:06:56][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
+[11:06:56][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
+[11:06:56][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
+[11:06:56][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
+[11:06:56][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
+[11:06:56][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
+==3623== 
+==3623== Events    : Ir Dr Dw I1mr D1mr D1mw ILmr DLmr DLmw Bc Bcm Bi Bim
+==3623== Collected : 320579 70750 26397 1822 2802 767 1683 2203 697 60533 7103 1223 284
+==3623== 
+==3623== I   refs:      320,579
+==3623== I1  misses:      1,822
+==3623== LLi misses:      1,683
+==3623== I1  miss rate:    0.57%
+==3623== LLi miss rate:    0.52%
+==3623== 
+==3623== D   refs:       97,147  (70,750 rd + 26,397 wr)
+==3623== D1  misses:      3,569  ( 2,802 rd +    767 wr)
+==3623== LLd misses:      2,900  ( 2,203 rd +    697 wr)
+==3623== D1  miss rate:     3.7% (   4.0%   +    2.9%  )
+==3623== LLd miss rate:     3.0% (   3.1%   +    2.6%  )
+==3623== 
+==3623== LL refs:         5,391  ( 4,624 rd +    767 wr)
+==3623== LL misses:       4,583  ( 3,886 rd +    697 wr)
+==3623== LL miss rate:      1.1% (   1.0%   +    2.6%  )
+==3623== 
+==3623== Branches:       61,756  (60,533 cond +  1,223 ind)
+==3623== Mispredicts:     7,387  ( 7,103 cond +    284 ind)
+==3623== Mispred rate:     12.0% (  11.7%     +   23.2%   )
