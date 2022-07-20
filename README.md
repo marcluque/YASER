@@ -44,7 +44,6 @@
 - [X] [Clang](https://clang.llvm.org/) compilation
 - [X] [Sonarcloud](https://sonarcloud.io/)
 - [X] Include GCov report into [Sonarcloud](https://sonarcloud.io/)
-- [ ] [clang-format](https://clang.llvm.org/docs/ClangFormat.html)
 - [ ] Benchmarks with and without profiling data
 
 #### Documentation of code & analysis results
@@ -66,7 +65,9 @@
 - [ ] [Google's Heap Checker](https://gperftools.github.io/gperftools/heap_checker.html)
 - [ ] [Google's CPU Profiler](https://gperftools.github.io/gperftools/cpuprofile.html)
 - [ ] [Pigeonhole Problem](http://user.it.uu.se/~tjawe125/software/pigeonhole/)
-- [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
+- [ ] Verify correctness: [SATLIB benchmarks](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html) unit tests
+- [ ] [Verifast](https://github.com/verifast/verifast)
+- [ ] [CBMC](https://www.cprover.org/cbmc/)
 
 ## License
 Licensed under the BSD 2-Clause License - see the [LICENSE](LICENSE) file for details.
