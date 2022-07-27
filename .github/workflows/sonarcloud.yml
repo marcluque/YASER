@@ -22,17 +22,24 @@ jobs:
       - name: Run gcov
         continue-on-error: true
         run: |
+          pip install gcovr==5.0
           mkdir ${{ env.GCOV_OUT_DIR }}
           cd ${{ env.GCOV_OUT_DIR }}
+          pwd
           find ../src/* ../test/assignments -iname '*.c' ! -iname 'main.c' | xargs gcc -o main_test_assignments -fprofile-arcs -ftest-coverage -g -O0 -I../external/uthash/src -I../external/Unity/src -I../include -I../test/assignments ../external/Unity/src/unity.c
-          ./main_test_assignments
+          ./main_test_assignments || true # We ignore test fails
           for f in `find . -name '*test*.gcda'`; do
             rm -rf ${f}
           done
+           for f in `find . -name 'external*.gcda'`; do
+            rm -rf ${f}
+          done 
           for f in `find . -name '*.gcda'`; do
             echo "Processing $f file..."
             gcov -o ${f} x
           done
+          gcovr -r .. --exclude=../test --exclude=../external --sonarqube > coverage.xml
+          ls
           cd ..
       - name: Set up JDK 11
         uses: actions/setup-java@v1
@@ -67,4 +74,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" --define sonar.cfamily.gcov.reportsPath=${{ env.GCOV_OUT_DIR }}
+          pwd
+          sonar-scanner --define sonar.host.url="${{ env.SONAR_SERVER_URL }}" --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" --define sonar.cfamily.gcov.reportsPath="${{ env.GCOV_OUT_DIR }}" --define sonar.coverageReportPaths="${{ env.GCOV_OUT_DIR }}/coverage.xml"
