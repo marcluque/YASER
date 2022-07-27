@@ -10,7 +10,7 @@
 
 typedef UT_array* ClauseArray;
 
-typedef struct {
+typedef struct WatchedLiteralClauseItem {
   /**
    *
    */

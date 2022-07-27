@@ -6,7 +6,7 @@
 #include "global/formula.h"
 #include "global/yaser.h"
 
-typedef struct {
+typedef struct ResolventItem {
   literal l;
   UT_hash_handle hh;
 } ResolventItem;

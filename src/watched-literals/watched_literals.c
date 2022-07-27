@@ -20,11 +20,12 @@ void watched_literals_init(void) {
 
   for (clause_index i = 0; i < num_clauses; ++i) {
     watched_literal_clause_map_add(formula[clauses[i]], i);
-    if (clauses[i + 1] - clauses[i] > 1) {
-      watched_literal_clause_map_add(formula[clauses[i] + 1], i);
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]}, false);
+    // Is unit clause?
+    if (clauses[i + 1] - clauses[i] <= 1) {
+        clause_literal_map_add(i, (literal[]){formula[clauses[i]]}, true);
     } else {
-      clause_literal_map_add(i, (literal[]){formula[clauses[i]]}, true);
+        watched_literal_clause_map_add(formula[clauses[i] + 1], i);
+        clause_literal_map_add(i, (literal[]){formula[clauses[i]], formula[clauses[i] + 1]}, false);
     }
   }
 
@@ -108,7 +109,11 @@ void watched_literals_check(const literal watched_literal) {
   // Find all clauses that contain the negated watched literal (i.e., formula[watched_literal])
   literal negated_watched_literal = -watched_literal;
   ClauseArray clause_array        = watched_literal_clause_map_get(negated_watched_literal);
-  YASER_ASSERT(clause_array, !=, NULL);
+
+  // Negated watched literal doesn't exist, so no work to do
+  if (clause_array == NULL) {
+    return;
+  }
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wsign-conversion"

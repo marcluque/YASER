@@ -36,8 +36,6 @@ void formula_init(const size_t num_variables_param, const size_t num_clauses_par
 
 void formula_clear(void) {
   free(formula);
-
   free(assignment_map);
-
   free(clauses);
 }

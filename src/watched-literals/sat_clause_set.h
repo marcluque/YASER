@@ -11,7 +11,7 @@
 #include "uthash.h"
 #include <stdbool.h>
 
-typedef struct {
+typedef struct SatClauseItem {
   /**
    *
    */

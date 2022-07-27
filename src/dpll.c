@@ -9,6 +9,7 @@
 #include "global/formula.h"
 #include "watched-literals/sat_clause_set.h"
 #include "conflicts/conflict_resolution.h"
+#include "logging/log.h"
 
 static void update_assignment(const clause_index clause, const literal l) {
   // Trail -> entries (l, v, b): assigning v to l, b == true <=> negated l is visited
@@ -16,6 +17,8 @@ static void update_assignment(const clause_index clause, const literal l) {
   assignment_stack_push(l, v, true);
   assignment_map_set(l, v);
   sat_clause_set_add(clause);
+
+  log_debug("Assigning %sx%d with value %d in clause %lu", l < 0 ? "¬" : "", abs(l), v - 1, clause);
 
   // Call to update watched literals
   watched_literals_check(l);
@@ -31,7 +34,7 @@ static bool bcp(void) {
     }
   }
 
-  return sat_clause_set_exists_unsat();
+  return true;
 }
 
 static bool decide(void) {
@@ -40,8 +43,20 @@ static bool decide(void) {
   }
   // TODO: choose unassigned literal heuristically
   // TODO: Do we know the clause that the literal is coming from?
-  literal l           = 0;
-  clause_index clause = 0;
+  formula_pos i = 0;
+  clause_index j = 0;
+  for ( ; i < num_variables * num_clauses; ++i) {
+    if (i >= clauses[j + 1]) {
+      ++j;
+    }
+
+    if (assignment_map_get(formula[i]) == VALUE_UNASSIGNED) {
+      break;
+    }
+  }
+
+  literal l           = formula[i];
+  clause_index clause = j;
   update_assignment(clause, l);
   return true;
 }

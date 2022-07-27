@@ -19,13 +19,13 @@
 #include <ctype.h>
 
 ATTR_COLD static void init(size_t init_num_variables, size_t init_num_clauses) {
-  if (init_num_variables > ULLONG_MAX) {
-    log_error("number of variables exceeds %llu", ULLONG_MAX);
+  if (init_num_variables > UINT_MAX) {
+    log_error("number of variables exceeds %d", UINT_MAX);
     YASER_EXIT();
   }
 
   formula_init(init_num_variables, init_num_clauses);
-  assignment_stack_init(init_num_variables * 2);
+  assignment_stack_init(init_num_variables);
   unit_clause_stack_init(init_num_clauses);
 }
 
@@ -118,7 +118,7 @@ ATTR_COLD static bool tokenize_header(char* const line) {
 void dimacs_parse_file(const char* const file_path) {
   FILE* file = fopen(file_path, "r");
   if (file == 0) {
-    log_error("%s", strerror(errno));
+    log_error("File: %s -> %s", file_path, strerror(errno));
     YASER_EXIT();
   }
 
