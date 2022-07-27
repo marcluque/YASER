@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 
-typedef struct {
+typedef struct UnitClause {
   clause_index clause;
   literal l;
 } UnitClause;

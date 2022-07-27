@@ -22,12 +22,6 @@ int main(void) {
     RUN_TEST(test_assignment_stack_pop);
 
     //
-    // Assignment Map
-    //
-    RUN_TEST(test_assignment_map_add_and_get);
-    RUN_TEST(test_assignment_map_clear);
-
-    //
     // Unit Clause Stack
     //
     RUN_TEST(test_unit_clause_stack_init);

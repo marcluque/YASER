@@ -39,8 +39,8 @@ bool unit_clause_stack_full(void) {
 void unit_clause_stack_push(const clause_index clause, const literal l) {
   assert(unit_clause_stack != NULL);
   assert(!unit_clause_stack_full());
-  unit_clause_stack[unit_clause_sp].l      = l;
   unit_clause_stack[unit_clause_sp].clause = clause;
+  unit_clause_stack[unit_clause_sp].l      = l;
   ++unit_clause_sp;
 }
 

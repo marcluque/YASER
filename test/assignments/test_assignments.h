@@ -21,13 +21,6 @@ void test_assignment_stack_push(void);
 void test_assignment_stack_pop(void);
 
 //
-// Assignment Map
-//
-void test_assignment_map_add_and_get(void);
-
-void test_assignment_map_clear(void);
-
-//
 // Unit Clause Stack
 //
 void test_unit_clause_stack_init(void);
