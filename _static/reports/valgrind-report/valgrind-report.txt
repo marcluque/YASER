@@ -1,23 +1,23 @@
-==3152== Memcheck, a memory error detector
-==3152== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==3152== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==3152== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
-==3152== 
-[20:00:31][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
-[20:00:31][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
-[20:00:31][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
-[20:00:31][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
-[20:00:31][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
-[20:00:31][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
-[20:00:31][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
-[20:00:31][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
-[20:00:31][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
-==3152== 
-==3152== HEAP SUMMARY:
-==3152==     in use at exit: 0 bytes in 0 blocks
-==3152==   total heap usage: 63 allocs, 63 frees, 90,514 bytes allocated
-==3152== 
-==3152== All heap blocks were freed -- no leaks are possible
-==3152== 
-==3152== For lists of detected and suppressed errors, rerun with: -s
-==3152== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==3090== Memcheck, a memory error detector
+==3090== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3090== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==3090== Command: ./yaser -i satlib/pigeonhole/pigeonhole-1.cnf
+==3090== 
+[20:15:33][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mSuccessfully opened file (satlib/pigeonhole/pigeonhole-1.cnf)[0m
+[20:15:33][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Literals=4 (not distinct)[0m
+[20:15:33][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Variables=2[0m
+[20:15:33][YASER - [32mINFO[0m][dimacs_parser.c]: [32m#Clauses=3[0m
+[20:15:33][YASER - [36mDEBUG[0m][dimacs_parser.c]: [36mParsed formula (x1) ∧ (x2) ∧ (¬x1 ∨ ¬x2)[0m
+[20:15:33][YASER - [36mDEBUG[0m][watched_literals.c]: [36mWatched Literals are initialized...[0m
+[20:15:33][YASER - [36mDEBUG[0m][main.c]: [36mInitialization done...[0m
+[20:15:33][YASER - [36mDEBUG[0m][watched_literals.c]: [36mClause 0 is conflicting[0m
+[20:15:33][YASER - [32mINFO[0m][main.c]: [32mRESULT: UNSAT[0m
+==3090== 
+==3090== HEAP SUMMARY:
+==3090==     in use at exit: 0 bytes in 0 blocks
+==3090==   total heap usage: 63 allocs, 63 frees, 90,514 bytes allocated
+==3090== 
+==3090== All heap blocks were freed -- no leaks are possible
+==3090== 
+==3090== For lists of detected and suppressed errors, rerun with: -s
+==3090== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
