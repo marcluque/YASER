@@ -1,107 +1,24 @@
-cmake_minimum_required(VERSION 3.0)
-project(YASER C)
+cmake_minimum_required(VERSION 3.13)
+project(yaser
+        VERSION 0.1
+        DESCRIPTION "Yet Another Sat solvER"
+        LANGUAGES CXX)
 
-set(PRODUCT_NAME yaser)
-set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
-    message("[YASER] Using yaser debug mode (NOT NDEBUG)")
-    add_definitions(-DYASER_DEBUG)
-endif()
+add_subdirectory(src)
 
-if(TARGET_GROUP STREQUAL test)
-    include(CTest)
-    include_directories(external/uthash/src)
-
-    add_subdirectory(src)
-    add_subdirectory(external)
+option(BUILD_TESTS "Build the tests" ON)
+if (BUILD_TESTS)
+    enable_testing()
+    include(GoogleTest)
     add_subdirectory(test)
-else()
-    add_compile_options(
-            -std=c11
+endif ()
 
-            ### WARNINGS
-            # Standrad GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-            -Wall
-            -Werror
-            -pedantic
-            -Wextra
-            -Wunused
-            -Wno-unused-function
-            -Wno-unused-parameter
-            -Wshadow
-            -Wcast-align
-            -Wconversion
-            -Wdouble-promotion
-            -Wstack-protector
-            -Wredundant-decls
-            -Wpacked
-            -Wno-padded
-            -Wmissing-declarations
-            -Wmissing-prototypes
-            -Wstrict-prototypes
-            -Wwrite-strings
-            -Wcast-qual
-            -Wundef
-            -Wfloat-equal
-            -Warray-bounds
-            -Wstrict-overflow=4
-            -Wuninitialized
-            -Wswitch-enum
-            -Wswitch-default
-            -Wmissing-include-dirs
-            -Wformat-security
-            -Wnonnull
-            -Wvla
-
-            # Has to be disabled because UTHash uses it
-            -Wno-implicit-fallthrough
-    )
-
-    if(NOT DEFINED OPTIMIZE)
-        message("[YASER] Using -O0 -g")
-        add_compile_options(-O0 -g)
-    else()
-        message("[YASER] Using -O3")
-        add_compile_options(-O3)
-    endif()
-
-    if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
-        message("[YASER] Using -g")
-        add_compile_options(-g)
-    endif()
-
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        add_compile_options(
-                -Weverything
-                -Wno-unknown-warning-option
-                -Wno-format-nonliteral
-                -ferror-limit=0)
-    elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-        add_compile_options(
-                ### WARNINGS
-                # Standard GCC warnings: https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
-                -Werror
-                -Wlogical-op
-                -Wjump-misses-init
-                -Wunsafe-loop-optimizations
-                -Wtrampolines
-                -Wsuggest-attribute=pure
-                -Wsuggest-attribute=const
-                -Wsuggest-attribute=noreturn
-                -Wsuggest-attribute=format
-                -Wformat=1
-                -fmax-errors=0
-        )
-    endif()
-
-    include_directories(external/uthash/src)
-    include_directories(include)
-    file(GLOB_RECURSE SRC_FILES "src/*.c")
-
-    add_executable(${PRODUCT_NAME} ${SRC_FILES})
-
-    if (NOT DEFINED DONT_LINK_TCMALLOC)
-        target_link_libraries(${PRODUCT_NAME} PUBLIC -ltcmalloc)
-    endif()
-endif()
+option(BUILD_BENCHMARKS "Build the benchmarks" ON)
+if (BUILD_TESTS)
+    set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
+    add_subdirectory(benchmark)
+endif ()
