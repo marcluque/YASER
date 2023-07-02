@@ -4,3 +4,12 @@
 [submodule "external/uthash"]
 	path = external/uthash
 	url = https://github.com/troydhanson/uthash
+[submodule "extern/google/benchmark"]
+	path = extern/google/benchmark
+	url = https://github.com/google/benchmark.git
+[submodule "extern/google/googletest"]
+	path = extern/google/googletest
+	url = https://github.com/google/googletest.git
+[submodule "extern/fmtlib/fmt"]
+	path = extern/fmtlib/fmt
+	url = https://github.com/fmtlib/fmt.git
