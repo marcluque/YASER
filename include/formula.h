@@ -13,10 +13,12 @@
  */
 
 /**
- * CNF Formula:    (-3 5 3) (-1 2 -4) (1 2)
- *                 |        |         |
- * Clause indices: 0=c1     1=c2      2=c3
+ * CNF Formula:    [(-3 5 3) (-1 2 -4) (1 2)]
+ *                 |         |         |
+ * Clause indices: 0=c1      3=c2      6=c3  8
  */
+
+//for (int i = clause[0]; i < clause[1]; ++i) {}
 
 /**
  * - Store literals as vector
