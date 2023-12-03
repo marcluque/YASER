@@ -5,7 +5,7 @@
 #include <string>
 #include <fmt/core.h>
 
-void vlog(const char* log_level, const char* file, int line, fmt::string_view format, fmt::format_args args) {
+inline void vlog(const char* log_level, const char* file, int line, fmt::string_view format, fmt::format_args args) {
   fmt::print("[{:5}]: ", log_level);
   fmt::vprint(format, args);
 #ifdef PIPELINE
@@ -17,7 +17,7 @@ void vlog(const char* log_level, const char* file, int line, fmt::string_view fo
 }
 
 template <typename... T>
-void log(const char* log_level, const char* file, int line, fmt::format_string<T...> format, T&&... args) {
+inline void log(const char* log_level, const char* file, int line, fmt::format_string<T...> format, T&&... args) {
   vlog(log_level, file, line, format, fmt::make_format_args(args...));
 }
 
@@ -28,5 +28,7 @@ void log(const char* log_level, const char* file, int line, fmt::format_string<T
 #endif
 
 #define INFO_LOG(format, ...) log("INFO", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)
+
+#define ERROR_LOG(format, ...) log("ERROR", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)
 
 #endif // YASER_LOG_H

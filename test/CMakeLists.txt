@@ -13,13 +13,14 @@ set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
 macro(package_add_test TEST_NAME)
     add_executable(${TEST_NAME} ${ARGN})
-    target_link_libraries(${TEST_NAME} gtest gmock gtest_main)
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+    target_link_libraries(${TEST_NAME} gtest gmock gtest_main yaserlib)
     gtest_discover_tests(${TEST_NAME}
             WORKING_DIRECTORY ${PROJECT_DIR}
             PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_DIR}")
     set_target_properties(${TESTNAME} PROPERTIES FOLDER test)
 endmacro()
 
-package_add_test(example_test example_test.cpp)
+package_add_test(dimacs_parser_test dimacs_parser_test.cpp)
 
 package_add_test(example_test2 example_test2.cpp)
