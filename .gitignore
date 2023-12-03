@@ -7,3 +7,6 @@ gcov
 
 # CLion
 .idea
+
+# MacOS
+.DS_Store

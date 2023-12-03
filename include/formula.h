@@ -3,6 +3,9 @@
 
 #include <vector>
 #include <cstdint>
+#include <string>
+#include <span>
+#include "fmt/format.h"
 
 /**
  * Only use unsigned int for literals.
@@ -40,20 +43,65 @@
  */
 using Literal = uint32_t;
 
-using Clause = std::size_t;
+using Clause = std::span<Literal>;
 
 class Formula {
 public:
   Formula(std::size_t num_variables, std::size_t num_clauses);
 
   /**
-   * Literals are not changed, hence const and no reference returned.
+   *
    *
    * @param i
    * @return
    */
-  [[nodiscard]] Literal literal(int i) const {
+  [[nodiscard]] Literal& literal(std::size_t i) {
+    // TODO: Use function for literal >> 1?
+#ifdef YASER_DEBUG
+    return literals.at(i); // Allow range checks
+#else
     return literals[i];
+#endif
+  }
+
+  /**
+   *
+   *
+   * @param i
+   * @return
+   */
+  [[nodiscard]] Clause& clause(std::size_t i) {
+#ifdef YASER_DEBUG
+    return clauses.at(i); // Allow range checks
+#else
+    return clauses[i];
+#endif
+  }
+
+  /**
+   * No need to be efficient here, this should only be used for debugging and test purposes.
+   *
+   * @return
+   */
+  explicit operator std::string() const {
+    std::string s;
+    for (const auto& clause : clauses) {
+      s.append("(");
+      for (const auto& literal : clause) {
+        std::string sign{};
+        if (!(literal & 1)) {
+          sign.append("¬");
+        }
+
+        s.append(fmt::format("{}x_{} ∨ ", sign, literal >> 1));
+      }
+      s.resize(s.length() - 5);
+      s.append(") ∧ ");
+    }
+
+    s.resize(s.length() - 5);
+
+    return s;
   }
 
 private:
@@ -68,6 +116,6 @@ private:
   std::vector<Clause> clauses;
 };
 
-enum class Value { UNASSIGNED = 0, FALSE, TRUE };
+enum class Value { UNASSIGNED = 0 };
 
 #endif // YASER_FORMULA_H

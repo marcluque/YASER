@@ -7,8 +7,7 @@
 #include "formula.h"
 #include "dimacs_parser.h"
 
-int main(int argc, char** argv) {
-  //VERIFY(1, std::greater<>(), 10);
+int main(int _argc, char** argv) {
   //DEBUG_LOG("test log {} and {}", 42, fmt::join(std::vector{1, 2, 3}, ","));
 
   // DIMACS parser can now fill literal and clause vectors (should use push_back since we might need to reallocate)
@@ -17,6 +16,10 @@ int main(int argc, char** argv) {
 
   DEBUG_LOG("{}", argv[1]);
   Formula f = DimacsParser::parse_formula(std::filesystem::path(argv[1]));
+
+  INFO_LOG("{}", f.literal(0));
+
+  DEBUG_LOG("Parsed formula {}", static_cast<std::string>(f));
 
   INFO_LOG("Parsed input file, took {} ms", 1);
 

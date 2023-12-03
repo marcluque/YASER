@@ -1,9 +1,12 @@
 add_subdirectory("${PROJECT_SOURCE_DIR}/extern/google/benchmark" "extern/google/benchmark")
 
-macro(package_add_benchmark BENCHMARK_NAME)
+macro(add_benchmark BENCHMARK_NAME)
     add_executable(${BENCHMARK_NAME} ${ARGN})
-    target_link_libraries(${BENCHMARK_NAME} benchmark::benchmark)
+    include_directories(${PROJECT_SOURCE_DIR}/include)
+    target_link_libraries(${BENCHMARK_NAME} benchmark::benchmark ${CMAKE_PROJECT_NAME}lib)
     set_target_properties(${BENCHMARK_NAME} PROPERTIES FOLDER benchmark)
 endmacro()
 
-package_add_benchmark(example_benchmark example_benchmark.cpp)
+add_benchmark(example_benchmark example_benchmark.cpp)
+
+add_benchmark(dimacs_parser_benchmark dimacs_parser_benchmark.cpp)
