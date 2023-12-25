@@ -17,7 +17,7 @@ inline void vlog(const char* log_level, const char* file, int line, fmt::string_
 }
 
 template <typename... T>
-inline void log(const char* log_level, const char* file, int line, fmt::format_string<T...> format, T&&... args) {
+void log(const char* log_level, const char* file, int line, fmt::format_string<T...> format, T&&... args) {
   vlog(log_level, file, line, format, fmt::make_format_args(args...));
 }
 

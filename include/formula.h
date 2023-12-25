@@ -6,6 +6,9 @@
 #include <string>
 #include <span>
 #include "fmt/format.h"
+#include "literal.h"
+
+#include <unordered_set>
 
 /**
  * Only use unsigned int for literals.
@@ -21,7 +24,7 @@
  * Clause indices: 0=c1      3=c2      6=c3  8
  */
 
-//for (int i = clause[0]; i < clause[1]; ++i) {}
+// for (int i = clause[0]; i < clause[1]; ++i) {}
 
 /**
  * - Store literals as vector
@@ -35,14 +38,13 @@
  *
  * - Store, access, and set literal assignments? e.g.: formula.value(i) // = assignment_map[formula[i] & 0]
  *
- * - Watched literals map: unordered_map<literal, vector<Clause>> (i.e., a literal points to the clauses its being watched in)
+ * - Watched literals map: unordered_map<literal, vector<Clause>> (i.e., a literal points to the clauses its being
+ * watched in)
  *
  * - Unit clause set: unordered_set<Clause>
  *
  * - SAT clause set: unordered_set<Clause>
  */
-using Literal = uint32_t;
-
 using Clause = std::span<Literal>;
 
 class Formula {
@@ -56,11 +58,10 @@ public:
    * @return
    */
   [[nodiscard]] Literal& literal(std::size_t i) {
-    // TODO: Use function for literal >> 1?
 #ifdef YASER_DEBUG
     return literals.at(i); // Allow range checks
 #else
-    return literals[i];
+    return m_literals[i];
 #endif
   }
 
@@ -74,7 +75,7 @@ public:
 #ifdef YASER_DEBUG
     return clauses.at(i); // Allow range checks
 #else
-    return clauses[i];
+    return m_clauses[i];
 #endif
   }
 
@@ -85,15 +86,15 @@ public:
    */
   explicit operator std::string() const {
     std::string s;
-    for (const auto& clause : clauses) {
+    for (const auto& clause : m_clauses) {
       s.append("(");
       for (const auto& literal : clause) {
         std::string sign{};
-        if (!(literal & 1)) {
+        if (!literal::is_positive(literal)) {
           sign.append("¬");
         }
 
-        s.append(fmt::format("{}x_{} ∨ ", sign, literal >> 1));
+        s.append(fmt::format("{}x_{} ∨ ", sign, literal::value(literal)));
       }
       s.resize(s.length() - 5);
       s.append(") ∧ ");
@@ -104,16 +105,64 @@ public:
     return s;
   }
 
-private:
-  /**
-   * We can have up to 2^31 variables.
-   */
-  std::vector<Literal> literals;
+  [[nodiscard]] size_t number_of_variables() const {
+    return m_number_of_variables;
+  }
 
   /**
-   * Stores indices to positions in the ::literals vector.
+   * \brief
+   *
+   * It is possible to create a conflict during BCP.
+   * Consider, for instance:
+   * (a | !b) & (c | !d) & (b | d)
+   * Further assume a = 0, c = 0. Our unit clauses imply b = 0, d = 0.
+   * This leads to the last clause being conflicting, since all its assignments are 0.
+   *
+   * \return
    */
-  std::vector<Clause> clauses;
+  [[nodiscard]] bool is_conflict_present() const {
+    return m_is_conflict_present;
+  }
+
+  [[nodiscard]] std::vector<std::tuple<Literal, bool>>& assignment_trail() {
+    return m_assignment_trail;
+  }
+
+  [[nodiscard]] std::unordered_set<Clause> unit_clauses() const {
+    return m_unit_clauses;
+  }
+
+private:
+  /**
+   * \brief
+   */
+  size_t m_number_of_variables;
+
+  /**
+   * \brief
+   */
+  bool m_is_conflict_present;
+
+  /**
+   * \brief We can have up to 2^31 variables.
+   */
+  std::vector<Literal> m_literals;
+
+  /**
+   * \brief Stores indices to positions in the ::literals vector.
+   */
+  std::vector<Clause> m_clauses;
+
+  /**
+   * \brief
+   */
+  std::vector<std::tuple<Literal, bool>> m_assignment_trail;
+
+  /**
+   * \brief
+   */
+  // TODO: Does this have to be a set?
+  std::unordered_set<Clause> m_unit_clauses;
 };
 
 enum class Value { UNASSIGNED = 0 };

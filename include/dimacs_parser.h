@@ -13,7 +13,7 @@ namespace impl {
  * \param n
  * \return
  */
-std::tuple<bool, unsigned> atoi(const char* s, std::size_t n);
+std::tuple<bool, unsigned> atoui(const char* s, std::size_t n);
 
 /**
  *
@@ -21,7 +21,7 @@ std::tuple<bool, unsigned> atoi(const char* s, std::size_t n);
  * @param buffer_ptr
  * @return
  */
-std::tuple<std::size_t, std::size_t> parse_header(char*& buffer_ptr);
+std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr);
 
 /**
  * \brief
@@ -30,7 +30,7 @@ std::tuple<std::size_t, std::size_t> parse_header(char*& buffer_ptr);
  * \param clause_start
  * \return
  */
-std::size_t parse_clause(Formula& formula, char*& buffer_ptr, std::size_t clause_start);
+std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start);
 } // namespace impl
 
 /**
