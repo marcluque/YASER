@@ -9,6 +9,8 @@ static void BM_ParseSmallFormula(benchmark::State& state) {
                 "2 -3 0\n"
                 "-1 -3 0"};
 
+  std::cout << "File size: " << s.length() << " bytes" << std::endl;
+
   for ([[maybe_unused]] auto _ : state) {
     DimacsParser::parse_formula(s);
   }
@@ -17,6 +19,8 @@ static void BM_ParseSmallFormula(benchmark::State& state) {
 static void BM_ParseBigFormulaFromFile(benchmark::State& state) {
   auto p = std::filesystem::current_path();
   p /= "../../satlib/pigeonhole/pigeonhole-20.cnf";
+
+  std::cout << "File size: " << std::filesystem::file_size(p) << " bytes" << std::endl;
 
   for ([[maybe_unused]] auto _ : state) {
     DimacsParser::parse_formula(p);
