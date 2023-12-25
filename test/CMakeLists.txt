@@ -22,5 +22,3 @@ macro(package_add_test TEST_NAME)
 endmacro()
 
 package_add_test(dimacs_parser_test dimacs_parser_test.cpp)
-
-package_add_test(example_test2 example_test2.cpp)
