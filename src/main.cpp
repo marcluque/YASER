@@ -1,9 +1,5 @@
 #include <cstdlib>
-#include <vector>
-#include <iostream>
-#include "fmt/ranges.h"
 #include "log.h"
-#include "verify.h"
 #include "formula.h"
 #include "dimacs_parser.h"
 

@@ -11,11 +11,8 @@ namespace DimacsParser {
 
   namespace impl {
 
-    std::tuple<bool, unsigned> atoi(const char* s, const std::size_t n) {
-      std::size_t i = 0;
-      if (s[0] == '-') {
-        ++i;
-      }
+    std::tuple<bool, unsigned> atoui(const char* s, const std::size_t n) {
+      std::size_t i = s[0] == '-';
 
       unsigned val = 0;
       for (; i < n; ++i) {
@@ -25,28 +22,26 @@ namespace DimacsParser {
       return {s[0] == '-', val};
     }
 
-    static std::optional<std::tuple<bool, unsigned, std::size_t>> parse_number(char* buffer_ptr) {
+    static std::optional<std::tuple<bool, unsigned>> parse_number(const char*& buffer_ptr) {
       const char* number_start = nullptr;
-      const char* buffer_start = buffer_ptr;
       // TODO: Use portable new line
       for (; *buffer_ptr; ++buffer_ptr) {
         switch (*buffer_ptr) {
           case '\r':
             if (number_start) {
-              auto [sign, number] = atoi(number_start, buffer_ptr - number_start);
+              auto [sign, number] = atoui(number_start, buffer_ptr - number_start);
               ++buffer_ptr;
-              return std::tuple(sign, number, buffer_ptr - buffer_start);
+              return std::tuple(sign, number);
             }
             break;
           case '\n':
             if (number_start) {
-              auto [sign, number] = atoi(number_start, buffer_ptr - number_start);
-              return std::tuple(sign, number, buffer_ptr - buffer_start);
+              return atoui(number_start, buffer_ptr - number_start);
             }
             break;
           case ' ':
             if (number_start) {
-              return atoi(number_start, buffer_ptr - number_start);
+              return atoui(number_start, buffer_ptr - number_start);
             }
             number_start = nullptr;
             break;
@@ -74,10 +69,11 @@ namespace DimacsParser {
         }
       }
 
-      return std::nullopt;
+      // Important if the buffer doesn't end with /n, /r/n, /r (e.g., a simple c-style string)
+      return number_start ? std::make_optional(atoui(number_start, buffer_ptr - number_start)) : std::nullopt;
     }
 
-    std::tuple<std::size_t, std::size_t> parse_header(char*& buffer_ptr) {
+    std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
       unsigned num_variables = std::get<1>(parse_number(buffer_ptr).value());
       unsigned num_clauses = std::get<1>(parse_number(buffer_ptr).value());
 
@@ -86,7 +82,7 @@ namespace DimacsParser {
       return {num_variables, num_clauses};
     }
 
-    std::size_t parse_clause(Formula& formula, char*& buffer_ptr, std::size_t clause_start) {
+    std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start) {
       while (auto literal = parse_number(buffer_ptr)) {
         auto [is_negated, input_literal] = literal.value();
 #ifdef YASER_DEBUG
@@ -115,7 +111,7 @@ namespace DimacsParser {
       buffer.reserve(size);
       // TODO: Check size and conversion
       input_stream.read(buffer.data(), static_cast<std::streamsize>(size));
-      char* buffer_ptr = buffer.data();
+      const char* buffer_ptr = buffer.data();
 
       // Skip comments until we reach problem statement line
       for (; *buffer_ptr != 'p'; ++buffer_ptr) {
@@ -132,7 +128,7 @@ namespace DimacsParser {
       // +1 on buffer_ptr to skip newline character
       for (std::size_t current_clause = 0; current_clause < num_clauses; ++current_clause, ++buffer_ptr) {
         const std::size_t clause_start = clause_end;
-        clause_end = impl::parse_clause(formula, buffer_ptr, clause_start);
+        clause_end = parse_clause(formula, buffer_ptr, clause_start);
 
         formula.clause(current_clause) = std::span{&formula.literal(clause_start), clause_end - clause_start};
       }

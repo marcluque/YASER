@@ -1,5 +1,6 @@
 #include "formula.h"
 
-Formula::Formula(std::size_t num_variables, std::size_t num_clauses)
-    : literals(num_variables * num_clauses), clauses(num_clauses) {}
+Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
+    : m_number_of_variables(num_variables), m_literals(num_variables * num_clauses), m_clauses(num_clauses) {
 
+}
