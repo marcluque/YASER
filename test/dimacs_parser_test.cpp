@@ -3,19 +3,16 @@
 #include "dimacs_parser.h"
 
 TEST(DimacsParserTest, ParseHeader) {
-  const auto s = "  p cnf 3 1";
-  char* s2 = strdup(s);
-  auto [num_variables, num_clauses] = DimacsParser::impl::parse_header(s2);
+  auto s = "  p cnf 3 1";
+  auto [num_variables, num_clauses] = DimacsParser::impl::parse_header(s);
   EXPECT_EQ(num_variables, 3);
   EXPECT_EQ(num_clauses, 1);
 }
 
 TEST(DimacsParserTest, ParseClause) {
   Formula f{3, 1};
-  const auto s = "1 2 3 0";
-  char* s2 = strdup(s);
-  const auto clause_end = DimacsParser::impl::parse_clause(f, s2, 0);
-  free(s2);
+  const char* s = "1 2 3 0";
+  const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
   EXPECT_EQ(clause_end, 3);
   EXPECT_EQ(f.literal(0) >> 1, 1);
   EXPECT_EQ(f.literal(1) >> 1, 2);
@@ -24,10 +21,8 @@ TEST(DimacsParserTest, ParseClause) {
 
 TEST(DimacsParserTest, ParseClauseWithLeadingWhitespaces) {
   Formula f{3, 1};
-  const auto s = "     1 2 3 0";
-  char* s2 = strdup(s);
-  const auto clause_end = DimacsParser::impl::parse_clause(f, s2, 0);
-  free(s2);
+  auto s = "     1 2 3 0";
+  const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
   EXPECT_EQ(clause_end, 3);
   EXPECT_EQ(f.literal(0) >> 1, 1);
   EXPECT_EQ(f.literal(1) >> 1, 2);
