@@ -7,6 +7,4 @@ macro(add_benchmark BENCHMARK_NAME)
     set_target_properties(${BENCHMARK_NAME} PROPERTIES FOLDER benchmark)
 endmacro()
 
-add_benchmark(example_benchmark example_benchmark.cpp)
-
 add_benchmark(dimacs_parser_benchmark dimacs_parser_benchmark.cpp)
