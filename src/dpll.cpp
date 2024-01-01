@@ -16,9 +16,10 @@ bool bcp(Formula& formula) {
             return false;
         }
 
-        const auto unit_clause             = formula.unit_clauses().begin();
-        const auto [clause_index, literal] = *unit_clause;
-        formula.unit_clauses().erase(unit_clause);
+        const auto [clause_index, literal] = formula.unit_clauses().back();
+        formula.unit_clauses().pop_back();
+
+        formula.unit_clause_map()[clause_index] = false;
 
         if (formula.assignment_map()[literal::variable(literal)] != Value::UNASSIGNED) {
             WARNING_LOG("{} is already assigned with {}", literal::print_literal(literal),
@@ -107,6 +108,7 @@ bool run(Formula& formula) {
         while (!impl::bcp(formula)) {
             // We have found a conflict, we can erase the currently stored unit clauses
             formula.unit_clauses().clear();
+            std::fill(formula.unit_clause_map().begin(), formula.unit_clause_map().end(), false);
 
             const auto backtrack_level = ConflictResolution::analyze_conflict(formula);
             if (backtrack_level < 0) {

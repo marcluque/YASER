@@ -133,7 +133,8 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 
         // Collect unit clauses
         if (formula.clause(current_clause_index).size() == 1) {
-            formula.unit_clauses().emplace(current_clause_index, formula.clause(current_clause_index).front());
+            formula.unit_clauses().emplace_back(current_clause_index, formula.clause(current_clause_index).front());
+            formula.unit_clause_map()[current_clause_index] = true;
             WatchedLiterals::add_clause_to_watch(formula, current_clause_index, true);
         } else {
             WatchedLiterals::add_clause_to_watch(formula, current_clause_index, false);
