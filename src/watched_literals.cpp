@@ -63,7 +63,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         VERIFY(watched_literals, std::not_equal_to<>{}, formula.clause_watched_literals_map().end());
 
         Literal partner_literal;
-        if (formula.unit_clauses().contains({affected_clause_index, negated_watched_literal})) {
+        if (formula.unit_clause_map()[affected_clause_index]) {
             partner_literal = watched_literals->second.first;
         } else {
             partner_literal = watched_literals->second.first == negated_watched_literal
@@ -96,7 +96,8 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             formula.watched_literal_clause_map()[new_partner_literal.value()].push_back(affected_clause_index);
         } else if (formula.assignment_map()[literal::variable(partner_literal)] == Value::UNASSIGNED) {
             // Clause is unit, partner_literal is unassigned
-            formula.unit_clauses().emplace(affected_clause_index, partner_literal);
+            formula.unit_clauses().emplace_back(affected_clause_index, partner_literal);
+            formula.unit_clause_map()[affected_clause_index] = true;
         } else if (!literal::is_satisfied(partner_literal,
                                           formula.assignment_map()[literal::variable(partner_literal)])) {
             // Clause is conflicting -> resolve

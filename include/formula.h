@@ -183,9 +183,13 @@ class Formula {
         return m_literals;
     }
 
-    [[nodiscard]] std::unordered_set<ClauseIndexLiteralPair, ClauseIndexLiteralHash, ClauseLiteralPairEquality>&
-        unit_clauses() {
+    [[nodiscard]] std::vector<ClauseIndexLiteralPair>& unit_clauses() {
         return m_unit_clauses;
+    }
+
+
+    [[nodiscard]] std::vector<bool>& unit_clause_map() {
+        return m_unit_clause_map;
     }
 
     [[nodiscard]] std::unordered_map<ClauseIndex, LiteralPair>& clause_watched_literals_map() {
@@ -283,9 +287,12 @@ class Formula {
      * The literal in the pair is the last unassigned literal of this clause.
      * We store it for convenient assignment
      */
-    // TODO: Does this have to be a set?: We need it to lookup whether a clause is unit,
-    //       but it could be a separate map.
-    std::unordered_set<ClauseIndexLiteralPair, ClauseIndexLiteralHash, ClauseLiteralPairEquality> m_unit_clauses;
+    std::vector<ClauseIndexLiteralPair> m_unit_clauses;
+
+    /**
+     * \brief
+     */
+    std::vector<bool> m_unit_clause_map;
 
     /**
      * \brief
