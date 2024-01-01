@@ -102,14 +102,9 @@ ssize_t analyze_conflict(Formula& formula) {
     std::vector<Literal> current_clause;
     auto clause = formula.clause(formula.conflicting_clause().value());
     current_clause.insert(current_clause.begin(), clause.begin(), clause.end());
-    auto last_assignment_index = formula.assignment_trail().size() - 1;
     std::optional<std::pair<ssize_t, Literal>> pair;
 
     do {
-        VERIFY(last_assignment_index, std::greater_equal<>{}, static_cast<std::size_t>(0));
-
-        DEBUG_LOG("Last assignment {}", std::string(formula.assignment_trail()[last_assignment_index]));
-
         std::optional<ClauseIndex> antecedent = std::nullopt;
         std::size_t max = 0;
         for (const auto literal : current_clause) {
@@ -128,17 +123,14 @@ ssize_t analyze_conflict(Formula& formula) {
 
         DEBUG_LOG("Resolve ({}) and ({})", clause::print_clause(current_clause), clause::print_clause(formula.clause(antecedent.value())));
         current_clause = std::move(impl::resolve(current_clause, formula.clause(antecedent.value())));
-        --last_assignment_index;
         DEBUG_LOG("Resolvent ({})", clause::print_clause(current_clause));
-        for (const Literal resolvent1 : current_clause) {
-            DEBUG_LOG("VAR {} DL {}", literal::variable(resolvent1), formula.variable_decision_level()[literal::variable(resolvent1)]);
-        }
+        VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
     } while (!pair.has_value());
 
     // TODO: This could be done with all resolvents involved instead of just the "conflict clause",
     //       i.e., the last resolvent
-    VSIDS::update_variable_priorities(formula, current_clause);
+
 
     formula.learn_clause(current_clause, pair.value().second);
 

@@ -1,7 +1,10 @@
 #include "watched_literals.h"
 
-#include <formula.h>
+#if YASER_DEBUG
 #include <clause.h>
+#endif
+
+#include <formula.h>
 #include <log.h>
 #include <verify.h>
 

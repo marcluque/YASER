@@ -55,15 +55,6 @@ using ClauseIndexLiteralPair = std::pair<ClauseIndex, Literal>;
 /**
  * \brief
  */
-struct ClauseLiteralPairEquality {
-    std::size_t operator()(const ClauseIndexLiteralPair& pair_1, const ClauseIndexLiteralPair& pair_2) const {
-        return pair_1 == pair_2;
-    }
-};
-
-/**
- * \brief
- */
 struct Assignment {
     ssize_t decision_level;
     std::optional<ClauseIndex> antecedent;
@@ -91,16 +82,6 @@ struct Assignment {
         return fmt::format("x_{}={}@{} (antecedent=c_{}), ", variable,
                            static_cast<int>(literal::is_positive(variable) ? true : false), decision_level,
                            antecedent.has_value() ? std::to_string(antecedent.value()) : "");
-    }
-};
-
-/**
- * \brief
- */
-struct ClauseIndexLiteralHash {
-    std::size_t operator()(const ClauseIndexLiteralPair& s) const {
-        const auto clause_index_hash = std::hash<ClauseIndex>()(s.first);
-        return std::hash<Literal>()(s.second) + 0x9e3779b9 + (clause_index_hash << 6) + (clause_index_hash >> 2);
     }
 };
 
