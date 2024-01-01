@@ -3,33 +3,32 @@
 #include "formula.h"
 #include "dimacs_parser.h"
 
+#include <dpll.h>
+#include <verify.h>
+
 int main(int _argc, char** argv) {
-  //DEBUG_LOG("test log {} and {}", 42, fmt::join(std::vector{1, 2, 3}, ","));
+    DEBUG_LOG("Input file {}", argv[1]);
+    Formula formula = DimacsParser::parse_formula(std::filesystem::path(argv[1]));
 
-  // DIMACS parser can now fill literal and clause vectors (should use push_back since we might need to reallocate)
-  // If we overestimated the number of literals (i.e., #vars * #clauses), there is no issue since we likely need
-  // more space for clause learning
+    DEBUG_LOG("Parsed formula {}", static_cast<std::string>(formula));
 
-  DEBUG_LOG("{}", argv[1]);
-  Formula f = DimacsParser::parse_formula(std::filesystem::path(argv[1]));
+    INFO_LOG("Parsed input file, took {} ms", 1);
 
-  INFO_LOG("{}", f.literal(0));
+    auto result = DPLL::run(formula);
 
-  DEBUG_LOG("Parsed formula {}", static_cast<std::string>(f));
+    INFO_LOG("RESULT: {}", result);
 
-  INFO_LOG("Parsed input file, took {} ms", 1);
+    std::string assignment_trail;
+    for (const auto& assignment : formula.assignment_trail()) {
+        assignment_trail += fmt::format("x_{}={}@{}, ", assignment.variable,
+                                        static_cast<int>(literal::is_positive(assignment.variable) ? true : false),
+                                        assignment.decision_level);
+    }
 
-  // Initialize watched literals?
-  //WatchedLiterals::init(formula)
+    assignment_trail.pop_back();
+    assignment_trail.pop_back();
 
-  INFO_LOG("Initialized watched literals");
+    INFO_LOG("Assignment trail: {}", assignment_trail);
 
-  // Initialize heuristics?
-
-  // Start DPLL
-  //result = DPLL::run(formula)
-
-  INFO_LOG("RESULT: {}", true);
-
-  return EXIT_SUCCESS;
+    return EXIT_SUCCESS;
 }
