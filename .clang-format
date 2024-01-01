@@ -62,7 +62,7 @@ IndentCaseLabels: true
 IndentExternBlock: Indent
 IndentGotoLabels: true
 IndentPPDirectives: BeforeHash
-IndentWidth: 2
+IndentWidth: 4
 IndentWrappedFunctionNames: true
 
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -71,7 +71,7 @@ InsertTrailingCommas: None
 
 MaxEmptyLinesToKeep: 1
 
-PPIndentWidth: 2
+PPIndentWidth: 4
 
 PenaltyBreakAssignment: 100
 PenaltyBreakBeforeFirstCallParameter: 300

@@ -8,6 +8,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (CMAKE_BUILD_TYPE MATCHES "Debug" OR CMAKE_BUILD_TYPE MATCHES "DEBUG" OR CMAKE_BUILD_TYPE MATCHES "debug")
+    message("[YASER] Using yaser debug mode (NOT NDEBUG)")
+    add_definitions(-DYASER_DEBUG)
+endif()
+
 add_subdirectory(src)
 
 option(BUILD_TESTS "Build the tests" ON)
@@ -18,7 +23,7 @@ if (BUILD_TESTS)
 endif ()
 
 option(BUILD_BENCHMARKS "Build the benchmarks" ON)
-if (BUILD_TESTS)
+if (BUILD_BENCHMARKS)
     set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
     add_subdirectory(benchmark)
 endif ()
