@@ -22,8 +22,7 @@ bool bcp(Formula& formula) {
         formula.unit_clause_map()[clause_index] = false;
 
         if (formula.assignment_map()[literal::variable(literal)] != Value::UNASSIGNED) {
-            WARNING_LOG("{} is already assigned with {}", literal::print_literal(literal),
-                      formula.assignment_map()[literal::variable(literal)] == Value::TRUE);
+            // TODO: Investigate why this is happening
             continue;
         }
 
