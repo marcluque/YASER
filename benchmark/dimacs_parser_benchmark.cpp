@@ -18,7 +18,7 @@ static void BM_ParseSmallFormula(benchmark::State& state) {
 
 static void BM_ParseBigFormulaFromFile(benchmark::State& state) {
   auto p = std::filesystem::current_path();
-  p /= "../../satlib/pigeonhole/pigeonhole-20.cnf";
+  p /= "../../satlib/pigeonhole/pigeon-20.cnf";
 
   std::cout << "File size: " << std::filesystem::file_size(p) << " bytes" << std::endl;
 

@@ -2,6 +2,8 @@
 #include "gtest/gtest.h"
 #include "dimacs_parser.h"
 
+#include <gmock/gmock-matchers.h>
+
 TEST(DimacsParserTest, ParseHeader) {
   auto s = "  p cnf 3 1";
   auto [num_variables, num_clauses] = DimacsParser::impl::parse_header(s);
@@ -11,12 +13,12 @@ TEST(DimacsParserTest, ParseHeader) {
 
 TEST(DimacsParserTest, ParseClause) {
   Formula f{3, 1};
-  const char* s = "1 2 3 0";
+    auto s = "1 2 3 0";
   const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
   EXPECT_EQ(clause_end, 3);
-  EXPECT_EQ(f.literal(0) >> 1, 1);
-  EXPECT_EQ(f.literal(1) >> 1, 2);
-  EXPECT_EQ(f.literal(2) >> 1, 3);
+    for (int i = 0; i < 3; ++i) {
+        EXPECT_EQ(literal::variable(f.literal(i)), i + 1);
+    }
 }
 
 TEST(DimacsParserTest, ParseClauseWithLeadingWhitespaces) {
@@ -24,9 +26,9 @@ TEST(DimacsParserTest, ParseClauseWithLeadingWhitespaces) {
   auto s = "     1 2 3 0";
   const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
   EXPECT_EQ(clause_end, 3);
-  EXPECT_EQ(f.literal(0) >> 1, 1);
-  EXPECT_EQ(f.literal(1) >> 1, 2);
-  EXPECT_EQ(f.literal(2) >> 1, 3);
+  for (int i = 0; i < 3; ++i) {
+        EXPECT_EQ(literal::variable(f.literal(i)), i + 1);
+    }
 }
 
 TEST(DimacsParserTest, ParseFormula) {
@@ -63,10 +65,58 @@ TEST(DimacsParserTest, ParseFormula) {
 
 TEST(DimacsParserTest, ParseBigFormulaFromFile) {
   auto p = std::filesystem::current_path();
-  p /= "../../satlib/pigeonhole/pigeonhole-20.cnf";
+  p /= "../../satlib/pigeonhole/pigeon-20.cnf";
   Formula f = DimacsParser::parse_formula(p);
+
   for (int i = 0; i < 21; ++i) {
-    //EXPECT_EQ(f.clause(i).size(), 20);
+    EXPECT_EQ(f.clause(i).size(), 20);
   }
 }
 
+TEST(DimacsParserTest, FindUnitClauses) {
+    auto p = std::filesystem::current_path();
+    p /= "../../satlib/small-sat-01.cnf";
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_EQ(f.unit_clauses().size(), 2);
+    EXPECT_TRUE(f.unit_clauses().contains({0, 3}));
+    EXPECT_FALSE(f.unit_clauses().contains({0, 5}));
+    EXPECT_TRUE(f.unit_clauses().contains({1, 5}));
+    EXPECT_FALSE(f.unit_clauses().contains({1, 3}));
+}
+
+TEST(DimacsParserTest, FindUnitClauses2) {
+    auto p = std::filesystem::current_path();
+    p /= "../../satlib/pigeonhole/pigeon-1.cnf";
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_EQ(f.unit_clauses().size(), 2);
+    EXPECT_TRUE(f.unit_clauses().contains({0, 3}));
+    EXPECT_FALSE(f.unit_clauses().contains({0, 5}));
+    EXPECT_TRUE(f.unit_clauses().contains({1, 5}));
+    EXPECT_FALSE(f.unit_clauses().contains({1, 3}));
+}
+
+TEST(DimacsParserTest, CheckWatchedLiteralMap) {
+    auto p = std::filesystem::current_path();
+    p /= "../../satlib/small-sat-01.cnf";
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_EQ(f.clause_watched_literals_map().size(), 2);
+}
+
+TEST(DimacsParserTest, CheckNextLiteralQueue) {
+    auto p = std::filesystem::current_path();
+    p /= "../../satlib/small-sat-01.cnf";
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_EQ(f.next_literal().size(), 2);
+}
+
+TEST(DimacsParserTest, CheckNextLiteralQueue2) {
+    auto p = std::filesystem::current_path();
+    p /= "../../satlib/small-sat-02.cnf";
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_EQ(f.next_literal().size(), 4);
+}
