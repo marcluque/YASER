@@ -46,6 +46,13 @@ Formula parse_formula(const std::filesystem::path& input_file_path);
  * \return
  */
 Formula parse_formula(const std::string& input_string);
+
+/**
+ * \brief
+ * \param input_string
+ * \return
+ */
+Formula parse_formula(const char* input_string);
 } // namespace DimacsParser
 
 #endif // YASER_DIMACS_PARSER_H
