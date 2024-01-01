@@ -22,3 +22,6 @@ macro(package_add_test TEST_NAME)
 endmacro()
 
 package_add_test(dimacs_parser_test dimacs_parser_test.cpp)
+package_add_test(conflict_resolution_test conflict_resolution_test.cpp)
+package_add_test(dpll_test dpll_test.cpp)
+package_add_test(watched_literals_test watched_literals_test.cpp)
