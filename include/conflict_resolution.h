@@ -9,9 +9,10 @@ namespace impl {
  * \brief
  * \param clause_1
  * \param clause_2
+ * \param resolution_variable
  * \return
  */
-std::vector<Literal> resolve(Clause clause_1, Clause clause_2);
+std::vector<Literal> binary_resolve(Clause clause_1, Clause clause_2, Variable resolution_variable);
 
 /**
  * \brief

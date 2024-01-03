@@ -25,7 +25,7 @@ inline Literal negate(const Literal literal) {
   return literal ^ 1;
 }
 
-inline Literal variable(const Literal literal) {
+inline Variable variable(const Literal literal) {
   return literal >> 1;
 }
 

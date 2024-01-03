@@ -10,45 +10,28 @@ namespace ConflictResolution {
 
 namespace impl {
 
-std::vector<Literal> resolve(const Clause clause_1, const Clause clause_2) {
-    const bool clause_1_smaller  = clause_1.size() < clause_2.size();
-    const Clause& bigger_clause  = clause_1_smaller ? clause_2 : clause_1;
-    const Clause& smaller_clause = clause_1_smaller ? clause_1 : clause_2;
-
-    std::unordered_set<Literal> resolvent;
-    for (const auto& literal_1 : bigger_clause) {
-        auto found_negated_literal = false;
-        for (const auto& literal_2 : smaller_clause) {
-            if (literal_1 == literal::negate(literal_2)) {
-                found_negated_literal = true;
-                break;
-            }
-        }
-
-        if (!found_negated_literal) {
-            resolvent.insert(literal_1);
-        }
+std::vector<Literal> binary_resolve(const Clause clause_1, const Clause clause_2, const Variable resolution_variable) {
+    // More efficient shortcut for small clauses
+    if (clause_2.size() <= 10 || clause_1.size() <= 10) {
+        std::unordered_set<Literal> resolvent;
+        std::ranges::copy_if(clause_1, std::inserter(resolvent, resolvent.begin()),
+                             [&](auto lit) { return literal::variable(lit) != resolution_variable; });
+        std::ranges::copy_if(clause_2, std::inserter(resolvent, resolvent.begin()),
+                             [&](auto lit) { return literal::variable(lit) != resolution_variable; });
+        return {resolvent.begin(), resolvent.end()};
     }
 
-    for (const auto& literal_1 : smaller_clause) {
-        auto found_negated_literal = false;
-        for (const auto& literal_2 : bigger_clause) {
-            if (literal_1 == literal::negate(literal_2)) {
-                found_negated_literal = true;
-                break;
-            }
-        }
+    std::unordered_set<Literal> resolvent{clause_1.begin(), clause_1.end()};
+    resolvent.insert(clause_2.begin(), clause_2.end());
 
-        if (!found_negated_literal) {
-            resolvent.insert(literal_1);
-        }
-    }
+    resolvent.erase(literal::convert(resolution_variable, true));
+    resolvent.erase(literal::convert(resolution_variable, false));
 
     return {resolvent.begin(), resolvent.end()};
 }
 
 std::optional<std::pair<ssize_t, Literal>> is_clause_asserting(Formula& formula, const Clause clause,
-                                                                       const ssize_t decision_level) {
+                                                               const ssize_t decision_level) {
     if (clause.size() == 1) {
         return std::pair{0, clause.front()};
     }
@@ -64,7 +47,7 @@ std::optional<std::pair<ssize_t, Literal>> is_clause_asserting(Formula& formula,
                 return std::nullopt;
             }
 
-            decision_level_seen = true;
+            decision_level_seen   = true;
             last_assigned_literal = literal;
         }
 
@@ -105,32 +88,28 @@ ssize_t analyze_conflict(Formula& formula) {
     std::optional<std::pair<ssize_t, Literal>> pair;
 
     do {
-        std::optional<ClauseIndex> antecedent = std::nullopt;
-        std::size_t max = 0;
+        std::optional<ClauseIndex> antecedent          = std::nullopt;
+        std::optional<Variable> last_assigned_variable = std::nullopt;
+        std::size_t max                                = 0;
         for (const auto literal : current_clause) {
             for (std::size_t i = formula.assignment_trail().size() - 1; i > 0; i--) {
                 if (i > max && formula.assignment_trail()[i].variable == literal::variable(literal)) {
-                    antecedent = formula.assignment_trail()[i].antecedent;
-                    max = i;
+                    antecedent             = formula.assignment_trail()[i].antecedent;
+                    last_assigned_variable = formula.assignment_trail()[i].variable;
+                    max                    = i;
                     break;
                 }
             }
         }
 
         VERIFY(antecedent.has_value(), std::equal_to<>{}, true);
+        VERIFY(last_assigned_variable.has_value(), std::equal_to<>{}, true);
 
-        //const auto antecedent = formula.assignment_trail()[last_assignment_index].antecedent;
-
-        DEBUG_LOG("Resolve ({}) and ({})", clause::print_clause(current_clause), clause::print_clause(formula.clause(antecedent.value())));
-        current_clause = std::move(impl::resolve(current_clause, formula.clause(antecedent.value())));
-        DEBUG_LOG("Resolvent ({})", clause::print_clause(current_clause));
+        current_clause = std::move(impl::binary_resolve(current_clause, formula.clause(antecedent.value()),
+                                                        last_assigned_variable.value()));
         VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
     } while (!pair.has_value());
-
-    // TODO: This could be done with all resolvents involved instead of just the "conflict clause",
-    //       i.e., the last resolvent
-
 
     formula.learn_clause(current_clause, pair.value().second);
 
