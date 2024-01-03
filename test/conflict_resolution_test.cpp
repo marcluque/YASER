@@ -8,65 +8,50 @@
 TEST(ConflictResolutionTest, EmptyClauses) {
     std::vector<Literal> clause_1{};
     std::vector<Literal> clause_2{};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, 1);
     ASSERT_EQ(resolvent.size(), 0);
 }
 
 TEST(ConflictResolutionTest, OneEmptyClause) {
     std::vector<Literal> clause_1{1, 2, 3};
     std::vector<Literal> clause_2{};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, 4);
     ASSERT_THAT(resolvent, testing::UnorderedElementsAre(1, 2, 3));
 }
 
 TEST(ConflictResolutionTest, OneEmptyClauseReversed) {
     std::vector<Literal> clause_1{};
     std::vector<Literal> clause_2{1, 2, 3};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, 4);
     ASSERT_THAT(resolvent, testing::UnorderedElementsAre(1, 2, 3));
 }
 
 TEST(ConflictResolutionTest, CompleteResolution) {
-    std::vector<Literal> clause_1{2 | 1, 4 | 1, 8 | 1};
+    std::vector<Literal> clause_1{2 | 1, 4, 8};
     std::vector<Literal> clause_2{2, 4, 8};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_EQ(resolvent.size(), 0);
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
+    ASSERT_EQ(resolvent.size(), 2);
 }
 
 TEST(ConflictResolutionTest, PartialResolution) {
-    std::vector<Literal> clause_1{2 | 1, 4 | 1, 8 | 1, 16};
+    std::vector<Literal> clause_1{2 | 1, 4, 8, 16};
     std::vector<Literal> clause_2{2, 4, 8};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(16));
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
+    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(4, 8, 16));
 }
 
 TEST(ConflictResolutionTest, PartialResolutionReversed) {
-    std::vector<Literal> clause_1{2 | 1, 4 | 1, 8 | 1};
+    std::vector<Literal> clause_1{2 | 1, 4, 8};
     std::vector<Literal> clause_2{2, 4, 8, 16};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(16));
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
+    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(4, 8, 16));
 }
 
 TEST(ConflictResolutionTest, MixedPartialResolution) {
-    std::vector<Literal> clause_1{2, 4, 8 | 1, 16};
+    std::vector<Literal> clause_1{2, 4, 8, 16};
     std::vector<Literal> clause_2{2 | 1, 8};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(4, 16));
-}
-
-TEST(ConflictResolutionTest, MixedPartialResolutionReversed) {
-    std::vector<Literal> clause_1{2 | 1, 8};
-    std::vector<Literal> clause_2{2, 4, 8 | 1, 16};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(4, 16));
-}
-
-TEST(ConflictResolutionTest, MixedPartialResolution2) {
-    std::vector clause_1{literal::convert(4, true), literal::convert(6, true), literal::convert(9, true)};
-    std::vector clause_2{literal::convert(5, true), literal::convert(6, false)};
-    const auto resolvent = ConflictResolution::impl::resolve(clause_1, clause_2);
-    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(literal::convert(4, true), literal::convert(5, true),
-                                                         literal::convert(9, true)));
+    const auto resolvent = ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
+    ASSERT_THAT(resolvent, testing::UnorderedElementsAre(4, 8, 16));
 }
 
 TEST(ConflictResolutionTest, ClauseIsAsserting) {

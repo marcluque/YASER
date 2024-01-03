@@ -10,7 +10,7 @@ static void BM_SmallResolution(benchmark::State& state) {
     std::vector<Literal> clause_2{2 | 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
 
     for ([[maybe_unused]] auto _ : state) {
-        ConflictResolution::impl::resolve(clause_1, clause_2);
+        ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
     }
 }
 
@@ -30,8 +30,10 @@ static void BM_BigResolution(benchmark::State& state) {
     std::vector<Literal> clause_2 = clause_1;
     clause_2.push_back(literal::negate(negated_literal[0]));
 
+    const Variable v = literal::variable(literal::negate(negated_literal[0]));
+
     for ([[maybe_unused]] auto _ : state) {
-        ConflictResolution::impl::resolve(clause_1, clause_2);
+        ConflictResolution::impl::binary_resolve(clause_1, clause_2, v);
     }
 }
 // Register the function as a benchmark
