@@ -8,8 +8,8 @@
 #include "fmt/format.h"
 #include "literal.h"
 
+#include <log.h>
 #include <set>
-#include <unordered_set>
 
 /**
  * Only use unsigned int for literals.
@@ -62,25 +62,48 @@ struct Assignment {
     Value value;
     bool negated_literal_visited;
 
+    /**
+     * \brief
+     * \param decision_level
+     * \param antecedent
+     * \param variable
+     * \param value
+     * \param negated_literal_visited
+     */
     Assignment(const ssize_t decision_level, const std::optional<ClauseIndex>& antecedent, const Variable variable,
                const Value value, const bool negated_literal_visited)
         : decision_level(decision_level), antecedent(antecedent), variable(variable), value(value),
           negated_literal_visited(negated_literal_visited) {
     }
 
+    /**
+     * \brief
+     * \param lhs
+     * \param rhs
+     * \return
+     */
     friend bool operator==(const Assignment& lhs, const Assignment& rhs) {
         return lhs.decision_level == rhs.decision_level && lhs.antecedent == rhs.antecedent
                && lhs.variable == rhs.variable && lhs.value == rhs.value
                && lhs.negated_literal_visited == rhs.negated_literal_visited;
     }
 
+    /**
+     * \brief
+     * \param lhs
+     * \param rhs
+     * \return
+     */
     friend bool operator!=(const Assignment& lhs, const Assignment& rhs) {
         return !operator==(lhs, rhs);
     }
 
+    /**
+     * \brief
+     */
     explicit operator std::string() const {
-        return fmt::format("x_{}={}@{} (antecedent=c_{}), ", variable,
-                           static_cast<int>(literal::is_positive(variable) ? true : false), decision_level,
+        return fmt::format("x_{}={}@{} (antecedent=c_{})", variable,
+                           static_cast<int>(literal::is_positive(variable)), decision_level,
                            antecedent.has_value() ? std::to_string(antecedent.value()) : "");
     }
 };
@@ -88,10 +111,17 @@ struct Assignment {
 /**
  * \brief
  */
-class ComparePriorityLiteralPair {
-  public:
+struct ComparePriorityLiteralPair {
+    using is_transparent = void;
+
+    /**
+     * \brief
+     * \param a
+     * \param b
+     * \return
+     */
     bool operator()(const PriorityLiteralPair& a, const PriorityLiteralPair& b) const {
-        return (a.first > b.first) || (a.second == b.second && a.first > b.first);
+        return std::tie(a.first, a.second) > std::tie(b.first, b.second);
     }
 };
 
@@ -168,7 +198,6 @@ class Formula {
         return m_unit_clauses;
     }
 
-
     [[nodiscard]] std::vector<bool>& unit_clause_map() {
         return m_unit_clause_map;
     }
@@ -187,6 +216,20 @@ class Formula {
 
     [[nodiscard]] std::vector<ssize_t>& variable_decision_level() {
         return m_variable_decision_level;
+    }
+
+    [[nodiscard]] int& literal_priority(Literal literal) {
+#ifdef YASER_DEBUG
+        return m_literal_priority.at(literal::is_positive(literal)
+                                         ? literal::variable(literal)
+                                         : number_of_variables()
+                                               + literal::variable(literal)); // Allow range checks
+#else
+
+        return m_literal_priority[literal::is_positive(literal)
+                                      ? literal::variable(literal)
+                                      : number_of_variables() + literal::variable(literal)];
+#endif
     }
 
     [[nodiscard]] std::unordered_map<Literal, std::vector<ClauseIndex>>& watched_literal_clause_map() {
@@ -210,9 +253,7 @@ class Formula {
         return m_conflicting_clause;
     }
 
-    [[nodiscard]] std::priority_queue<PriorityLiteralPair, std::vector<PriorityLiteralPair>,
-                                      ComparePriorityLiteralPair>&
-        next_literal() {
+    [[nodiscard]] std::set<PriorityLiteralPair, ComparePriorityLiteralPair>& next_literal() {
         return m_next_literal;
     }
 
@@ -288,8 +329,12 @@ class Formula {
     /**
      * \brief
      */
-    std::priority_queue<PriorityLiteralPair, std::vector<PriorityLiteralPair>, ComparePriorityLiteralPair>
-        m_next_literal;
+    std::vector<int> m_literal_priority;
+
+    /**
+     * \brief
+     */
+    std::set<PriorityLiteralPair, ComparePriorityLiteralPair> m_next_literal;
 };
 
 #endif // YASER_FORMULA_H

@@ -5,17 +5,15 @@
 
 namespace VSIDS {
 
-static constexpr int INCREMENT = 1;
-
 void update_variable_priorities(Formula& formula, const Clause literals_to_update) {
     // TODO: Periodically divide by factor
 
     for (const auto& literal : literals_to_update) {
-        //const auto it = formula.next_literal().find({0, literal});
-        //VERIFY(it, std::not_equal_to<>{}, formula.next_literal().end());
-        //auto [priority, _] = *it;
-        //formula.next_literal().erase(it);
-        //formula.next_literal().emplace(literal, priority + INCREMENT);
+        auto priority                        = formula.literal_priority(literal);
+        const auto number_of_elements_erased = formula.next_literal().erase({priority, literal});
+        ++formula.literal_priority(literal);
+        VERIFY(number_of_elements_erased, std::equal_to<>{}, static_cast<size_t>(1));
+        formula.next_literal().emplace(formula.literal_priority(literal), literal);
     }
 }
 

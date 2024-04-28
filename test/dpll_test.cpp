@@ -39,7 +39,7 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat20VarsSAT) {
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.assignment_trail_is_valid());
 }
-/*
+
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 50 VARS " << i << std::endl;
@@ -49,8 +49,9 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
 
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.assignment_trail_is_valid());
-}*/
+}
 
+/*
 TEST_P(UniformRandom3SatTestSuite100, UniformRandom3Sat250VarsSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 250 VARS " << i << std::endl;
@@ -60,7 +61,7 @@ TEST_P(UniformRandom3SatTestSuite100, UniformRandom3Sat250VarsSAT) {
 
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.assignment_trail_is_valid());
-}
+}*/
 
 /*
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {

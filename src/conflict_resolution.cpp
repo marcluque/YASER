@@ -79,9 +79,6 @@ ssize_t analyze_conflict(Formula& formula) {
         return -1;
     }
 
-    const auto current_clause_index = formula.conflicting_clause();
-    VERIFY(current_clause_index.has_value(), std::equal_to<>{}, true);
-
     std::vector<Literal> current_clause;
     auto clause = formula.clause(formula.conflicting_clause().value());
     current_clause.insert(current_clause.begin(), clause.begin(), clause.end());

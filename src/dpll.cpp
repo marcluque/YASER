@@ -50,16 +50,15 @@ bool decide(Formula& formula) {
 
     ++formula.decision_level();
 
-    auto priotiy_literal_pair = formula.next_literal().top();
-    formula.next_literal().pop();
-
-    while (formula.assignment_map()[literal::variable(priotiy_literal_pair.second)] != Value::UNASSIGNED) {
-        VERIFY(formula.next_literal().size(), std::greater<>{}, static_cast<std::size_t>(0));
-        priotiy_literal_pair = formula.next_literal().top();
-        formula.next_literal().pop();
+    Literal literal = INVALID_LITERAL;
+    for (const auto [_, next_literal] : formula.next_literal()) {
+        if (formula.assignment_map()[literal::variable(next_literal)] == Value::UNASSIGNED) {
+            literal = next_literal;
+            break;
+        }
     }
 
-    const auto [_, literal] = priotiy_literal_pair;
+    VERIFY(literal, std::not_equal_to<>{}, INVALID_LITERAL);
 
     DEBUG_LOG("Deciding {} at level {}", literal::print_literal(literal), formula.decision_level());
 
