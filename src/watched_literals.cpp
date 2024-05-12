@@ -1,12 +1,11 @@
 #include "watched_literals.h"
+#include "formula.h"
+#include "log.h"
+#include "verify.h"
 
 #if YASER_DEBUG
-#include <clause.h>
+#include "clause.h"
 #endif
-
-#include <formula.h>
-#include <log.h>
-#include <verify.h>
 
 namespace WatchedLiterals {
 
@@ -109,7 +108,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will
-            // make the propagration invalid anyway
+            // make the propagation invalid anyway
             return;
         }
     }

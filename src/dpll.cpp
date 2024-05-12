@@ -1,9 +1,8 @@
-#include "../include/conflict_resolution.h"
+#include "conflict_resolution.h"
 #include "watched_literals.h"
-
-#include <formula.h>
-#include <dpll.h>
-#include <verify.h>
+#include "formula.h"
+#include "dpll.h"
+#include "verify.h"
 
 namespace DPLL {
 
@@ -11,7 +10,7 @@ namespace impl {
 
 bool bcp(Formula& formula) {
     while (!formula.unit_clauses().empty()) {
-        // We have a conflict, stop early
+        // We have a conflict, stop propagating
         if (formula.conflicting_clause().has_value()) {
             return false;
         }

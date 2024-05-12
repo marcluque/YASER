@@ -279,7 +279,7 @@ class Formula {
     std::vector<Literal> m_literals;
 
     /**
-     * \brief Stores indices to positions in the ::literals vector.
+     * \brief Stores indices to positions in the ::m_literals vector.
      */
     std::vector<Clause> m_clauses;
 

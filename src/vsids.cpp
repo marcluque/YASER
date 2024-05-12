@@ -1,7 +1,6 @@
-#include "../include/vsids.h"
-
-#include <formula.h>
-#include <verify.h>
+#include "vsids.h"
+#include "formula.h"
+#include "verify.h"
 
 namespace VSIDS {
 

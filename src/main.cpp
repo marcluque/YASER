@@ -2,11 +2,9 @@
 #include "log.h"
 #include "formula.h"
 #include "dimacs_parser.h"
+#include "dpll.h"
 
-#include <dpll.h>
-#include <verify.h>
-
-int main(int _argc, char** argv) {
+int main([[maybe_unused]] int _argc, char** argv) {
     DEBUG_LOG("Input file {}", argv[1]);
     Formula formula = DimacsParser::parse_formula(std::filesystem::path(argv[1]));
 

@@ -1,12 +1,11 @@
+#include <unordered_set>
 #include "formula.h"
+#include "log.h"
+#include "verify.h"
 
 #ifdef YASER_DEBUG
-#include <clause.h>
+#include "clause.h"
 #endif
-
-#include <log.h>
-#include <unordered_set>
-#include <verify.h>
 
 Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
     : m_number_of_variables(num_variables), m_conflicting_clause(std::nullopt), m_decision_level(0),

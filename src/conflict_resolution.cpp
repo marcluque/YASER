@@ -1,10 +1,9 @@
+#include <vector>
+#include <unordered_set>
 #include "conflict_resolution.h"
 #include "verify.h"
-
-#include <clause.h>
-#include <formula.h>
-#include <vector>
-#include <vsids.h>
+#include "formula.h"
+#include "vsids.h"
 
 namespace ConflictResolution {
 
@@ -102,8 +101,8 @@ ssize_t analyze_conflict(Formula& formula) {
         VERIFY(antecedent.has_value(), std::equal_to<>{}, true);
         VERIFY(last_assigned_variable.has_value(), std::equal_to<>{}, true);
 
-        current_clause = std::move(impl::binary_resolve(current_clause, formula.clause(antecedent.value()),
-                                                        last_assigned_variable.value()));
+        current_clause = impl::binary_resolve(current_clause, formula.clause(antecedent.value()),
+                                                        last_assigned_variable.value());
         VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
     } while (!pair.has_value());

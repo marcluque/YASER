@@ -1,13 +1,11 @@
-#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <span>
+#include <optional>
 #include "dimacs_parser.h"
 #include "log.h"
-
-#include <optional>
-#include <verify.h>
-#include <watched_literals.h>
+#include "verify.h"
+#include "watched_literals.h"
 
 namespace DimacsParser {
 
