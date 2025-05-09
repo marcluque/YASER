@@ -3,7 +3,8 @@
 
 #include <fmt/core.h>
 
-inline void vlog(const char* log_level, const char* file, int line, fmt::string_view format, fmt::format_args args) {
+inline void vlog(const char* log_level, const char* file, int line, const fmt::string_view format,
+                 const fmt::format_args args) {
   fmt::print("[{:7}]: ", log_level);
   fmt::vprint(format, args);
 #ifdef PIPELINE
