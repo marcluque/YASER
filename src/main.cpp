@@ -18,9 +18,8 @@ int main([[maybe_unused]] int _argc, char** argv) {
 
     std::string assignment_trail;
     for (const auto& assignment : formula.assignment_trail()) {
-        assignment_trail += fmt::format("x_{}={}@{}, ", assignment.variable,
-                                        static_cast<int>(literal::is_positive(assignment.variable) ? true : false),
-                                        assignment.decision_level);
+        auto value = static_cast<int>(literal::is_positive(assignment.variable));
+        assignment_trail += fmt::format("x_{}={}@{}, ", assignment.variable, value, assignment.decision_level);
     }
 
     assignment_trail.pop_back();
