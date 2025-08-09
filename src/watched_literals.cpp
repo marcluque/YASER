@@ -40,14 +40,13 @@ void add_clause_to_watch(Formula& formula, const ClauseIndex clause_index, const
         // one literal. This will be checked for in the watched literals update function, so we do not use the
         // invalid literal
         formula.clause_watched_literals_map().emplace(clause_index,
-                                                      std::make_pair(clause.front(), INVALID_LITERAL));
-        formula.watched_literal_clause_map()[clause.front()].push_back(clause_index);
+                                                      std::make_pair(clause[0], INVALID_LITERAL));
+        formula.watched_literal_clause_map()[clause[0]].push_back(clause_index);
     } else {
         VERIFY(clause.size(), std::greater_equal<>{}, static_cast<std::size_t>(2));
-        formula.clause_watched_literals_map().emplace(clause_index,
-                                                      std::make_pair(clause.front(), *(clause.begin() + 1)));
-        formula.watched_literal_clause_map()[clause.front()].push_back(clause_index);
-        formula.watched_literal_clause_map()[*(clause.begin() + 1)].push_back(clause_index);
+        formula.clause_watched_literals_map().emplace(clause_index, std::make_pair(clause[0], clause[1]));
+        formula.watched_literal_clause_map()[clause[0]].push_back(clause_index);
+        formula.watched_literal_clause_map()[clause[1]].push_back(clause_index);
     }
 }
 
@@ -103,8 +102,8 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         } else if (!literal::is_satisfied(partner_literal,
                                           formula.assignment_map()[literal::variable(partner_literal)])) {
             // Clause is conflicting -> resolve
-            DEBUG_LOG("Clause {} ({}) is conflicting", affected_clause_index,
-                      clause::print_clause(formula.clause(affected_clause_index)));
+            DEBUG_LOG("Clause {} ({}) is conflicting @ DL {}", affected_clause_index,
+                      clause::print_clause(formula.clause(affected_clause_index)), formula.decision_level());
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will
