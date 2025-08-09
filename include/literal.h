@@ -11,7 +11,7 @@ using Literal = uint32_t;
  */
 using Variable = uint32_t;
 
-#define INVALID_LITERAL 0
+constexpr Literal INVALID_LITERAL = 0;
 
 enum class Value { UNASSIGNED = 0, TRUE = 1, FALSE = 2 };
 
