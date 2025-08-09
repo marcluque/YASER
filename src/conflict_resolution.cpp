@@ -81,9 +81,14 @@ ssize_t analyze_conflict(Formula& formula) {
     std::vector<Literal> current_clause;
     auto clause = formula.clause(formula.conflicting_clause().value());
     current_clause.insert(current_clause.begin(), clause.begin(), clause.end());
-    std::optional<std::pair<ssize_t, Literal>> pair;
+    std::optional<std::pair<ssize_t, Literal>> pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
 
-    do {
+    /*
+     * When analyzing a conflict, we cannot assume whether any propagation has happened.
+     * It is possible that the decision we made immediately led to a conflict.
+     * In that case, there won't be any binary resolution necessary.
+     */
+    while (!pair.has_value()) {
         std::optional<ClauseIndex> antecedent          = std::nullopt;
         std::optional<Variable> last_assigned_variable = std::nullopt;
         std::size_t max                                = 0;
@@ -105,7 +110,7 @@ ssize_t analyze_conflict(Formula& formula) {
                                                         last_assigned_variable.value());
         VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
-    } while (!pair.has_value());
+    }
 
     formula.learn_clause(current_clause, pair.value().second);
 
