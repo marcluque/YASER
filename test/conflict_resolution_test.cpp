@@ -121,3 +121,36 @@ TEST(ConflictResolutionTest, AnalyzeConflict) {
 
     ASSERT_EQ(backtrack_level, 3);
 }
+
+TEST(ConflictResolutionTest, ImmediateConflictAfterDecision) {
+    // Create a formula with 1 variable and 1 clause: (¬x1)
+    Formula f{1, 1};
+
+    // Clause: (¬x1) -- variable index = 1
+    std::vector clause = {literal::convert(1, false)};
+    f.clause(0) = std::span(clause);
+
+    // At decision level 1, we decide x1 = TRUE.
+    // No BCP is needed; this decision immediately falsifies clause 0.
+    f.assignment_trail().emplace_back(1, std::nullopt, 1, Value::TRUE, false);
+    f.assignment_map()[1] = Value::TRUE;
+    f.variable_decision_level()[1] = 1;
+
+    f.conflicting_clause() = 0;
+    f.decision_level() = 1;
+
+    // Run conflict analysis
+    const auto backtrack_level = ConflictResolution::analyze_conflict(f);
+
+    // In this setup, the learned clause should be (¬x1), which forces x1=FALSE at level 0.
+    // Therefore, the backtrack level is expected to be 0.
+    ASSERT_EQ(backtrack_level, 0);
+
+    // Verify that the clause database has been augmented with (¬x1)
+    const auto target_literal = literal::convert(1, false);
+    const bool found_learned_clause = std::ranges::any_of(f.clauses(), [&](const Clause& c) {
+        return c.size() == 1 && c[0] == target_literal;
+    });
+
+    ASSERT_TRUE(found_learned_clause) << "Expected learned clause (¬x1) was not found.";
+}
