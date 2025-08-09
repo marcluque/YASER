@@ -46,17 +46,19 @@
  *
  * - SAT clause set: unordered_set<Clause>
  */
-using Clause                 = std::span<Literal>;
-using ClauseIndex            = std::size_t;
-using PriorityLiteralPair    = std::pair<int, Literal>;
-using LiteralPair            = std::pair<Literal, Literal>;
-using ClauseIndexLiteralPair = std::pair<ClauseIndex, Literal>;
+using Clause                  = std::span<Literal>;
+using ClauseIndex             = std::size_t;
+using PriorityClauseIndexPair = std::pair<int, ClauseIndex>;
+using PriorityLiteralPair     = std::pair<int, Literal>;
+using LiteralPair             = std::pair<Literal, Literal>;
+using ClauseIndexLiteralPair  = std::pair<ClauseIndex, Literal>;
+using DecisionLevel           = std::ptrdiff_t; // We need -1 to indicate "conflicting" decision level
 
 /**
  * \brief
  */
 struct Assignment {
-    ssize_t decision_level;
+    DecisionLevel decision_level;
     std::optional<ClauseIndex> antecedent;
     Variable variable;
     Value value;
@@ -70,7 +72,7 @@ struct Assignment {
      * \param value
      * \param negated_literal_visited
      */
-    Assignment(const ssize_t decision_level, const std::optional<ClauseIndex>& antecedent, const Variable variable,
+    Assignment(const DecisionLevel decision_level, const std::optional<ClauseIndex>& antecedent, const Variable variable,
                const Value value, const bool negated_literal_visited)
         : decision_level(decision_level), antecedent(antecedent), variable(variable), value(value),
           negated_literal_visited(negated_literal_visited) {
@@ -214,7 +216,7 @@ class Formula {
         return m_variable_assignment_index;
     }
 
-    [[nodiscard]] std::vector<ssize_t>& variable_decision_level() {
+    [[nodiscard]] std::vector<DecisionLevel>& variable_decision_level() {
         return m_variable_decision_level;
     }
 
@@ -236,7 +238,7 @@ class Formula {
         return m_watched_literal_clause_map;
     }
 
-    [[nodiscard]] ssize_t& decision_level() {
+    [[nodiscard]] DecisionLevel& decision_level() {
         return m_decision_level;
     }
 
@@ -271,7 +273,7 @@ class Formula {
     /**
      * \brief
      */
-    ssize_t m_decision_level;
+    DecisionLevel m_decision_level;
 
     /**
      * \brief We can have up to 2^31 variables.
@@ -279,7 +281,7 @@ class Formula {
     std::vector<Literal> m_literals;
 
     /**
-     * \brief Stores indices to positions in the ::m_literals vector.
+     * \brief Stores spans to positions in the ::m_literals vector.
      */
     std::vector<Clause> m_clauses;
 
@@ -301,7 +303,7 @@ class Formula {
     /**
      * \brief
      */
-    std::vector<ssize_t> m_variable_decision_level;
+    std::vector<DecisionLevel> m_variable_decision_level;
 
     /**
      * \brief
