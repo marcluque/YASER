@@ -158,6 +158,7 @@ Formula parse_formula(const std::string& input_string) {
 }
 
 Formula parse_formula(const std::filesystem::path& input_file_path) {
+    DEBUG_LOG("Parsing input file from path: {}", input_file_path.string());
     std::ifstream input_file_stream{input_file_path};
     VERIFY(!input_file_stream, std::equal_to<>{}, false);
     const auto file_size = std::filesystem::file_size(input_file_path);
