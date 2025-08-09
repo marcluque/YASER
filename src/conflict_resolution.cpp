@@ -29,14 +29,16 @@ std::vector<Literal> binary_resolve(const Clause clause_1, const Clause clause_2
     return {resolvent.begin(), resolvent.end()};
 }
 
-std::optional<std::pair<ssize_t, Literal>> is_clause_asserting(Formula& formula, const Clause clause,
-                                                               const ssize_t decision_level) {
+std::optional<std::pair<DecisionLevel, Literal>> is_clause_asserting(Formula& formula, const Clause clause,
+                                                               const DecisionLevel decision_level) {
     if (clause.size() == 1) {
-        return std::pair{0, clause.front()};
+        // Special case where the decision at DL 0 is the reason for our conflict
+        // To avoid this decision, we only need a clause with a single literal that prohibits the assignment
+        return std::pair{0, clause[0]};
     }
 
-    ssize_t max        = -1;
-    ssize_t second_max = -1;
+    DecisionLevel max        = -1;
+    DecisionLevel second_max = -1;
     Literal last_assigned_literal;
     bool decision_level_seen = false;
     for (const auto& literal : clause) {
@@ -71,7 +73,7 @@ std::optional<std::pair<ssize_t, Literal>> is_clause_asserting(Formula& formula,
 
 } // namespace impl
 
-ssize_t analyze_conflict(Formula& formula) {
+DecisionLevel analyze_conflict(Formula& formula) {
     VERIFY(formula.conflicting_clause().has_value(), std::equal_to<>{}, true);
 
     if (formula.decision_level() == 0) {
@@ -81,7 +83,7 @@ ssize_t analyze_conflict(Formula& formula) {
     std::vector<Literal> current_clause;
     auto clause = formula.clause(formula.conflicting_clause().value());
     current_clause.insert(current_clause.begin(), clause.begin(), clause.end());
-    std::optional<std::pair<ssize_t, Literal>> pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
+    std::optional<std::pair<DecisionLevel, Literal>> pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
 
     /*
      * When analyzing a conflict, we cannot assume whether any propagation has happened.
