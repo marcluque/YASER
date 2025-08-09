@@ -16,14 +16,18 @@ int main([[maybe_unused]] int _argc, char** argv) {
 
     INFO_LOG("RESULT: {}", result);
 
+    // Format the assignment trail for printing (remove trailing ", ")
     std::string assignment_trail;
     for (const auto& assignment : formula.assignment_trail()) {
         auto value = static_cast<int>(literal::is_positive(assignment.variable));
         assignment_trail += fmt::format("x_{}={}@{}, ", assignment.variable, value, assignment.decision_level);
     }
+    assignment_trail.pop_back();
+    assignment_trail.pop_back();
 
-    assignment_trail.pop_back();
-    assignment_trail.pop_back();
+#ifdef YASER_DEBUG
+    formula.assignment_trail_is_valid();
+#endif
 
     INFO_LOG("Assignment trail: {}", assignment_trail);
 

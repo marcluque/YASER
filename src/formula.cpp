@@ -27,14 +27,40 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
 
 bool Formula::assignment_trail_is_valid() {
     std::unordered_set<Variable> variables;
-    for (auto assignment : this->assignment_trail()) {
+
+    // Check if any variable appears more than once in the assignment trail
+    const auto duplicate_exists = std::ranges::any_of(this->assignment_trail(), [&](const Assignment& assignment) {
         if (variables.contains(assignment.variable)) {
-            return false;
+            DEBUG_LOG("Duplicate variable in assignment trail: {}", assignment.variable);
+            return true;
         }
         variables.insert(assignment.variable);
+        return false;
+    });
+
+    if (duplicate_exists) {
+        ERROR_LOG("Found duplicate variable in assignment trail");
+        return false;
     }
 
     if (assignment_trail().size() != this->number_of_variables()) {
+        ERROR_LOG("Assignment trail size ({}) does not match number of variables ({})", assignment_trail().size(), this->number_of_variables());
+        return false;
+    }
+
+    auto anyVariableInClauseSatisfied = [&](const Clause& clause) {
+        return std::ranges::any_of(clause, [&](const Literal lit) {
+            const Variable var = literal::variable(lit);
+            const Value val    = assignment_map()[var];
+            const bool is_positive = literal::is_positive(lit);
+            return (val == Value::TRUE && is_positive) || (val == Value::FALSE && !is_positive);
+        });
+    };
+
+    // Check that every clause is satisfied
+    if (const bool all_clauses_satisfied = std::ranges::all_of(this->m_clauses, anyVariableInClauseSatisfied);
+        !all_clauses_satisfied) {
+        ERROR_LOG("One or more clauses are not satisfied by assignment trail");
         return false;
     }
 
