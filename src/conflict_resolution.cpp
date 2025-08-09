@@ -1,5 +1,6 @@
 #include <vector>
 #include <unordered_set>
+#include <algorithm>
 #include "conflict_resolution.h"
 #include "verify.h"
 #include "formula.h"
@@ -107,6 +108,9 @@ DecisionLevel analyze_conflict(Formula& formula) {
 
         VERIFY(antecedent.has_value(), std::equal_to<>{}, true);
         VERIFY(last_assigned_variable.has_value(), std::equal_to<>{}, true);
+
+        // We reward clauses that help with conflict resolution
+        VSIDS::update_clause_priority(formula, antecedent.value());
 
         current_clause = impl::binary_resolve(current_clause, formula.clause(antecedent.value()),
                                                         last_assigned_variable.value());

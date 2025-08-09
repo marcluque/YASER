@@ -11,6 +11,13 @@ namespace VSIDS {
  */
 void update_variable_priorities(Formula& formula, Clause literals_to_update);
 
+/**
+ *
+ * @param formula
+ * @param clause_index
+ */
+void update_clause_priority(Formula& formula, ClauseIndex clause_index);
+
 } // namespace VSIDS
 
 #endif // VSIDS_H

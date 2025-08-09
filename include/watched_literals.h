@@ -26,6 +26,8 @@ std::optional<Literal> find_new_partner_literal(Formula& formula, ClauseIndex cl
  */
 void add_clause_to_watch(Formula& formula, ClauseIndex clause_index, bool is_unit_clause);
 
+void add_learnt_conflict_clause_to_watch(Formula& formula, ClauseIndex clause_index, Literal literal_to_imply);
+
 /**
  * \brief
  * \param formula

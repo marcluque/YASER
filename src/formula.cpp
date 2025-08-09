@@ -1,35 +1,124 @@
 #include <unordered_set>
+#include <algorithm>
 #include "formula.h"
 #include "log.h"
 #include "verify.h"
+#include "watched_literals.h"
 
 #ifdef YASER_DEBUG
 #include "clause.h"
 #endif
 
 Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
-    : m_number_of_variables(num_variables), m_conflicting_clause(std::nullopt), m_decision_level(0),
-      m_literals(num_variables * num_clauses), m_clauses(num_clauses), m_assignment_map(num_variables + 1),
+    : m_number_of_variables(num_variables), m_number_of_input_clauses(num_clauses), m_conflicting_clause(std::nullopt),
+      m_decision_level(0), m_literals(num_variables * num_clauses), m_clauses(num_clauses), m_assignment_map(num_variables + 1),
       m_variable_assignment_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
-      m_unit_clause_map(num_clauses), m_literal_priority((num_variables + 1) * 2) {
+      m_unit_clause_map(num_clauses), m_literal_priority((num_variables + 1) * 2),
+      m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses + ((num_clauses + 2 - 1) / 2)),
+      m_locked_clause_map(num_clauses) {
+    DEBUG_LOG("Number of allowed learned clauses: {}", m_learned_clause_limit);
+}
+
+std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
+    // TODO: Remove all learnt, unlocked clauses
+    // Find least active (lowest priority) clause that is a learnt clause and is not locked
+    const auto clause_activity_it = std::find_if(
+        f.m_clause_activity.rbegin(),
+        f.m_clause_activity.rend(),
+        [&](const auto& pair) {
+            const ClauseIndex clause_index = pair.second;
+            return clause_index >= f.m_number_of_input_clauses && f.m_locked_clause_map[clause_index] == 0;
+        }
+    );
+
+    if (clause_activity_it == f.m_clause_activity.rend()) {
+        WARNING_LOG("No removable clause found — all clauses are locked");
+        return std::nullopt;
+    }
+
+    // Convert reverse_iterator to normal iterator for erase
+    const auto forward_it = std::next(clause_activity_it).base();
+    ClauseIndex least_active_clause_index = forward_it->second;
+
+    // 1. Stop tracking activity
+    f.m_clause_activity.erase(forward_it);
+
+    // NOTE: the following operations would change the formula contains in a way that affects indexing,
+    // there's no harm in not erasing them other than thrashing/wasting memory. A good approach might be
+    // reusing the spots for learning clauses
+    //f.m_literals.erase(least_active_clause.begin(), least_active_clause.end());
+    //f.m_clauses.erase(f.m_clauses.begin() + least_active_clause_index);
+    //f.m_unit_clause_map.erase(f.m_unit_clause_map.begin() + least_active_clause_index);
+    //f.m_clause_priority.erase(f.m_clause_priority.begin() + least_active_clause_index);
+
+    // 1. Remove mapping of clause -> Pair(WatchedLiteral1, WatchedLiteral2)
+    const auto watched_literal_it = f.m_clause_watched_literals_map.find(least_active_clause_index);
+    VERIFY(watched_literal_it, std::not_equal_to<>{}, f.m_clause_watched_literals_map.end());
+    const auto first_watched_literal = watched_literal_it->second.first;
+    const auto second_watched_literal = watched_literal_it->second.second;
+    f.m_clause_watched_literals_map.erase(watched_literal_it);
+
+    // 2. Remove mapping of WatchedLiteral1 -> clause
+    const auto first_watched_literal_watched_clauses_it = f.m_watched_literal_clause_map.find(first_watched_literal);
+    auto first_watched_literal_watched_clause_it = std::ranges::remove(first_watched_literal_watched_clauses_it->second, least_active_clause_index);
+    first_watched_literal_watched_clauses_it->second.erase(first_watched_literal_watched_clause_it.begin(), first_watched_literal_watched_clause_it.end());
+
+    // 3. Remove mapping of WatchedLiteral2 -> clause
+    const auto second_watched_literal_clauses_it = f.m_watched_literal_clause_map.find(second_watched_literal);
+    auto second_watched_literal_watched_clause_it = std::ranges::remove(second_watched_literal_clauses_it->second, least_active_clause_index);
+    second_watched_literal_clauses_it->second.erase(second_watched_literal_watched_clause_it.begin(), second_watched_literal_watched_clause_it.end());
+
+    // We don't need to wipe this clause from the set of unit clauses because we just resolved a conflict,
+    // also the set of unit clauses should be empty now (see assert that len(unit_clauses) == 0)
+
+    return least_active_clause_index;
 }
 
 void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
-    this->m_literals.reserve(this->m_literals.size() + clause.size());
-    auto it = this->m_literals.insert(this->m_literals.end(), clause.begin(), clause.end());
-    this->m_clauses.emplace_back(it, clause.size());
-    this->m_unit_clauses.emplace_back(this->m_clauses.size() - 1, literal_to_imply);
-    this->m_unit_clause_map.push_back(true);
+    VERIFY(m_unit_clauses.size(), std::equal_to<>{}, 0);
 
-    VERIFY(this->m_unit_clause_map.size(), std::equal_to<>{}, this->m_clauses.size());
-    DEBUG_LOG("Learnt clause c_{}: ({})", this->m_clauses.size() - 1, clause::print_clause(clause));
+    // Check if we will be over the limit of allowed learned clauses,
+    // if so, we drop the clause with the least activity/priority (that is not locked)
+    if (m_clauses.size() >= m_learned_clause_limit) {
+        DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_clauses.size(), m_learned_clause_limit);
+        if (const auto least_active_clause_index = impl::delete_clause(*this);
+            least_active_clause_index.has_value()) {
+            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value(), clause::print_clause(m_clauses[least_active_clause_index.value()]));
+        }
+    }
+
+    m_literals.reserve(m_literals.size() + clause.size());
+    auto it = m_literals.insert(m_literals.end(), clause.begin(), clause.end());
+
+    m_clauses.emplace_back(it, clause.size());
+    auto clause_index = m_clauses.size() - 1;
+
+    // We know clauses learnt after conflicts will be unit after backtracking by definition
+    // Hence, we can simply add them already
+    m_unit_clauses.emplace_back(clause_index, literal_to_imply);
+    m_unit_clause_map.push_back(true);
+
+    // Starting watching clause
+    WatchedLiterals::add_learnt_conflict_clause_to_watch(*this, clause_index, literal_to_imply);
+
+    // Start with priority 1
+    m_clause_priority.push_back(1);
+    m_clause_activity.emplace(clause_priority(clause_index), clause_index);
+
+    // We keep it as false for now: this clause is asserting so it will be used as reason for a propagation
+    // and automatically be locked
+    m_locked_clause_map.push_back(false);
+
+    VERIFY(m_unit_clause_map.size(), std::equal_to<>{}, m_clauses.size());
+    VERIFY(m_clause_priority.size(), std::equal_to<>{}, m_clauses.size());
+    DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(clause), m_decision_level);
 }
 
 bool Formula::is_assignment_trail_valid() {
     std::unordered_set<Variable> variables;
 
     // Check if any variable appears more than once in the assignment trail
-    const auto duplicate_exists = std::ranges::any_of(this->assignment_trail(), [&](const Assignment& assignment) {
+    const auto duplicate_exists = std::ranges::any_of(m_assignment_trail, [&](const Assignment& assignment) {
         if (variables.contains(assignment.variable)) {
             DEBUG_LOG("Duplicate variable in assignment trail: {}", assignment.variable);
             return true;
@@ -43,22 +132,22 @@ bool Formula::is_assignment_trail_valid() {
         return false;
     }
 
-    if (assignment_trail().size() != this->number_of_variables()) {
-        ERROR_LOG("Assignment trail size ({}) does not match number of variables ({})", assignment_trail().size(), this->number_of_variables());
+    if (m_assignment_trail.size() != m_number_of_variables) {
+        ERROR_LOG("Assignment trail size ({}) does not match number of variables ({})", m_assignment_trail.size(), m_number_of_variables);
         return false;
     }
 
     auto anyVariableInClauseSatisfied = [&](const Clause& clause) {
         return std::ranges::any_of(clause, [&](const Literal lit) {
             const Variable var = literal::variable(lit);
-            const Value val    = assignment_map()[var];
+            const Value val    = m_assignment_map[var];
             const bool is_positive = literal::is_positive(lit);
             return (val == Value::TRUE && is_positive) || (val == Value::FALSE && !is_positive);
         });
     };
 
     // Check that every clause is satisfied
-    if (const bool all_clauses_satisfied = std::ranges::all_of(this->m_clauses, anyVariableInClauseSatisfied);
+    if (const bool all_clauses_satisfied = std::ranges::all_of(m_clauses, anyVariableInClauseSatisfied);
         !all_clauses_satisfied) {
         ERROR_LOG("One or more clauses are not satisfied by assignment trail");
         return false;

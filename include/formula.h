@@ -2,7 +2,7 @@
 #define YASER_FORMULA_H
 
 #include <vector>
-#include <queue>
+#include <unordered_map>
 #include <string>
 #include <span>
 #include "fmt/format.h"
@@ -127,7 +127,28 @@ struct ComparePriorityLiteralPair {
     }
 };
 
+/**
+ * \brief
+ */
+struct ComparePriorityClauseIndexPair {
+    using is_transparent = void;
+
+    /**
+     * \brief
+     * \param a
+     * \param b
+     * \return
+     */
+    bool operator()(const PriorityClauseIndexPair& a, const PriorityClauseIndexPair& b) const {
+        return std::tie(a.first, a.second) > std::tie(b.first, b.second);
+    }
+};
+
 class Formula {
+    struct impl {
+        static std::optional<ClauseIndex> delete_clause(Formula& f);
+    };
+
   public:
     Formula(std::size_t num_variables, std::size_t num_clauses);
 
@@ -184,8 +205,12 @@ class Formula {
         return s;
     }
 
-    [[nodiscard]] size_t number_of_variables() const {
+    [[nodiscard]] std::size_t number_of_variables() const {
         return m_number_of_variables;
+    }
+
+    [[nodiscard]] std::size_t number_of_input_clauses() const {
+        return m_number_of_input_clauses;
     }
 
     [[nodiscard]] std::vector<Assignment>& assignment_trail() {
@@ -234,6 +259,18 @@ class Formula {
 #endif
     }
 
+    [[nodiscard]] int& clause_priority(ClauseIndex clause_index) {
+#ifdef YASER_DEBUG
+        return m_clause_priority.at(clause_index); // Allow range checks
+#else
+        return m_clause_priority[clause_index];
+#endif
+    }
+
+    [[nodiscard]] std::size_t& learned_clause_limit() {
+        return m_learned_clause_limit;
+    }
+
     [[nodiscard]] std::unordered_map<Literal, std::vector<ClauseIndex>>& watched_literal_clause_map() {
         return m_watched_literal_clause_map;
     }
@@ -259,11 +296,25 @@ class Formula {
         return m_next_literal;
     }
 
+    [[nodiscard]] std::set<PriorityClauseIndexPair, ComparePriorityClauseIndexPair>& clause_activity() {
+        return m_clause_activity;
+    }
+
+    [[nodiscard]] std::vector<unsigned>& locked_clause_map() {
+        return m_locked_clause_map;
+    }
+
+    [[nodiscard]] std::vector<Clause>& clauses() {
+        return m_clauses;
+    }
+
   private:
     /**
      * \brief
      */
-    size_t m_number_of_variables;
+    std::size_t m_number_of_variables;
+
+    std::size_t m_number_of_input_clauses;
 
     /**
      * \brief
@@ -334,9 +385,35 @@ class Formula {
     std::vector<int> m_literal_priority;
 
     /**
+     * \brief Simple lookup table for a clauses priority score
+     */
+    std::vector<int> m_clause_priority;
+
+    /**
+     * \brief Provides a limit for the number of learned clauses. Once the limit is reached,
+     * clauses with the lowest priority have to be pruned.
+     *
+     * The limit is increased with each restart of the solver.
+     */
+    std::size_t m_learned_clause_limit;
+
+    /**
      * \brief
      */
     std::set<PriorityLiteralPair, ComparePriorityLiteralPair> m_next_literal;
+
+    /**
+     * \brief Orders pairs for (ClausePriority, ClauseIndex) according to ClausePriority
+     *
+     * TODO: Currently, this contains problem input clauses, it doesn't necessarily have to do that,
+     * it could improve performance to only track learnt clauses
+     */
+    std::set<PriorityClauseIndexPair, ComparePriorityClauseIndexPair> m_clause_activity;
+
+    /**
+     * \brief
+     */
+    std::vector<unsigned> m_locked_clause_map;
 };
 
 #endif // YASER_FORMULA_H

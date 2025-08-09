@@ -41,6 +41,7 @@ bool bcp(Formula& formula) {
         formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal::variable(literal),
                                                 formula.assignment_map()[literal::variable(literal)], false);
         formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
+        formula.locked_clause_map()[clause_index] += 1;
 
         WatchedLiterals::update(formula, literal::negate(literal));
     }

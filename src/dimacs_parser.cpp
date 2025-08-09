@@ -137,6 +137,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
         clause_end                     = parse_clause(formula, buffer_ptr, clause_start);
 
         formula.clause(current_clause_index) = std::span{&formula.literal(clause_start), clause_end - clause_start};
+        formula.clause_activity().emplace(0, current_clause_index);
 
         VERIFY(formula.clause(current_clause_index).size(), std::greater<>{}, static_cast<size_t>(0));
 
