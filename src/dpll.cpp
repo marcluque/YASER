@@ -2,6 +2,8 @@
 #include "watched_literals.h"
 #include "formula.h"
 #include "dpll.h"
+
+#include "clause.h"
 #include "verify.h"
 
 namespace DPLL {
@@ -25,8 +27,11 @@ bool bcp(Formula& formula) {
             continue;
         }
 
-        DEBUG_LOG("Clause {} is unit, implying {} @ DL {}", clause_index, literal::print_literal(literal),
-                  formula.decision_level());
+        DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}",
+            clause_index,
+            clause::print_clause((formula.clause(clause_index))),
+            literal::print_literal(literal),
+            formula.decision_level());
 
         formula.assignment_map()[literal::variable(literal)] = literal::is_positive(literal) ? Value::TRUE
                                                                                              : Value::FALSE;
@@ -59,7 +64,7 @@ bool decide(Formula& formula) {
 
     VERIFY(literal, std::not_equal_to<>{}, INVALID_LITERAL);
 
-    DEBUG_LOG("Deciding {} at level {}", literal::print_literal(literal), formula.decision_level());
+    DEBUG_LOG("Deciding {} @ DL {}", literal::print_literal(literal), formula.decision_level());
 
     formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE
                                                                                                     : Value::FALSE;
