@@ -27,7 +27,7 @@ bool decide(Formula& formula);
  * \param backtrack_level
  * \return
  */
-void backtrack(Formula& formula, ssize_t backtrack_level);
+void backtrack(Formula& formula, DecisionLevel backtrack_level);
 } // namespace impl
 
 /**

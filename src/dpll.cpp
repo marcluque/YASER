@@ -77,7 +77,7 @@ bool decide(Formula& formula) {
     return true;
 }
 
-void backtrack(Formula& formula, const ssize_t backtrack_level) {
+void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
     DEBUG_LOG("Backtracking to level {}", backtrack_level);
 
     while (!formula.assignment_trail().empty()
