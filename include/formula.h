@@ -161,7 +161,7 @@ class Formula {
 
     void learn_clause(Clause clause, Literal literal_to_imply);
 
-    bool assignment_trail_is_valid();
+    bool is_assignment_trail_valid();
 
     /**
      * No need to be efficient here, this should only be used for debugging and test purposes.

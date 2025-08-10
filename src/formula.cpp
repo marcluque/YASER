@@ -25,7 +25,7 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
     DEBUG_LOG("Learnt clause c_{}: ({})", this->m_clauses.size() - 1, clause::print_clause(clause));
 }
 
-bool Formula::assignment_trail_is_valid() {
+bool Formula::is_assignment_trail_valid() {
     std::unordered_set<Variable> variables;
 
     // Check if any variable appears more than once in the assignment trail

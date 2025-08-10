@@ -14,7 +14,7 @@ TEST(DpllTest, SimpleSAT) {
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_TRUE(DPLL::run(f));
-    ASSERT_TRUE(f.assignment_trail_is_valid());
+    ASSERT_TRUE(f.is_assignment_trail_valid());
 }
 
 TEST(DpllTest, SimpleSAT2) {
@@ -23,7 +23,7 @@ TEST(DpllTest, SimpleSAT2) {
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_TRUE(DPLL::run(f));
-    ASSERT_TRUE(f.assignment_trail_is_valid());
+    ASSERT_TRUE(f.is_assignment_trail_valid());
 }
 
 class UniformRandom3SatTestSuite : public testing::TestWithParam<int> {};
@@ -37,7 +37,7 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat20VarsSAT) {
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_TRUE(DPLL::run(f));
-    ASSERT_TRUE(f.assignment_trail_is_valid());
+    ASSERT_TRUE(f.is_assignment_trail_valid());
 }
 
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
@@ -48,7 +48,7 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_TRUE(DPLL::run(f));
-    ASSERT_TRUE(f.assignment_trail_is_valid());
+    ASSERT_TRUE(f.is_assignment_trail_valid());
 }
 
 /*
