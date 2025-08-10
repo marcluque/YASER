@@ -104,13 +104,22 @@ TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0_2) {
     EXPECT_TRUE(f.conflicting_clause().has_value());
 }
 
-TEST(DpllTest, Pigeonhole1To4) {
-    for (int i = 1; i <= 4; ++i) {
-        std::cout << "Pigeonhole " << i << std::endl;
-        auto p = std::filesystem::current_path();
-        p /= fmt::format("../../satlib/pigeonhole/pigeon-{}.cnf", i);
-        Formula f = DimacsParser::parse_formula(p);
+class PigeonholeTestSuite : public testing::TestWithParam<int> {};
 
-        EXPECT_FALSE(DPLL::run(f));
-    }
+TEST_P(PigeonholeTestSuite, Unsatisfiable) {
+    int i = GetParam();
+    std::cout << "Pigeonhole " << i << std::endl;
+
+    auto p = std::filesystem::current_path();
+    p /= fmt::format("../../satlib/pigeonhole/pigeon-{}.cnf", i);
+    Formula f = DimacsParser::parse_formula(p);
+
+    EXPECT_FALSE(DPLL::run(f));
 }
+
+INSTANTIATE_TEST_SUITE_P(
+    DpllTest,
+    PigeonholeTestSuite,
+    testing::Range(1, 5),  // 1 through 4
+    testing::PrintToStringParamName()
+);
