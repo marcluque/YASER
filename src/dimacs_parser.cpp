@@ -2,6 +2,7 @@
 #include <sstream>
 #include <span>
 #include <optional>
+#include <algorithm>
 #include "dimacs_parser.h"
 #include "log.h"
 #include "verify.h"
@@ -97,11 +98,23 @@ std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t 
     return clause_start;
 }
 
+bool watched_clauses_contains_duplicates(Formula& formula) {
+    for (const auto& [literal, clauses] : formula.watched_literal_clause_map()) {
+        auto sorted_clauses = clauses;
+        std::ranges::sort(sorted_clauses);
+
+        if (auto it = std::ranges::adjacent_find(sorted_clauses); it != sorted_clauses.end()) {
+            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", *it, literal);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 Formula parse_formula(std::istream& input_stream, const std::size_t size) {
-    VERIFY(std::cmp_greater(size, std::numeric_limits<std::streamsize>::max()), std::equal_to<>{}, false);
-    std::vector<char> buffer;
-    buffer.reserve(size);
-    // TODO: Check size and conversion
+    VERIFY(std::isgreater(size, std::numeric_limits<std::streamsize>::max()), std::equal_to<>{}, false);
+    std::vector<char> buffer(size + 1);
     input_stream.read(buffer.data(), static_cast<std::streamsize>(size));
     const char* buffer_ptr = buffer.data();
 
@@ -140,6 +153,11 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     }
 
     formula.literals().resize(num_literals);
+
+    // Sanity checks after parsing
+    VERIFY(formula.clause_watched_literals_map().size(), std::equal_to<>{}, formula.number_of_input_clauses());
+    VERIFY(watched_clauses_contains_duplicates(formula), std::equal_to<>{}, false);
+    VERIFY(formula.watched_literal_clause_map().size(), std::less_equal<>{}, formula.number_of_variables() * 2);
 
     return formula;
 }

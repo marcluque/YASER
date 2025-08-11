@@ -31,6 +31,8 @@ std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr);
  * \return
  */
 std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start);
+
+bool watched_clauses_contains_duplicates(Formula& formula);
 } // namespace impl
 
 /**
