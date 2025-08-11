@@ -25,13 +25,13 @@ int main([[maybe_unused]] int _argc, char** argv) {
     assignment_trail.pop_back();
     assignment_trail.pop_back();
 
+    INFO_LOG("Assignment trail: {}", assignment_trail);
+
 #ifdef YASER_DEBUG
-    if (!formula.is_assignment_trail_valid()) {
+    if (result && !formula.is_assignment_trail_valid()) {
         return EXIT_FAILURE;
     }
 #endif
-
-    INFO_LOG("Assignment trail: {}", assignment_trail);
 
     return EXIT_SUCCESS;
 }
