@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <ranges>
 #include "conflict_resolution.h"
 #include "watched_literals.h"
 #include "formula.h"
@@ -55,7 +57,7 @@ bool decide(Formula& formula) {
     ++formula.decision_level();
 
     Literal literal = INVALID_LITERAL;
-    for (const auto [_, next_literal] : formula.next_literal()) {
+    for (const auto next_literal : formula.next_literal() | std::views::values) {
         if (formula.assignment_map()[literal::variable(next_literal)] == Value::UNASSIGNED) {
             literal = next_literal;
             break;
@@ -84,6 +86,10 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
            && formula.assignment_trail().back().decision_level > backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
+        if (assignment.antecedent.has_value()) {
+            VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater<>{}, 0);
+            formula.locked_clause_map()[assignment.antecedent.value()] -= 1;
+        }
         formula.assignment_map()[assignment.variable] = Value::UNASSIGNED;
         formula.next_literal().emplace(0, literal::convert(assignment.variable, assignment.value == Value::FALSE));
         formula.variable_decision_level()[assignment.variable] = 0;
@@ -103,14 +109,11 @@ bool run(Formula& formula) {
     }
 
     while (true) {
-        if (!impl::decide(formula)) {
-            return true;
-        }
-
-        while (!impl::bcp(formula)) {
+        (void) impl::bcp(formula);
+        if (formula.conflicting_clause().has_value()) {
             // We have found a conflict, we can erase the currently stored unit clauses
             formula.unit_clauses().clear();
-            std::fill(formula.unit_clause_map().begin(), formula.unit_clause_map().end(), false);
+            std::ranges::fill(formula.unit_clause_map(), false);
 
             const auto backtrack_level = ConflictResolution::analyze_conflict(formula);
             if (backtrack_level < 0) {
@@ -124,6 +127,11 @@ bool run(Formula& formula) {
 
             // Backtracking was successful, reset decision level
             formula.decision_level() = backtrack_level;
+        } else {
+            if (!impl::decide(formula)) {
+                // No more variables to assign and no conflict -> SAT
+                return true;
+            }
         }
     }
 }
