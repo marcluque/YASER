@@ -120,6 +120,6 @@ TEST_P(PigeonholeTestSuite, Unsatisfiable) {
 INSTANTIATE_TEST_SUITE_P(
     DpllTest,
     PigeonholeTestSuite,
-    testing::Range(1, 5),  // 1 through 4
+    testing::Range(1, 6),
     testing::PrintToStringParamName()
 );
