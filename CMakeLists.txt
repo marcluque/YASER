@@ -41,7 +41,7 @@ endif()
 
 add_subdirectory(src)
 
-option(YASER_BUILD_TESTS "Build the tests" OFF)
+option(YASER_BUILD_TESTS "Build the tests" ON)
 if (YASER_BUILD_TESTS)
     message("[YASER] Building tests")
     enable_testing()
