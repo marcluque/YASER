@@ -1,12 +1,12 @@
-#include <string>
+#include <filesystem>
+#include <iostream>
+
 #include "gtest/gtest.h"
 #include "dpll.h"
-
-#include <dimacs_parser.h>
-#include <formula.h>
-#include <log.h>
-#include <__filesystem/operations.h>
-#include <gmock/gmock-matchers.h>
+#include "dimacs_parser.h"
+#include "formula.h"
+#include "log.h"
+#include "gmock/gmock-matchers.h"
 
 TEST(DpllTest, SimpleSAT) {
     auto p = std::filesystem::current_path();
