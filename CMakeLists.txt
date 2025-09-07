@@ -22,6 +22,13 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug_MSAN")
     set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${ASAN_FLAGS}")
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES "Debug_UBSAN")
+    message("[YASER] UndefindedBehaviorSanitizer instrumentation enabled")
+    set(ASAN_FLAGS "-fsanitize=undefined")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASAN_FLAGS}")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${ASAN_FLAGS}")
+endif()
+
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     message("[YASER] Using yaser debug mode (NOT NDEBUG)")
     add_definitions(-DYASER_DEBUG)
