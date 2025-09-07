@@ -27,7 +27,6 @@ TEST(DpllTest, SimpleSAT2) {
 }
 
 class UniformRandom3SatTestSuite : public testing::TestWithParam<int> {};
-class UniformRandom3SatTestSuite100 : public testing::TestWithParam<int> {};
 
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat20VarsSAT) {
     auto i = GetParam();
@@ -63,21 +62,18 @@ TEST_P(UniformRandom3SatTestSuite100, UniformRandom3Sat250VarsSAT) {
     ASSERT_TRUE(f.assignment_trail_is_valid());
 }*/
 
-/*
+
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {
     auto i = GetParam();
-    std::cout << "UNIFROM RANDOM 3-SAT 50 VARS " << i << std::endl;
+    std::cout << "UNIFROM RANDOM 3-SAT 50 VARS (UNSAT) " << i << std::endl;
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf50-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_FALSE(DPLL::run(f));
-}*/
+}
 
-INSTANTIATE_TEST_SUITE_P(DpllTest, UniformRandom3SatTestSuite, testing::Range(1, 1000),
-                         testing::PrintToStringParamName());
-
-INSTANTIATE_TEST_SUITE_P(DpllTest, UniformRandom3SatTestSuite100, testing::Range(1, 100),
+INSTANTIATE_TEST_SUITE_P(DpllTest, UniformRandom3SatTestSuite, testing::Range(1, 1000 + 1),
                          testing::PrintToStringParamName());
 
 TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0) {
