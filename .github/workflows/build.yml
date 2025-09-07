@@ -1,0 +1,67 @@
+name: Build & Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.compiler }}-${{ matrix.version }} ${{ matrix.build_type }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compiler: [gcc, clang]
+        include:
+          # GCC
+          - compiler: gcc
+            version: 12
+            package: gcc-12 g++-12
+          - compiler: gcc
+            version: 13
+            package: gcc-13 g++-13
+          - compiler: gcc
+            version: 14
+            package: gcc-14 g++-14
+          # Clang
+          - compiler: clang
+            version: 16
+            package: clang-16
+          - compiler: clang
+            version: 17
+            package: clang-17
+          - compiler: clang
+            version: 18
+            package: clang-18
+
+        build_type: [Debug, Debug_ASAN, Debug_MSAN, Debug_UBSAN, Release]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Setup compiler alternatives
+        run: |
+          if [ "${{ matrix.compiler }}" = "gcc" ]; then
+            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${{ matrix.version }} 100
+            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${{ matrix.version }} 100
+          else
+            sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{ matrix.version }} 100
+            sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{ matrix.version }} 100
+          fi
+
+      - name: Configure CMake
+        run: |
+          mkdir -p build && cd build
+          cmake -G Ninja .. \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DYASER_BUILD_TESTS=ON
+
+      - name: Build
+        run: ninja -C build
+
+      - name: Run unit tests (only ASAN/MSAN/UBSAN)
+        run: |
+          cd build
+          ctest --output-on-failure
