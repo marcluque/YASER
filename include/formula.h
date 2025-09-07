@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <string>
 #include <span>
-#include "fmt/format.h"
+#include <optional>
 #include "literal.h"
 
 #include <log.h>

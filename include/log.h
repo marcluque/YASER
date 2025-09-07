@@ -1,7 +1,7 @@
 #ifndef YASER_LOG_H
 #define YASER_LOG_H
 
-#include <fmt/core.h>
+#include "fmt/format.h"
 
 inline void vlog(const char* log_level, const char* file, int line, const fmt::string_view format,
                  const fmt::format_args args) {

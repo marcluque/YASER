@@ -2,6 +2,7 @@
 #define CLAUSE_H
 
 #include "formula.h"
+#include "fmt/format.h"
 
 namespace clause {
 

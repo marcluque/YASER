@@ -1,6 +1,8 @@
 #ifndef YASER_LITERAL_H
 #define YASER_LITERAL_H
 
+#include "fmt/format.h"
+
 /**
  * \brief Uses 32 bits. Bit 0 is the literal's sign. The remaining 31 bits are the variable's index.
  */

@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include "fmt/format.h"
 #include "log.h"
 #include "formula.h"
 #include "dimacs_parser.h"

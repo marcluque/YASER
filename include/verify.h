@@ -2,6 +2,7 @@
 #define YASER_VERIFY_H
 
 #include "log.h"
+#include "fmt/format.h"
 
 #ifdef YASER_DEBUG
 
