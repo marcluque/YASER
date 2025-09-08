@@ -2,12 +2,14 @@
 
 #include "conflict_resolution.h"
 
+#include <algorithm>
 #include <random>
-#include <__random/random_device.h>
 
 static void BM_SmallResolution(benchmark::State& state) {
     std::vector<Literal> clause_1{2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
     std::vector<Literal> clause_2{2 | 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
+
+    state.SetLabel("|C1|=" + std::to_string(clause_1.size()) + " |C2|=" + std::to_string(clause_2.size()));
 
     for ([[maybe_unused]] auto _ : state) {
         ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
@@ -32,6 +34,8 @@ static void BM_BigResolution(benchmark::State& state) {
 
     const Variable v = literal::variable(literal::negate(negated_literal[0]));
 
+    state.SetLabel("|C1|=" + std::to_string(N) + " |C2|=" + std::to_string(N));
+
     for ([[maybe_unused]] auto _ : state) {
         ConflictResolution::impl::binary_resolve(clause_1, clause_2, v);
     }
@@ -41,4 +45,4 @@ BENCHMARK(BM_SmallResolution);
 BENCHMARK(BM_BigResolution)->Unit(benchmark::kMillisecond);
 
 // Run the benchmark
-BENCHMARK_MAIN();
+//BENCHMARK_MAIN();

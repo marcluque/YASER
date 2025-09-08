@@ -49,7 +49,7 @@ if (YASER_BUILD_TESTS)
     add_subdirectory(test)
 endif ()
 
-option(YASER_BUILD_BENCHMARKS "Build the benchmarks" OFF)
+option(YASER_BUILD_BENCHMARKS "Build the benchmarks" ON)
 if (YASER_BUILD_BENCHMARKS)
     message("[YASER] Building benchmarks")
     set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
