@@ -19,6 +19,7 @@ macro(package_add_test TEST_NAME)
     gtest_discover_tests(${TEST_NAME}
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+            DISCOVERY_TIMEOUT 30
     )
 
     set_target_properties(${TEST_NAME} PROPERTIES FOLDER test)
