@@ -13,7 +13,7 @@ namespace impl {
  * \param n
  * \return
  */
-std::tuple<bool, unsigned> atoui(const char* s, std::size_t n);
+unsigned atoui(const char* s, std::size_t n);
 
 /**
  *

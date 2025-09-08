@@ -1,7 +1,6 @@
 #include <fstream>
 #include <sstream>
 #include <span>
-#include <optional>
 #include <algorithm>
 #include "dimacs_parser.h"
 #include "log.h"
@@ -12,44 +11,42 @@ namespace DimacsParser {
 
 namespace impl {
 
-std::tuple<bool, unsigned> atoui(const char* s, const std::size_t n) {
-    std::size_t i = s[0] == '-';
-
+unsigned atoui(const char* s, const std::size_t n) {
     unsigned val = 0;
-    for (; i < n; ++i) {
+    for (std::size_t i = s[0] == '-'; i < n; ++i) {
         val = val * 10 + (s[i] - '0');
     }
 
-    return {s[0] == '-', val};
+    return val;
 }
 
-static std::optional<std::tuple<bool, unsigned>> parse_number(const char*& buffer_ptr) {
+static std::tuple<bool, unsigned> parse_number(const char*& buffer_ptr) {
     const char* number_start = nullptr;
     // TODO: Use portable new line
     for (; *buffer_ptr; ++buffer_ptr) {
         switch (*buffer_ptr) {
             case '\r':
                 if (number_start) {
-                    auto [sign, number] = atoui(number_start, buffer_ptr - number_start);
+                    auto number = atoui(number_start, buffer_ptr - number_start);
                     ++buffer_ptr;
-                    return std::tuple(sign, number);
+                    return {number_start[0] == '-', number};
                 }
                 break;
             case '\n':
                 if (number_start) {
-                    return atoui(number_start, buffer_ptr - number_start);
+                    return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
                 }
                 break;
             case ' ':
                 if (number_start) {
-                    return atoui(number_start, buffer_ptr - number_start);
+                    return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
                 }
                 number_start = nullptr;
                 break;
             case '0':
                 // If we are NOT looking at a number right now, we can fall through
                 if (!number_start) {
-                    return std::nullopt;
+                    return {false, 0};
                 }
             case '-':
             case '1':
@@ -71,12 +68,15 @@ static std::optional<std::tuple<bool, unsigned>> parse_number(const char*& buffe
     }
 
     // Important if the buffer doesn't end with /n, /r/n, /r (e.g., a simple c-style string)
-    return number_start ? std::make_optional(atoui(number_start, buffer_ptr - number_start)) : std::nullopt;
+    if (number_start) {
+        return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
+    }
+    return {false, 0};
 }
 
 std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
-    unsigned num_variables = std::get<1>(parse_number(buffer_ptr).value());
-    unsigned num_clauses   = std::get<1>(parse_number(buffer_ptr).value());
+    unsigned num_variables = std::get<1>(parse_number(buffer_ptr));
+    unsigned num_clauses   = std::get<1>(parse_number(buffer_ptr));
 
     DEBUG_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
 
@@ -84,8 +84,9 @@ std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
 }
 
 std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start) {
-    while (auto parsed_literal = parse_number(buffer_ptr)) {
-        auto [is_negated, raw_literal_index] = parsed_literal.value();
+    std::tuple<bool, unsigned> parsed_literal = parse_number(buffer_ptr);
+    while (std::get<1>(parsed_literal) != 0) {
+        auto [is_negated, raw_literal_index] = parsed_literal;
 
         VERIFY(static_cast<std::size_t>(raw_literal_index), std::less_equal<>{}, formula.number_of_variables());
         VERIFY(raw_literal_index, std::less_equal<>{}, 1U << 31);
@@ -93,6 +94,7 @@ std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t 
         formula.literal(clause_start) = literal::convert(raw_literal_index, is_negated);
         formula.next_literal().emplace(0, formula.literal(clause_start));
         ++clause_start;
+        parsed_literal = parse_number(buffer_ptr);
     }
 
     return clause_start;
