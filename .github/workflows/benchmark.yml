@@ -1,0 +1,45 @@
+name: Benchmark
+
+on:
+  push:
+    branches:
+      - rework-gh-actions
+
+permissions:
+  # deployments permission to deploy GitHub pages website
+  deployments: write
+  # contents permission to update benchmark contents in gh-pages branch
+  contents: write
+
+jobs:
+  benchmark:
+    name: Performance regression check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DYASER_BUILD_TESTS=OFF \
+          -DYASER_BUILD_BENCHMARKS=ON
+
+      - name: Build
+        run: |
+          ninja -C build
+
+      - name: Run benchmarks
+        run: |
+          cd build
+          ./benchmark/all_benchmark --benchmark_format=json | tee ../benchmark_result.json
+
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'googlecpp'
+          output-file-path: benchmark_result.json
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
