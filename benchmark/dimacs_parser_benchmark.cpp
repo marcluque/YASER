@@ -14,8 +14,8 @@ BENCHMARK_CAPTURE(BM_ParseFormula, formula_35_bytes,
                 "3 2 -1 0\n"
                 "2 -3 0\n"
                 "-1 -3 0"});
-BENCHMARK_CAPTURE(BM_ParseFormula, formula_54741_bytes, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-20.cnf")->Unit(benchmark::kMillisecond);
-BENCHMARK_CAPTURE(BM_ParseFormula, formula_6938400_bytes, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-6.cnf")->Unit(benchmark::kMillisecond);
+BENCHMARK_CAPTURE(BM_ParseFormula, formula_54741_bytes, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-20.cnf");
+BENCHMARK_CAPTURE(BM_ParseFormula, formula_6938400_bytes, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-6.cnf");
 
 // Run the benchmark
 //BENCHMARK_MAIN();
