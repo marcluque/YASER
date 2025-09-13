@@ -11,8 +11,6 @@ int main([[maybe_unused]] int _argc, char** argv) {
 
     DEBUG_LOG("Parsed formula {}", static_cast<std::string>(formula));
 
-    INFO_LOG("Parsed input file, took {} ms", 1);
-
     auto result = DPLL::run(formula);
 
     INFO_LOG("RESULT: {}", result);
