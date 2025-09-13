@@ -7,22 +7,25 @@
 namespace DimacsParser {
 
 namespace impl {
+
+using BufferIterator = std::span<const char>::iterator;
+
 /**
  *
  *
- * @param buffer_ptr
+ * @param buffer_it
  * @return
  */
-std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr);
+std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it);
 
 /**
  * \brief
  * \param formula
- * \param buffer_ptr
+ * \param buffer_it
  * \param clause_start
  * \return
  */
-std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start);
+std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start);
 
 bool watched_clauses_contains_duplicates(Formula& formula);
 } // namespace impl

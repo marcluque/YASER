@@ -5,8 +5,9 @@
 #include <gmock/gmock-matchers.h>
 
 TEST(DimacsParserTest, ParseHeader) {
-    auto s                            = "  p cnf 3 1";
-    auto [num_variables, num_clauses] = DimacsParser::impl::parse_header(s);
+    const auto s                            = "  p cnf 3 1";
+    auto it = std::span{s, strlen(s)}.begin();
+    auto [num_variables, num_clauses] = DimacsParser::impl::parse_header(it);
     EXPECT_EQ(num_variables, 3);
     EXPECT_EQ(num_clauses, 1);
 }
@@ -14,7 +15,8 @@ TEST(DimacsParserTest, ParseHeader) {
 TEST(DimacsParserTest, ParseClause) {
     Formula f{3, 1};
     auto s                = "1 2 3 0";
-    const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
+    auto it = std::span{s, strlen(s)}.begin();
+    const auto clause_end = DimacsParser::impl::parse_clause(f, it, 0);
     EXPECT_EQ(clause_end, 3);
     for (int i = 0; i < 3; ++i) {
         EXPECT_EQ(literal::variable(f.literal(i)), i + 1);
@@ -24,7 +26,8 @@ TEST(DimacsParserTest, ParseClause) {
 TEST(DimacsParserTest, ParseClauseWithLeadingWhitespaces) {
     Formula f{3, 1};
     auto s                = "     1 2 3 0";
-    const auto clause_end = DimacsParser::impl::parse_clause(f, s, 0);
+    auto it = std::span{s, strlen(s)}.begin();
+    const auto clause_end = DimacsParser::impl::parse_clause(f, it, 0);
     EXPECT_EQ(clause_end, 3);
     for (int i = 0; i < 3; ++i) {
         EXPECT_EQ(literal::variable(f.literal(i)), i + 1);

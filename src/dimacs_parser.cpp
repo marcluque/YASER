@@ -11,35 +11,35 @@ namespace DimacsParser {
 
 namespace impl {
 
-inline bool parse_number(const char*& p, unsigned& val, bool& is_negated) {
-    while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') ++p;
+inline bool parse_number(BufferIterator& it, unsigned& val, bool& is_negated) {
+    while (*it == ' ' || *it == '\t' || *it == '\r' || *it == '\n') ++it;
 
-    if (*p == '0') { ++p; return false; }
+    if (*it == '0') { ++it; return false; }
 
-    is_negated = *p == '-';
-    p += is_negated;
+    is_negated = *it == '-';
+    it += is_negated;
 
     val = 0;
     do {
-        val = val * 10 + (*p - '0');
-        ++p;
-    } while (std::isdigit(*p));
+        val = val * 10 + (*it - '0');
+        ++it;
+    } while (std::isdigit(*it));
 
     return true;
 }
 
-std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
+std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
     // Skip "p cnf" until we reach a digit
-    buffer_ptr += 5;
-    for (; !std::isdigit(*buffer_ptr); ++buffer_ptr) {}
+    buffer_it += 5;
+    for (; !std::isdigit(*buffer_it); ++buffer_it) {}
 
     unsigned num_variables = 0;
     bool is_negated = false;
-    auto r = parse_number(buffer_ptr, num_variables, is_negated);
+    auto r = parse_number(buffer_it, num_variables, is_negated);
     VERIFY(r, std::equal_to<>{}, true);
     unsigned num_clauses = 0;
     is_negated = false;
-    r = parse_number(buffer_ptr, num_clauses, is_negated);
+    r = parse_number(buffer_it, num_clauses, is_negated);
     VERIFY(r, std::equal_to<>{}, true);
 
     INFO_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
@@ -47,10 +47,10 @@ std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
     return {num_variables, num_clauses};
 }
 
-std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start) {
+std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start) {
     unsigned raw_literal_index = 0;
     bool is_negated = false;
-    while (parse_number(buffer_ptr, raw_literal_index, is_negated)) {
+    while (parse_number(buffer_it, raw_literal_index, is_negated)) {
         VERIFY(static_cast<std::size_t>(raw_literal_index), std::less_equal<>{}, formula.number_of_variables());
         VERIFY(raw_literal_index, std::less_equal<>{}, 1U << 31);
 
@@ -80,25 +80,25 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     VERIFY(std::isgreater(size, std::numeric_limits<std::streamsize>::max()), std::equal_to<>{}, false);
     std::vector<char> buffer(size + 1);
     input_stream.read(buffer.data(), static_cast<std::streamsize>(size));
-    const char* buffer_ptr = buffer.data();
+    auto buffer_it = std::span<const char>{buffer.data(), size}.begin();
 
     // Skip comments until we reach problem statement line
-    for (; *buffer_ptr != 'p'; ++buffer_ptr) {
-        for (; *buffer_ptr != '\n'; ++buffer_ptr) {}
+    for (; *buffer_it != 'p'; ++buffer_it) {
+        for (; *buffer_it != '\n'; ++buffer_it) {}
     }
 
     // Parse header
-    auto [num_variables, num_clauses] = parse_header(buffer_ptr);
+    auto [num_variables, num_clauses] = parse_header(buffer_it);
 
     Formula formula{num_variables, num_clauses};
 
     // Parse formula
     std::size_t clause_end = 0;
     std::size_t num_literals = 0;
-    // +1 on buffer_ptr to skip newline character
-    for (std::size_t current_clause_index = 0; current_clause_index < num_clauses; ++current_clause_index, ++buffer_ptr) {
+    // +1 on buffer_it to skip newline character
+    for (std::size_t current_clause_index = 0; current_clause_index < num_clauses; ++current_clause_index, ++buffer_it) {
         const std::size_t clause_start = clause_end;
-        clause_end                     = parse_clause(formula, buffer_ptr, clause_start);
+        clause_end                     = parse_clause(formula, buffer_it, clause_start);
 
         formula.clause(current_clause_index) = std::span{&formula.literal(clause_start), clause_end - clause_start};
         formula.clause_activity().emplace(0, current_clause_index);
