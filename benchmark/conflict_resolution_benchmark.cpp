@@ -1,48 +1,50 @@
-#include "benchmark/benchmark.h"
-
 #include "conflict_resolution.h"
 
-#include <algorithm>
+#include <benchmark/benchmark.h>
 #include <random>
+#include <vector>
+#include <ranges>
 
-static void BM_SmallResolution(benchmark::State& state) {
-    std::vector<Literal> clause_1{2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
-    std::vector<Literal> clause_2{2 | 1, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
+std::tuple<std::vector<Literal>, std::vector<Literal>> generate_resolvable_clauses(const size_t size1, const size_t size2, const Variable v, const unsigned seed = 1337) {
+    std::mt19937 rng(seed);
 
-    state.SetLabel("|C1|=" + std::to_string(clause_1.size()) + " |C2|=" + std::to_string(clause_2.size()));
+    std::vector<Literal> clause1(size1);
+    std::ranges::generate(clause1, [&]() { return rng() << 1; });
+
+    auto n = static_cast<std::uniform_int_distribution<>::result_type>(clause1.size());
+    std::uniform_int_distribution<> dist1(0, n - 1);
+    clause1[dist1(rng)] = literal::convert(v, false);
+
+    std::vector<Literal> clause2(size2);
+    std::ranges::generate(clause2, [&]() { return rng() << 1; });
+
+    n = static_cast<std::uniform_int_distribution<>::result_type>(clause2.size());
+    std::uniform_int_distribution<> dist2(0, n - 1);
+    clause2[dist2(rng)] = literal::convert(v, true);
+
+    return {clause1, clause2};
+}
+
+static void BM_Resolution(benchmark::State& state) {
+    const size_t size1 = state.range(0);
+    const size_t size2 = state.range(1);
+
+    const auto v = literal::variable(2);
+    auto [clause1, clause2] = generate_resolvable_clauses(size1, size2, v);
 
     for ([[maybe_unused]] auto _ : state) {
-        ConflictResolution::impl::binary_resolve(clause_1, clause_2, literal::variable(2));
+        ConflictResolution::impl::binary_resolve(clause1, clause2, v);
     }
 }
 
-static void BM_BigResolution(benchmark::State& state) {
-    srand(1337); // NOLINT(*-msc51-cpp)
-    constexpr size_t N = 1000;
-    std::vector<Literal> clause_1(N, 0);
-    std::ranges::generate(clause_1, rand);
-    for (auto& literal : clause_1) {
-        literal <<= 1;
-    }
-
-    std::vector<Literal> negated_literal;
-    std::ranges::sample(clause_1, std::back_inserter(negated_literal), 1,
-                std::mt19937{std::random_device{}()});
-
-    std::vector<Literal> clause_2 = clause_1;
-    clause_2.push_back(literal::negate(negated_literal[0]));
-
-    const Variable v = literal::variable(literal::negate(negated_literal[0]));
-
-    state.SetLabel("|C1|=" + std::to_string(N) + " |C2|=" + std::to_string(N));
-
-    for ([[maybe_unused]] auto _ : state) {
-        ConflictResolution::impl::binary_resolve(clause_1, clause_2, v);
-    }
-}
-// Register the function as a benchmark
-BENCHMARK(BM_SmallResolution);
-BENCHMARK(BM_BigResolution)->Unit(benchmark::kMillisecond);
+BENCHMARK(BM_Resolution)->Args({3, 5});
+BENCHMARK(BM_Resolution)->Args({10, 10});
+BENCHMARK(BM_Resolution)->Args({1000, 1000});
+BENCHMARK(BM_Resolution)->Args({10000, 10000});
+BENCHMARK(BM_Resolution)->Args({100000, 100000});
+BENCHMARK(BM_Resolution)->Args({1000000, 1000000});
+BENCHMARK(BM_Resolution)->Args({5, 1000});
+BENCHMARK(BM_Resolution)->Args({1000, 5});
 
 // Run the benchmark
 //BENCHMARK_MAIN();
