@@ -8,14 +8,6 @@ namespace DimacsParser {
 
 namespace impl {
 /**
- * \brief
- * \param s
- * \param n
- * \return
- */
-unsigned atoui(const char* s, std::size_t n);
-
-/**
  *
  *
  * @param buffer_ptr

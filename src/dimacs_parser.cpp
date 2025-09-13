@@ -11,15 +11,6 @@ namespace DimacsParser {
 
 namespace impl {
 
-unsigned atoui(const char* s, const std::size_t n) {
-    unsigned val = 0;
-    for (std::size_t i = s[0] == '-'; i < n; ++i) {
-        val = val * 10 + (s[i] - '0');
-    }
-
-    return val;
-}
-
 inline bool parse_number(const char*& p, unsigned& val, bool& is_negated) {
     while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') ++p;
 
