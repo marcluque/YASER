@@ -1,51 +1,18 @@
 #include "benchmark/benchmark.h"
-
 #include "dimacs_parser.h"
 #include "dpll.h"
 
-static void BM_UnifromRandom3SatSatInstance(benchmark::State& state) {
-    auto p = std::filesystem::current_path();
-    p /= "../satlib/uniform-random-3-sat/satisfiable/uf50-01.cnf";
+#include <filesystem>
+#include <string>
 
-    Formula f = DimacsParser::parse_formula(p);
-    state.SetLabel("vars=" + std::to_string(f.number_of_variables()) + " clauses=" + std::to_string(f.number_of_input_clauses()));
-
+static void BM_DPLL(benchmark::State& state, const std::filesystem::path& path) {
     for ([[maybe_unused]] auto _ : state) {
-        f = DimacsParser::parse_formula(p);
+        Formula f = DimacsParser::parse_formula(path);
         DPLL::run(f);
     }
 }
 
-static void BM_UnifromRandom3SatUnsatInstance(benchmark::State& state) {
-    auto p = std::filesystem::current_path();
-    p /= "../satlib/uniform-random-3-sat/unsatisfiable/uuf50-01.cnf";
-
-    Formula f = DimacsParser::parse_formula(p);
-    state.SetLabel("vars=" + std::to_string(f.number_of_variables()) + " clauses=" + std::to_string(f.number_of_input_clauses()));
-
-    for ([[maybe_unused]] auto _ : state) {
-        f = DimacsParser::parse_formula(p);
-        DPLL::run(f);
-    }
-}
-
-static void BM_PigeonHole4(benchmark::State& state) {
-    auto p = std::filesystem::current_path();
-    p /= "../satlib/pigeonhole/pigeon-4.cnf";
-
-    Formula f = DimacsParser::parse_formula(p);
-    state.SetLabel("vars=" + std::to_string(f.number_of_variables()) + " clauses=" + std::to_string(f.number_of_input_clauses()));
-
-    for ([[maybe_unused]] auto _ : state) {
-        f = DimacsParser::parse_formula(p);
-        DPLL::run(f);
-    }
-}
-
-// Register the function as a benchmark
-BENCHMARK(BM_PigeonHole4)->Unit(benchmark::kMillisecond);
-BENCHMARK(BM_UnifromRandom3SatSatInstance)->Unit(benchmark::kMillisecond);
-BENCHMARK(BM_UnifromRandom3SatUnsatInstance)->Unit(benchmark::kMillisecond);
-
-// Run the benchmark
-//BENCHMARK_MAIN();
+BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_4_20vars_45clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-4.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, uniform_random_3_sat_50vars_218clauses, std::filesystem::current_path() / "../satlib/uniform-random-3-sat/satisfiable/uf50-01.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, uniform_random_3_sat_250vars_1065clauses, std::filesystem::current_path() / "../satlib/uniform-random-3-sat/satisfiable/uf250-01.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, uniform_random_3_unsat_50vars_218clauses, std::filesystem::current_path() / "../satlib/uniform-random-3-sat/unsatisfiable/uuf50-01.cnf");
