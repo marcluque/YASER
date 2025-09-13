@@ -50,17 +50,16 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
     ASSERT_TRUE(f.is_assignment_trail_valid());
 }
 
-/*
-TEST_P(UniformRandom3SatTestSuite100, UniformRandom3Sat250VarsSAT) {
+TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsSAT) {
     auto i = GetParam();
-    std::cout << "UNIFROM RANDOM 3-SAT 250 VARS " << i << std::endl;
+    std::cout << "UNIFROM RANDOM 3-SAT 100 VARS " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf250-0{}.cnf", i);
+    p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_TRUE(DPLL::run(f));
-    ASSERT_TRUE(f.assignment_trail_is_valid());
-}*/
+    ASSERT_TRUE(f.is_assignment_trail_valid());
+}
 
 
 TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {
@@ -68,6 +67,16 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {
     std::cout << "UNIFROM RANDOM 3-SAT 50 VARS (UNSAT) " << i << std::endl;
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf50-0{}.cnf", i);
+    Formula f = DimacsParser::parse_formula(p);
+
+    ASSERT_FALSE(DPLL::run(f));
+}
+
+TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsUNSAT) {
+    auto i = GetParam();
+    std::cout << "UNIFROM RANDOM 3-SAT 100 VARS (UNSAT) " << i << std::endl;
+    auto p = std::filesystem::current_path();
+    p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 
     ASSERT_FALSE(DPLL::run(f));
