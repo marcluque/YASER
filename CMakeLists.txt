@@ -39,6 +39,12 @@ if (CMAKE_BUILD_TYPE MATCHES "Debug")
     add_definitions(-DYASER_DEBUG)
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES "Release")
+    set(OPTIMIZATION_FLAGS "-O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTIMIZATION_FLAGS}")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${OPTIMIZATION_FLAGS}")
+endif()
+
 add_subdirectory(src)
 
 option(YASER_BUILD_TESTS "Build the tests" ON)
