@@ -100,16 +100,16 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
         const std::size_t clause_start = clause_end;
         clause_end                     = parse_clause(formula, buffer_it, clause_start);
 
-        formula.clause(current_clause_index) = std::span{&formula.literal(clause_start), clause_end - clause_start};
+        formula.literal_range(current_clause_index) = LiteralRange{clause_start, clause_end};
         formula.clause_activity().emplace(0, current_clause_index);
 
-        VERIFY(formula.clause(current_clause_index).size(), std::greater<>{}, static_cast<size_t>(0));
+        VERIFY(formula.literal_range(current_clause_index).size(), std::greater<>{}, static_cast<size_t>(0));
 
-        num_literals += formula.clause(current_clause_index).size();
+        num_literals += formula.literal_range(current_clause_index).size();
 
         // Collect unit clauses
-        if (formula.clause(current_clause_index).size() == 1) {
-            formula.unit_clauses().emplace_back(current_clause_index, formula.clause(current_clause_index).front());
+        if (formula.literal_range(current_clause_index).size() == 1) {
+            formula.unit_clauses().emplace_back(current_clause_index, formula.literal_range(current_clause_index).clause(formula.literals()).front());
             formula.unit_clause_map()[current_clause_index] = true;
             WatchedLiterals::add_clause_to_watch(formula, current_clause_index, true);
         } else {

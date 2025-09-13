@@ -46,13 +46,27 @@
  *
  * - SAT clause set: unordered_set<Clause>
  */
-using Clause                  = std::span<Literal>;
+using LiteralIndex            = std::size_t;
+using Clause                  = std::span<const Literal>;
 using ClauseIndex             = std::size_t;
 using PriorityClauseIndexPair = std::pair<int, ClauseIndex>;
 using PriorityLiteralPair     = std::pair<int, Literal>;
 using LiteralPair             = std::pair<Literal, Literal>;
 using ClauseIndexLiteralPair  = std::pair<ClauseIndex, Literal>;
 using DecisionLevel           = std::ptrdiff_t; // We need -1 to indicate "conflicting" decision level
+
+struct LiteralRange {
+    LiteralIndex start; // inclusive
+    LiteralIndex end; // exclusive
+
+    [[nodiscard]] std::size_t size() const {
+        return end - start;
+    }
+
+    [[nodiscard]] Clause clause(const std::vector<Literal>& literals) const {
+        return std::span{literals.begin() + start, literals.begin() + end};
+    }
+};
 
 /**
  * \brief
@@ -172,11 +186,11 @@ class Formula {
      * @param i
      * @return
      */
-    [[nodiscard]] Clause& clause(std::size_t i) {
+    [[nodiscard]] LiteralRange& literal_range(std::size_t i) {
 #ifdef YASER_DEBUG
-        return m_clauses.at(i); // Allow range checks
+        return m_literal_ranges.at(i); // Allow range checks
 #else
-        return m_clauses[i];
+        return m_literal_ranges[i];
 #endif
     }
 
@@ -191,9 +205,9 @@ class Formula {
      */
     explicit operator std::string() const {
         std::string s;
-        for (const auto& clause : m_clauses) {
+        for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
-            for (const auto& literal : clause) {
+            for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause) {
                 s.append(fmt::format("{} ∨ ", literal::print_literal(literal)));
             }
             s.resize(s.length() - 5);
@@ -304,8 +318,8 @@ class Formula {
         return m_locked_clause_map;
     }
 
-    [[nodiscard]] std::vector<Clause>& clauses() {
-        return m_clauses;
+    [[nodiscard]] std::vector<LiteralRange>& literal_ranges() {
+        return m_literal_ranges;
     }
 
   private:
@@ -332,9 +346,12 @@ class Formula {
     std::vector<Literal> m_literals;
 
     /**
-     * \brief Stores spans to positions in the ::m_literals vector.
+     * \brief Stores `LiteralRange` into the ::m_literals vector.
+     *
+     * `LiteralRange` should never own a pointer into the ::m_literals vector.
+     * It should always be constructed adhoc.
      */
-    std::vector<Clause> m_clauses;
+    std::vector<LiteralRange> m_literal_ranges;
 
     /**
      * \brief

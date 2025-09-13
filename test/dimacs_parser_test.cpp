@@ -39,7 +39,7 @@ TEST(DimacsParserTest, ParseFormula) {
     p /= "../../satlib/small-sat-02.cnf";
     Formula f = DimacsParser::parse_formula(p);
 
-    std::span clause = f.clause(0);
+    Clause clause = f.literal_range(0).clause(f.literals());
     EXPECT_EQ(f.literal(0) >> 1, 3);
     EXPECT_EQ(f.literal(0) & 1, 1);
     EXPECT_EQ(f.literal(1) >> 1, 2);
@@ -49,7 +49,7 @@ TEST(DimacsParserTest, ParseFormula) {
     EXPECT_EQ(clause.size(), 3);
     EXPECT_EQ(&(*clause.begin()), &f.literal(0));
 
-    clause = f.clause(1);
+    clause = f.literal_range(1).clause(f.literals());
     EXPECT_EQ(f.literal(3) >> 1, 2);
     EXPECT_EQ(f.literal(3) & 1, 1);
     EXPECT_EQ(f.literal(4) >> 1, 3);
@@ -57,7 +57,7 @@ TEST(DimacsParserTest, ParseFormula) {
     EXPECT_EQ(clause.size(), 2);
     EXPECT_EQ(&(*clause.begin()), &f.literal(3));
 
-    clause = f.clause(2);
+    clause = f.literal_range(2).clause(f.literals());
     EXPECT_EQ(f.literal(5) >> 1, 1);
     EXPECT_EQ(f.literal(5) & 1, 0);
     EXPECT_EQ(f.literal(6) >> 1, 3);
@@ -72,7 +72,7 @@ TEST(DimacsParserTest, ParseBigFormulaFromFile) {
     Formula f = DimacsParser::parse_formula(p);
 
     for (int i = 0; i < 21; ++i) {
-        EXPECT_EQ(f.clause(i).size(), 20);
+        EXPECT_EQ(f.literal_range(i).size(), 20);
     }
 }
 

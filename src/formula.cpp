@@ -1,9 +1,11 @@
 #include <unordered_set>
 #include <algorithm>
+#include <ranges>
 #include "formula.h"
 #include "log.h"
 #include "verify.h"
 #include "watched_literals.h"
+
 
 #ifdef YASER_DEBUG
 #include "clause.h"
@@ -11,7 +13,7 @@
 
 Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
     : m_number_of_variables(num_variables), m_number_of_input_clauses(num_clauses), m_conflicting_clause(std::nullopt),
-      m_decision_level(0), m_literals(num_variables * num_clauses), m_clauses(num_clauses), m_assignment_map(num_variables + 1),
+      m_decision_level(0), m_literals(num_variables * num_clauses), m_literal_ranges(num_clauses), m_assignment_map(num_variables + 1),
       m_variable_assignment_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
       m_unit_clause_map(num_clauses), m_literal_priority((num_variables + 1) * 2),
       m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses + ((num_clauses + 2 - 1) / 2)),
@@ -79,19 +81,23 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
 
     // Check if we will be over the limit of allowed learned clauses,
     // if so, we drop the clause with the least activity/priority (that is not locked)
-    if (m_clauses.size() >= m_learned_clause_limit) {
-        DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_clauses.size(), m_learned_clause_limit);
+    if (m_literal_ranges.size() >= m_learned_clause_limit) {
+        DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_literal_ranges.size(), m_learned_clause_limit);
         if (const auto least_active_clause_index = impl::delete_clause(*this);
             least_active_clause_index.has_value()) {
-            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value(), clause::print_clause(m_clauses[least_active_clause_index.value()]));
+            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value(), clause::print_clause(m_literal_ranges[least_active_clause_index.value()].clause(m_literals)));
         }
     }
 
+    // Might be a no-op if we have enough space in `m_literals`.
     m_literals.reserve(m_literals.size() + clause.size());
-    auto it = m_literals.insert(m_literals.end(), clause.begin(), clause.end());
+    const auto it = m_literals.insert(m_literals.end(), clause.begin(), clause.end());
 
-    m_clauses.emplace_back(it, clause.size());
-    auto clause_index = m_clauses.size() - 1;
+    const auto new_literal_range_start = std::distance(m_literals.begin(), it);
+    auto new_literal_range = LiteralRange{static_cast<std::size_t>(new_literal_range_start), new_literal_range_start + clause.size()};
+    m_literal_ranges.emplace_back(new_literal_range);
+
+    auto clause_index = m_literal_ranges.size() - 1;
 
     // We know clauses learnt after conflicts will be unit after backtracking by definition
     // Hence, we can simply add them already
@@ -109,8 +115,8 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
     // and automatically be locked
     m_locked_clause_map.push_back(false);
 
-    VERIFY(m_unit_clause_map.size(), std::equal_to<>{}, m_clauses.size());
-    VERIFY(m_clause_priority.size(), std::equal_to<>{}, m_clauses.size());
+    VERIFY(m_unit_clause_map.size(), std::equal_to<>{}, m_literal_ranges.size());
+    VERIFY(m_clause_priority.size(), std::equal_to<>{}, m_literal_ranges.size());
     DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(clause), m_decision_level);
 }
 
@@ -146,8 +152,12 @@ bool Formula::is_assignment_trail_valid() {
         });
     };
 
+    auto clauses = m_literal_ranges | std::ranges::views::transform([&](const LiteralRange& r) {
+        return r.clause(m_literals);
+    });
+
     // Check that every clause is satisfied
-    if (const bool all_clauses_satisfied = std::ranges::all_of(m_clauses, anyVariableInClauseSatisfied);
+    if (const bool all_clauses_satisfied = std::ranges::all_of(clauses, anyVariableInClauseSatisfied);
         !all_clauses_satisfied) {
         ERROR_LOG("One or more clauses are not satisfied by assignment trail");
         return false;

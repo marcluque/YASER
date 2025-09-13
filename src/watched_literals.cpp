@@ -19,7 +19,8 @@ namespace impl {
 std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIndex clause_index,
                                                 const Literal old_partner_literal,
                                                 const Literal current_partner_literal) {
-    for (const auto& literal : formula.clause(clause_index)) {
+    for (const auto clauses = formula.literal_range(clause_index).clause(formula.literals());
+         const auto& literal : clauses) {
         const auto literal_assignment = formula.assignment_map()[literal::variable(literal)];
         if (literal != old_partner_literal && literal != current_partner_literal
             && literal_assignment == Value::UNASSIGNED) {
@@ -38,7 +39,7 @@ std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIn
 } // namespace impl
 
 void add_clause_to_watch(Formula& formula, const ClauseIndex clause_index, const bool is_unit_clause) {
-    const auto& clause = formula.clause(clause_index);
+    const auto clause = formula.literal_range(clause_index).clause(formula.literals());
 
     if (is_unit_clause) {
         // We set the second literal in the literal pair to an invalid one since we have a unit clause with only
@@ -56,7 +57,7 @@ void add_clause_to_watch(Formula& formula, const ClauseIndex clause_index, const
 }
 
 void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex clause_index, Literal literal_to_imply) {
-    if (const auto& clause = formula.clause(clause_index); clause.size() == 1) {
+    if (const auto& clause = formula.literal_range(clause_index).clause(formula.literals()); clause.size() == 1) {
         // We set the second literal in the literal pair to an invalid one since we have a unit clause with only
         // one literal. This will be checked for in the watched literals update function, so we do not use the
         // invalid literal
@@ -140,7 +141,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
                                           formula.assignment_map()[literal::variable(partner_literal)])) {
             // Clause is conflicting -> resolve
             DEBUG_LOG("Clause {} ({}) is conflicting @ DL {}", affected_clause_index,
-                      clause::print_clause(formula.clause(affected_clause_index)), formula.decision_level());
+                      clause::print_clause(formula.literal_range(affected_clause_index).clause(formula.literals())), formula.decision_level());
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will

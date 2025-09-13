@@ -82,7 +82,8 @@ DecisionLevel analyze_conflict(Formula& formula) {
     }
 
     std::vector<Literal> current_clause;
-    auto clause = formula.clause(formula.conflicting_clause().value());
+    const auto literal_range = formula.literal_range(formula.conflicting_clause().value());
+    auto clause = literal_range.clause(formula.literals());
     current_clause.insert(current_clause.begin(), clause.begin(), clause.end());
     std::optional<std::pair<DecisionLevel, Literal>> pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
 
@@ -112,8 +113,8 @@ DecisionLevel analyze_conflict(Formula& formula) {
         // We reward clauses that help with conflict resolution
         VSIDS::update_clause_priority(formula, antecedent.value());
 
-        current_clause = impl::binary_resolve(current_clause, formula.clause(antecedent.value()),
-                                                        last_assigned_variable.value());
+        const auto antecedent_clause = formula.literal_range(antecedent.value()).clause(formula.literals());
+        current_clause = impl::binary_resolve(current_clause, antecedent_clause, last_assigned_variable.value());
         VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
     }

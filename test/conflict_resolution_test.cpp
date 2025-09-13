@@ -1,4 +1,5 @@
 #include <string>
+#include <ranges>
 #include "gtest/gtest.h"
 #include "conflict_resolution.h"
 
@@ -58,9 +59,9 @@ TEST(ConflictResolutionTest, ClauseIsAsserting) {
     Formula f{3, 1};
     f.variable_decision_level() = {0, 1, 2, 3};
     std::vector v = {literal::convert(1, false), literal::convert(2, false), literal::convert(3, false)};
-    f.clause(0)   = std::span(v);
+    f.literal_range(0).clause(f.literals()) = std::span(v);
 
-    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.clause(0), 3);
+    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 3);
     EXPECT_TRUE(p.has_value());
     EXPECT_EQ(p.value().first, 2);
     EXPECT_EQ(p.value().second, literal::convert(3, false));
@@ -70,9 +71,9 @@ TEST(ConflictResolutionTest, ClauseIsNotAsserting) {
     Formula f{3, 1};
     f.variable_decision_level() = {0, 1, 3, 3};
     std::vector v = {literal::convert(1, false), literal::convert(2, false), literal::convert(3, false)};
-    f.clause(0)   = std::span(v);
+    f.literal_range(0).clause(f.literals()) = std::span(v);
 
-    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.clause(0), 3);
+    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 3);
     EXPECT_FALSE(p.has_value());
 }
 
@@ -80,9 +81,9 @@ TEST(ConflictResolutionTest, UnitClauseIsAsserting) {
     Formula f{1, 1};
     f.variable_decision_level() = {0, 1};
     std::vector v               = {literal::convert(1, false)};
-    f.clause(0)                 = std::span(v);
+    f.literal_range(0).clause(f.literals()) = std::span(v);
 
-    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.clause(0), 1);
+    const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 1);
     EXPECT_TRUE(p.has_value());
     EXPECT_EQ(p.value().first, 0);
     EXPECT_EQ(p.value().second, literal::convert(1, false));
@@ -128,7 +129,7 @@ TEST(ConflictResolutionTest, ImmediateConflictAfterDecision) {
 
     // Clause: (¬x1) -- variable index = 1
     std::vector clause = {literal::convert(1, false)};
-    f.clause(0) = std::span(clause);
+    f.literal_range(0).clause(f.literals()) = std::span(clause);
 
     // At decision level 1, we decide x1 = TRUE.
     // No BCP is needed; this decision immediately falsifies clause 0.
@@ -148,7 +149,12 @@ TEST(ConflictResolutionTest, ImmediateConflictAfterDecision) {
 
     // Verify that the clause database has been augmented with (¬x1)
     const auto target_literal = literal::convert(1, false);
-    const bool found_learned_clause = std::ranges::any_of(f.clauses(), [&](const Clause& c) {
+
+    auto clauses = f.literal_ranges() | std::ranges::views::transform([&](const LiteralRange& r) {
+        return r.clause(f.literals());
+    });
+
+    const bool found_learned_clause = std::ranges::any_of(clauses, [&](const Clause& c) {
         return c.size() == 1 && c[0] == target_literal;
     });
 

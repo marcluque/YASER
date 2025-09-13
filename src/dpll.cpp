@@ -31,7 +31,7 @@ bool bcp(Formula& formula) {
 
         DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}",
             clause_index,
-            clause::print_clause((formula.clause(clause_index))),
+            clause::print_clause(formula.literal_range(clause_index).clause(formula.literals())),
             literal::print_literal(literal),
             formula.decision_level());
 
