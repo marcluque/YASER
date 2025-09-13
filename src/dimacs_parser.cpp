@@ -20,81 +20,52 @@ unsigned atoui(const char* s, const std::size_t n) {
     return val;
 }
 
-static std::tuple<bool, unsigned> parse_number(const char*& buffer_ptr) {
-    const char* number_start = nullptr;
-    // TODO: Use portable new line
-    for (; *buffer_ptr; ++buffer_ptr) {
-        switch (*buffer_ptr) {
-            case '\r':
-                if (number_start) {
-                    auto number = atoui(number_start, buffer_ptr - number_start);
-                    ++buffer_ptr;
-                    return {number_start[0] == '-', number};
-                }
-                break;
-            case '\n':
-                if (number_start) {
-                    return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
-                }
-                break;
-            case ' ':
-                if (number_start) {
-                    return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
-                }
-                number_start = nullptr;
-                break;
-            case '0':
-                // If we are NOT looking at a number right now, we can fall through
-                if (!number_start) {
-                    return {false, 0};
-                }
-            case '-':
-            case '1':
-            case '2':
-            case '3':
-            case '4':
-            case '5':
-            case '6':
-            case '7':
-            case '8':
-            case '9':
-                if (!number_start) {
-                    number_start = buffer_ptr;
-                }
-                break;
-            default:
-                break;
-        }
-    }
+inline bool parse_number(const char*& p, unsigned& val, bool& is_negated) {
+    while (*p == ' ' || *p == '\t' || *p == '\r' || *p == '\n') ++p;
 
-    // Important if the buffer doesn't end with /n, /r/n, /r (e.g., a simple c-style string)
-    if (number_start) {
-        return {number_start[0] == '-', atoui(number_start, buffer_ptr - number_start)};
-    }
-    return {false, 0};
+    if (*p == '0') { ++p; return false; }
+
+    is_negated = *p == '-';
+    p += is_negated;
+
+    val = 0;
+    do {
+        val = val * 10 + (*p - '0');
+        ++p;
+    } while (std::isdigit(*p));
+
+    return true;
 }
 
 std::tuple<std::size_t, std::size_t> parse_header(const char*& buffer_ptr) {
-    unsigned num_variables = std::get<1>(parse_number(buffer_ptr));
-    unsigned num_clauses   = std::get<1>(parse_number(buffer_ptr));
+    // Skip "p cnf" until we reach a digit
+    buffer_ptr += 5;
+    for (; !std::isdigit(*buffer_ptr); ++buffer_ptr) {}
 
-    DEBUG_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
+    unsigned num_variables = 0;
+    bool is_negated = false;
+    auto r = parse_number(buffer_ptr, num_variables, is_negated);
+    VERIFY(r, std::equal_to<>{}, true);
+    unsigned num_clauses = 0;
+    is_negated = false;
+    r = parse_number(buffer_ptr, num_clauses, is_negated);
+    VERIFY(r, std::equal_to<>{}, true);
+
+    INFO_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
 
     return {num_variables, num_clauses};
 }
 
 std::size_t parse_clause(Formula& formula, const char*& buffer_ptr, std::size_t clause_start) {
-    std::tuple<bool, unsigned> parsed_literal = parse_number(buffer_ptr);
-    while (std::get<1>(parsed_literal) != 0) {
-        auto [is_negated, raw_literal_index] = parsed_literal;
-
+    unsigned raw_literal_index = 0;
+    bool is_negated = false;
+    while (parse_number(buffer_ptr, raw_literal_index, is_negated)) {
         VERIFY(static_cast<std::size_t>(raw_literal_index), std::less_equal<>{}, formula.number_of_variables());
         VERIFY(raw_literal_index, std::less_equal<>{}, 1U << 31);
 
         formula.literal(clause_start) = literal::convert(raw_literal_index, is_negated);
         formula.next_literal().emplace(0, formula.literal(clause_start));
         ++clause_start;
-        parsed_literal = parse_number(buffer_ptr);
     }
 
     return clause_start;
