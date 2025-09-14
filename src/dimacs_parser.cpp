@@ -42,7 +42,7 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
     r = parse_number(buffer_it, num_clauses, is_negated);
     VERIFY(r, std::equal_to<>{}, true);
 
-    INFO_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
+    DEBUG_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
 
     return {num_variables, num_clauses};
 }
