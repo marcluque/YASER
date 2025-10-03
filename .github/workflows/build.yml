@@ -55,7 +55,7 @@ jobs:
           mv build/src/yaser build/src/yaser-${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-${{ env.ARCH }}
 
       - name: Run tests
-        if: ${{matrix.os != 'ubuntu-24.04-arm' && matrix.build_type != 'Debug_ASAN'}} # Causes timeout
+        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'Debug_ASAN')}} # Causes timeout
         run: |
           cd build
           ctest --output-on-failure
