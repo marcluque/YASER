@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1759534522901,
+  "lastUpdate": 1759535284778,
   "repoUrl": "https://github.com/marcluque/YASER",
   "entries": {
     "Benchmark": [
@@ -564,6 +564,288 @@ window.BENCHMARK_DATA = {
             "value": 38859076063.00003,
             "unit": "ns/iter",
             "extra": "iterations: 1\ncpu: 38856615123.99997 ns\nthreads: 1"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "marc.luque@outlook.com",
+            "name": "Marc Luqué",
+            "username": "marcluque"
+          },
+          "committer": {
+            "email": "marc.luque@outlook.com",
+            "name": "Marc Luqué",
+            "username": "marcluque"
+          },
+          "distinct": true,
+          "id": "3f33c993c5a8aef4893d0848a5bf9c65621a489e",
+          "message": "Use proper flags for sanitizers",
+          "timestamp": "2025-10-04T01:40:31+02:00",
+          "tree_id": "66fa7590644d98809a4b68785cb46903914e2f1b",
+          "url": "https://github.com/marcluque/YASER/commit/3f33c993c5a8aef4893d0848a5bf9c65621a489e"
+        },
+        "date": 1759535283810,
+        "tool": "googlecpp",
+        "benches": [
+          {
+            "name": "BM_Resolution/3/5",
+            "value": 179.98580735928905,
+            "unit": "ns/iter",
+            "extra": "iterations: 3937745\ncpu: 179.97702365186166 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/10/10",
+            "value": 555.345625430172,
+            "unit": "ns/iter",
+            "extra": "iterations: 1262627\ncpu: 555.2866594805909 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/1000/1000",
+            "value": 111834.37877312266,
+            "unit": "ns/iter",
+            "extra": "iterations: 6162\ncpu: 111817.56069457973 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/10000/10000",
+            "value": 1739749.976303286,
+            "unit": "ns/iter",
+            "extra": "iterations: 422\ncpu: 1739611.4289099523 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/100000/100000",
+            "value": 28114763.807691973,
+            "unit": "ns/iter",
+            "extra": "iterations: 26\ncpu: 28110560.53846152 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/1000000/1000000",
+            "value": 976203411.0000286,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 976102851.9999995 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/5/1000",
+            "value": 51693.51121842766,
+            "unit": "ns/iter",
+            "extra": "iterations: 13460\ncpu: 51676.13915304606 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_Resolution/1000/5",
+            "value": 51769.46777546806,
+            "unit": "ns/iter",
+            "extra": "iterations: 13468\ncpu: 51761.85773685776 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_ParseFormula/formula_35_bytes",
+            "value": 7643.349674558583,
+            "unit": "ns/iter",
+            "extra": "iterations: 91568\ncpu: 7642.056373405563 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_ParseFormula/formula_54741_bytes",
+            "value": 1350262.2085769211,
+            "unit": "ns/iter",
+            "extra": "iterations: 513\ncpu: 1350040.504873295 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_ParseFormula/formula_6938400_bytes",
+            "value": 938892660.0000218,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 938821402.9999986 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/uniform_random_3_sat_50vars_218clauses",
+            "value": 1535886.098253307,
+            "unit": "ns/iter",
+            "extra": "iterations: 458\ncpu: 1535661.1681222697 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/uniform_random_3_unsat_50vars_218clauses",
+            "value": 2012950.9971264598,
+            "unit": "ns/iter",
+            "extra": "iterations: 348\ncpu: 2012776.4856321828 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/uniform_random_3_sat_100vars_430clauses",
+            "value": 2587652.464684133,
+            "unit": "ns/iter",
+            "extra": "iterations: 269\ncpu: 2587236.8475836455 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/uniform_random_3_unsat_100vars_430clauses",
+            "value": 68543650.10000265,
+            "unit": "ns/iter",
+            "extra": "iterations: 10\ncpu: 68542211.99999984 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/uniform_random_3_sat_250vars_1065clauses",
+            "value": 52926730819,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 52919494905 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_1_sat_9685vars_55870clauses",
+            "value": 11885350006.00001,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 11883856234.000008 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_2_sat_2810vars_11683clauses",
+            "value": 34258606.71428555,
+            "unit": "ns/iter",
+            "extra": "iterations: 21\ncpu: 34254289.85714315 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_4_sat_28161vars_139716clauses",
+            "value": 99457881915.00003,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 99449351364 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_5_sat_9396vars_41207clauses",
+            "value": 1848076213.000013,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 1847928289.9999988 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_7_sat_8710vars_39774clauses",
+            "value": 207651949.66666436,
+            "unit": "ns/iter",
+            "extra": "iterations: 3\ncpu: 207641655.33333313 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/bmc_ibm_13_sat_13215vars_65728clauses",
+            "value": 148639596357.00003,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 148628352714.99997 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/logistics_a_sat_828vars_6718clauses",
+            "value": 16386304.186047984,
+            "unit": "ns/iter",
+            "extra": "iterations: 43\ncpu: 16383205.162790725 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/logistics_b_sat_843vars_7301clauses",
+            "value": 22170897.031251967,
+            "unit": "ns/iter",
+            "extra": "iterations: 32\ncpu: 22168898.37499991 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/logistics_c_sat_1141vars_10719clauses",
+            "value": 65072807.8181828,
+            "unit": "ns/iter",
+            "extra": "iterations: 11\ncpu: 65041846.54545497 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/logistics_d_sat_4713vars_21991clauses",
+            "value": 118111252.1666705,
+            "unit": "ns/iter",
+            "extra": "iterations: 6\ncpu: 118099567.83333556 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_anomaly_sat_48vars_261clauses",
+            "value": 109110.9391849483,
+            "unit": "ns/iter",
+            "extra": "iterations: 6380\ncpu: 109093.39373041008 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_medium_sat_116vars_953clauses",
+            "value": 429945.19570553396,
+            "unit": "ns/iter",
+            "extra": "iterations: 1630\ncpu: 429904.02515338914 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_huge_sat_459vars_7054clauses",
+            "value": 3692799.7864578306,
+            "unit": "ns/iter",
+            "extra": "iterations: 192\ncpu: 3692152.442708263 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_bw_large_a_sat_459vars_4675clauses",
+            "value": 6467591.28037438,
+            "unit": "ns/iter",
+            "extra": "iterations: 107\ncpu: 6467414.009345753 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_bw_large_b_sat_1087vars_13772clauses",
+            "value": 151402543.80000895,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 151392232.0000006 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/blocksworld_bw_large_c_sat_3016vars_50457clauses",
+            "value": 16352029801.000072,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 16349842671.000032 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_1_2vars_3clauses",
+            "value": 14743.943875608466,
+            "unit": "ns/iter",
+            "extra": "iterations: 47270\ncpu: 14741.818849163623 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_2_6vars_9clauses",
+            "value": 19577.744660031298,
+            "unit": "ns/iter",
+            "extra": "iterations: 35768\ncpu: 19575.957084543727 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_3_12vars_22clauses",
+            "value": 48550.875665583946,
+            "unit": "ns/iter",
+            "extra": "iterations: 14461\ncpu: 48545.544498997595 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_4_20vars_45clauses",
+            "value": 262321.5126676421,
+            "unit": "ns/iter",
+            "extra": "iterations: 2684\ncpu: 262262.2198211757 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_5_30vars_81clauses",
+            "value": 1538007.5912087325,
+            "unit": "ns/iter",
+            "extra": "iterations: 455\ncpu: 1537885.2593406527 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_6_42vars_133clauses",
+            "value": 7044522.6363637,
+            "unit": "ns/iter",
+            "extra": "iterations: 99\ncpu: 7043837.616161666 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_7_56vars_204clauses",
+            "value": 30237295.56521768,
+            "unit": "ns/iter",
+            "extra": "iterations: 23\ncpu: 30235870.47826111 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_8_72vars_297clauses",
+            "value": 151110104.80000004,
+            "unit": "ns/iter",
+            "extra": "iterations: 5\ncpu: 151095060.199998 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_9_90vars_415clauses",
+            "value": 823170266.0000337,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 823042455.0000066 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_10_110vars_561clauses",
+            "value": 4999424637.000061,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 4998931008.999989 ns\nthreads: 1"
+          },
+          {
+            "name": "BM_DPLL/pigeon_hole_11_132vars_738clauses",
+            "value": 40972760923.00001,
+            "unit": "ns/iter",
+            "extra": "iterations: 1\ncpu: 40967696737.99997 ns\nthreads: 1"
           }
         ]
       }
