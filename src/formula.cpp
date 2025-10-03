@@ -2,22 +2,28 @@
 #include <algorithm>
 #include <ranges>
 #include "formula.h"
+
+#include "clause.h"
 #include "log.h"
 #include "verify.h"
 #include "watched_literals.h"
-
 
 #ifdef YASER_DEBUG
 #include "clause.h"
 #endif
 
 Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
+ : Formula(num_variables, num_clauses, std::filesystem::temp_directory_path() / "yaser.tmp") {
+    DEBUG_LOG("Using certificate path {}", (std::filesystem::temp_directory_path() / "yaser.tmp").string());
+}
+
+Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses, const std::filesystem::path& certificate_path)
     : m_number_of_variables(num_variables), m_number_of_input_clauses(num_clauses), m_conflicting_clause(std::nullopt),
       m_decision_level(0), m_literals(num_variables * num_clauses), m_literal_ranges(num_clauses), m_assignment_map(num_variables + 1),
       m_variable_assignment_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
       m_unit_clause_map(num_clauses), m_literal_priority((num_variables + 1) * 2),
-      m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses + ((num_clauses + 2 - 1) / 2)),
-      m_locked_clause_map(num_clauses) {
+      m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses * 100),
+      m_locked_clause_map(num_clauses), m_certificate_output_stream(certificate_path, std::ios::app) {
     DEBUG_LOG("Number of allowed learned clauses: {}", m_learned_clause_limit);
 }
 
@@ -41,6 +47,11 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
     // Convert reverse_iterator to normal iterator for erase
     const auto forward_it = std::next(clause_activity_it).base();
     ClauseIndex least_active_clause_index = forward_it->second;
+
+#ifdef YASER_CERTIFICATE
+    const auto clause_dimacs_format = clause::print_clause_dimacs(f.literal_range(least_active_clause_index).clause(f.literals()));
+    f.m_certificate_output_stream << "d " << clause_dimacs_format << std::endl;
+#endif
 
     // 1. Stop tracking activity
     f.m_clause_activity.erase(forward_it);
@@ -88,6 +99,11 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
             DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value(), clause::print_clause(m_literal_ranges[least_active_clause_index.value()].clause(m_literals)));
         }
     }
+
+#ifdef YASER_CERTIFICATE
+    const auto clause_dimacs_format = clause::print_clause_dimacs(clause);
+    m_certificate_output_stream << clause_dimacs_format << std::endl;
+#endif
 
     // Might be a no-op if we have enough space in `m_literals`.
     m_literals.reserve(m_literals.size() + clause.size());

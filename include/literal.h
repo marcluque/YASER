@@ -59,6 +59,15 @@ inline std::string print_literal(const Literal literal) {
     return fmt::format("{}x_{}", sign, variable(literal));
 }
 
+inline std::string print_literal_dimacs(const Literal literal) {
+    std::string sign;
+    if (!is_positive(literal)) {
+        sign.append("-");
+    }
+
+    return fmt::format("{}{}", sign, variable(literal));
+}
+
 /**
  * \brief
  * \param literal

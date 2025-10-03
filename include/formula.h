@@ -6,10 +6,12 @@
 #include <string>
 #include <span>
 #include <optional>
-#include "literal.h"
-
-#include <log.h>
+#include <filesystem>
+#include <fstream>
 #include <set>
+
+#include "literal.h"
+#include "log.h"
 
 /**
  * Only use unsigned int for literals.
@@ -165,6 +167,7 @@ class Formula {
 
   public:
     Formula(std::size_t num_variables, std::size_t num_clauses);
+    Formula(std::size_t num_variables, std::size_t num_clauses, const std::filesystem::path& certificate_path);
 
     /**
      *
@@ -431,6 +434,8 @@ class Formula {
      * \brief
      */
     std::vector<unsigned> m_locked_clause_map;
+
+    std::ofstream m_certificate_output_stream;
 };
 
 #endif // YASER_FORMULA_H

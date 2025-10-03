@@ -56,6 +56,11 @@ if (YASER_BUILD_TESTS)
     add_subdirectory(test)
 endif ()
 
+option(YASER_CERTIFICATE "Create certificate" OFF)
+if (YASER_CERTIFICATE)
+    message("[YASER] Creating certificates at runtime (impacts performance)")
+endif ()
+
 option(YASER_BUILD_BENCHMARKS "Build the benchmarks" ON)
 if (YASER_BUILD_BENCHMARKS)
     message("[YASER] Building benchmarks")

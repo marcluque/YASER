@@ -1,5 +1,4 @@
-#ifndef CLAUSE_H
-#define CLAUSE_H
+#pragma once
 
 #include "formula.h"
 #include "fmt/format.h"
@@ -21,6 +20,15 @@ inline std::string print_clause(const Clause clause) {
 
     return s;
 }
-}; // namespace clause
 
-#endif // CLAUSE_H
+inline std::string print_clause_dimacs(const Clause clause) {
+    std::string s;
+    for (const auto& literal : clause) {
+        s.append(fmt::format("{} ", literal::print_literal_dimacs(literal)));
+    }
+
+    s.append("0");
+
+    return s;
+}
+} // namespace clause
