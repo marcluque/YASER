@@ -1,6 +1,6 @@
+#include "benchmark/benchmark.h"
 #include "conflict_resolution.h"
 
-#include <benchmark/benchmark.h>
 #include <random>
 #include <vector>
 #include <ranges>
