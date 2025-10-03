@@ -27,7 +27,7 @@ std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIn
             return literal;
         }
 
-        // TODO: This might not be necessary since we do actually not expect to find a SAT value here
+        // TODO: This might not be necessary since we do not expect to find a SAT value here
         if (literal::is_satisfied(literal, literal_assignment)) {
             return current_partner_literal;
         }
@@ -109,7 +109,6 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         // TODO: Maybe this could start with a check whether clause is unit?
 
         if (literal::is_satisfied(partner_literal, formula.assignment_map()[literal::variable(partner_literal)])) {
-            // Clause satisfied
             continue;
         }
         if (auto new_partner_literal = impl::find_new_partner_literal(formula, affected_clause_index,
