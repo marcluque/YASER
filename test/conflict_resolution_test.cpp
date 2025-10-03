@@ -1,10 +1,14 @@
-#include <string>
-#include <ranges>
 #include "gtest/gtest.h"
-#include "conflict_resolution.h"
-
 #include "gmock/gmock-matchers.h"
-#include <dimacs_parser.h>
+
+#include "clause.h"
+#include "conflict_resolution.h"
+#include "dimacs_parser.h"
+
+#include <string>
+#include <vector>
+#include <ranges>
+#include <filesystem>
 
 TEST(ConflictResolutionTest, EmptyClauses) {
     std::vector<Literal> clause_1{};
@@ -57,9 +61,14 @@ TEST(ConflictResolutionTest, MixedPartialResolution) {
 
 TEST(ConflictResolutionTest, ClauseIsAsserting) {
     Formula f{3, 1};
+    // make sure decision-level vector has the right size/values
     f.variable_decision_level() = {0, 1, 2, 3};
-    std::vector v = {literal::convert(1, false), literal::convert(2, false), literal::convert(3, false)};
-    f.literal_range(0).clause(f.literals()) = std::span(v);
+
+    // set clause literals into the Formula-owned storage (do NOT create a temporary span)
+    f.literals() = { literal::convert(1, false),
+                     literal::convert(2, false),
+                     literal::convert(3, false) };
+    f.literal_range(0) = LiteralRange{0, f.literals().size()};
 
     const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 3);
     EXPECT_TRUE(p.has_value());
@@ -70,8 +79,12 @@ TEST(ConflictResolutionTest, ClauseIsAsserting) {
 TEST(ConflictResolutionTest, ClauseIsNotAsserting) {
     Formula f{3, 1};
     f.variable_decision_level() = {0, 1, 3, 3};
-    std::vector v = {literal::convert(1, false), literal::convert(2, false), literal::convert(3, false)};
-    f.literal_range(0).clause(f.literals()) = std::span(v);
+
+    // set clause into formula-owned literals (avoid temporary span)
+    f.literals() = { literal::convert(1, false),
+                     literal::convert(2, false),
+                     literal::convert(3, false) };
+    f.literal_range(0) = LiteralRange{0, f.literals().size()};
 
     const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 3);
     EXPECT_FALSE(p.has_value());
@@ -80,8 +93,8 @@ TEST(ConflictResolutionTest, ClauseIsNotAsserting) {
 TEST(ConflictResolutionTest, UnitClauseIsAsserting) {
     Formula f{1, 1};
     f.variable_decision_level() = {0, 1};
-    std::vector v               = {literal::convert(1, false)};
-    f.literal_range(0).clause(f.literals()) = std::span(v);
+    f.literals() = { literal::convert(1, false) };
+    f.literal_range(0) = LiteralRange{0, f.literals().size()};
 
     const auto p = ConflictResolution::impl::is_clause_asserting(f, f.literal_range(0).clause(f.literals()), 1);
     EXPECT_TRUE(p.has_value());
@@ -128,8 +141,8 @@ TEST(ConflictResolutionTest, ImmediateConflictAfterDecision) {
     Formula f{1, 1};
 
     // Clause: (¬x1) -- variable index = 1
-    std::vector clause = {literal::convert(1, false)};
-    f.literal_range(0).clause(f.literals()) = std::span(clause);
+    f.literals() = { literal::convert(1, false) };
+    f.literal_range(0) = LiteralRange{0, f.literals().size()};
 
     // At decision level 1, we decide x1 = TRUE.
     // No BCP is needed; this decision immediately falsifies clause 0.
