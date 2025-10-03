@@ -58,6 +58,7 @@ endif ()
 
 option(YASER_CERTIFICATE "Create certificate" OFF)
 if (YASER_CERTIFICATE)
+    add_definitions(-DYASER_CERTIFICATE)
     message("[YASER] Creating certificates at runtime (impacts performance)")
 endif ()
 

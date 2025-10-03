@@ -25,7 +25,8 @@ jobs:
           cmake -S . -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
           -DYASER_BUILD_TESTS=OFF \
-          -DYASER_BUILD_BENCHMARKS=ON
+          -DYASER_BUILD_BENCHMARKS=ON \
+          -DYASER_CERTIFICATE=OFF
 
       - name: Build
         run: |
