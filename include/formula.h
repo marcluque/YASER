@@ -66,7 +66,7 @@ struct LiteralRange {
     }
 
     [[nodiscard]] Clause clause(const std::vector<Literal>& literals) const {
-        return std::span{literals.begin() + start, literals.begin() + end};
+        return std::span{literals.data() + start, literals.data() + end};
     }
 };
 
