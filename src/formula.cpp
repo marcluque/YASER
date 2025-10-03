@@ -21,7 +21,7 @@ Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses,
       m_decision_level(0), m_literals(num_variables * num_clauses), m_literal_ranges(num_clauses), m_assignment_map(num_variables + 1),
       m_variable_assignment_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
       m_unit_clause_map(num_clauses), m_literal_priority((num_variables + 1) * 2),
-      m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses * 2),
+      m_clause_priority(num_clauses), m_learned_clause_limit(num_clauses * 100),
       m_locked_clause_map(num_clauses), m_certificate_output_stream(certificate_path, std::ios::app) {
     DEBUG_LOG("Using certificate path {}", (std::filesystem::temp_directory_path() / "yaser.tmp").string());
     DEBUG_LOG("Number of allowed learned clauses: {}", m_learned_clause_limit);
