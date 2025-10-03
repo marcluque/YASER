@@ -1,0 +1,60 @@
+#206d7082808f91e3c1a2901a914365b9b5e4fb02
+Unable to determine clock rate from sysctl: hw.cpufrequency: No such file or directory
+This does not affect benchmark measurements, only the metadata output.
+***WARNING*** Failed to set thread affinity. Estimated CPU frequency may be incorrect.
+2025-10-03T19:59:45+02:00
+Running ./benchmark/all_benchmark
+Run on (10 X 24 MHz CPU s)
+CPU Caches:
+  L1 Data 64 KiB
+  L1 Instruction 128 KiB
+  L2 Unified 4096 KiB (x10)
+Load Average: 2.85, 1.99, 1.88
+---------------------------------------------------------------------------------------------------
+Benchmark                                                         Time             CPU   Iterations
+---------------------------------------------------------------------------------------------------
+BM_Resolution/3/5                                               161 ns          161 ns      4189108
+BM_Resolution/10/10                                             366 ns          366 ns      1895488
+BM_Resolution/1000/1000                                       45108 ns        45106 ns        16181
+BM_Resolution/10000/10000                                    677844 ns       677780 ns         1012
+BM_Resolution/100000/100000                                 8328668 ns      8328469 ns           81
+BM_Resolution/1000000/1000000                             433539708 ns    433540000 ns            2
+BM_Resolution/5/1000                                          22222 ns        22221 ns        31678
+BM_Resolution/1000/5                                          25515 ns        23129 ns        32955
+BM_ParseFormula/formula_35_bytes                               7669 ns         7662 ns        94092
+BM_ParseFormula/formula_54741_bytes                         1002308 ns       995240 ns          734
+BM_ParseFormula/formula_6938400_bytes                    7350173000 ns   4319825000 ns            1
+BM_DPLL/uniform_random_3_sat_50vars_218clauses               713701 ns       713680 ns          972
+BM_DPLL/uniform_random_3_unsat_50vars_218clauses            1200468 ns      1200368 ns          587
+BM_DPLL/uniform_random_3_sat_100vars_430clauses              906393 ns       906376 ns          782
+BM_DPLL/uniform_random_3_unsat_100vars_430clauses          40934821 ns     40933941 ns           17
+BM_DPLL/uniform_random_3_sat_250vars_1065clauses         6110208041 ns   6109203000 ns            1
+BM_DPLL/bmc_ibm_1_sat_9685vars_55870clauses              4569862125 ns   4513521000 ns            1
+BM_DPLL/bmc_ibm_2_sat_2810vars_11683clauses                13131143 ns     13130909 ns           55
+BM_DPLL/bmc_ibm_4_sat_28161vars_139716clauses            2.0158e+10 ns   1.9631e+10 ns            1
+BM_DPLL/bmc_ibm_5_sat_9396vars_41207clauses               742071417 ns    739645000 ns            1
+BM_DPLL/bmc_ibm_7_sat_8710vars_39774clauses                86679432 ns     86677000 ns            8
+BM_DPLL/bmc_ibm_11_sat_32109vars_150027clauses           1.4780e+11 ns   1.4713e+11 ns            1
+BM_DPLL/bmc_ibm_13_sat_13215vars_65728clauses            5.1133e+10 ns   5.1045e+10 ns            1
+BM_DPLL/logistics_a_sat_828vars_6718clauses                 7558046 ns      7557903 ns           93
+BM_DPLL/logistics_b_sat_843vars_7301clauses                10621362 ns     10621185 ns           65
+BM_DPLL/logistics_c_sat_1141vars_10719clauses              56354313 ns     56353083 ns           12
+BM_DPLL/logistics_d_sat_4713vars_21991clauses              57052632 ns     57049917 ns           12
+BM_DPLL/blocksworld_anomaly_sat_48vars_261clauses             51440 ns        51438 ns        14252
+BM_DPLL/blocksworld_medium_sat_116vars_953clauses            172776 ns       172770 ns         4019
+BM_DPLL/blocksworld_huge_sat_459vars_7054clauses            1711391 ns      1708852 ns          400
+BM_DPLL/blocksworld_bw_large_a_sat_459vars_4675clauses      3609813 ns      3609715 ns          207
+BM_DPLL/blocksworld_bw_large_b_sat_1087vars_13772clauses   72298446 ns     72293800 ns           10
+BM_DPLL/blocksworld_bw_large_c_sat_3016vars_50457clauses 5087279417 ns   5084293000 ns            1
+BM_DPLL/pigeon_hole_1_2vars_3clauses                          14242 ns        14242 ns        48847
+BM_DPLL/pigeon_hole_2_6vars_9clauses                          16361 ns        16361 ns        42286
+BM_DPLL/pigeon_hole_3_12vars_22clauses                        31677 ns        31675 ns        22132
+BM_DPLL/pigeon_hole_4_20vars_45clauses                       127936 ns       127934 ns         5535
+BM_DPLL/pigeon_hole_5_30vars_81clauses                       790475 ns       790457 ns          864
+BM_DPLL/pigeon_hole_6_42vars_133clauses                     3941540 ns      3941475 ns          179
+BM_DPLL/pigeon_hole_7_56vars_204clauses                    16783309 ns     16782976 ns           41
+BM_DPLL/pigeon_hole_8_72vars_297clauses                    86524349 ns     86522750 ns            8
+BM_DPLL/pigeon_hole_9_90vars_415clauses                   365473104 ns    365466000 ns            2
+BM_DPLL/pigeon_hole_10_110vars_561clauses                2522594125 ns   2521760000 ns            1
+BM_DPLL/pigeon_hole_11_132vars_738clauses                3.5543e+10 ns   3.5537e+10 ns            1
+BM_DPLL/pigeon_hole_12_156vars_949clauses                2.8482e+11 ns   2.8475e+11 ns            1
