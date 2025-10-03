@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-24.04, ubuntu-24.04-arm, macos-15]
-        build_type: [Debug, Debug_ASAN, Debug_MSAN, Debug_UBSAN, Release]
+        build_type: [Debug, ASAN, MSAN, UBSAN, Release]
 
     runs-on: ${{ matrix.os }}
 
@@ -55,7 +55,7 @@ jobs:
           mv build/src/yaser build/src/yaser-${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-${{ env.ARCH }}
 
       - name: Run tests
-        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'Debug_ASAN')}} # Causes timeout
+        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN')}} # Causes timeout
         run: |
           cd build
           ctest --output-on-failure
