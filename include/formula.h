@@ -56,6 +56,17 @@ using PriorityLiteralPair     = std::pair<int, Literal>;
 using LiteralPair             = std::pair<Literal, Literal>;
 using ClauseIndexLiteralPair  = std::pair<ClauseIndex, Literal>;
 using DecisionLevel           = std::ptrdiff_t; // We need -1 to indicate "conflicting" decision level
+using LiteralsContainer       = std::vector<Literal, noinit_allocator<std::allocator<Literal>>>;
+using AssignmentMapContainer  = std::vector<Value, noinit_allocator<std::allocator<Value>>>;
+using VariableAssignmentIndexContainer = std::vector<std::size_t, noinit_allocator<std::allocator<std::size_t>>>;
+using VariableDecisionLevelContainer = std::vector<DecisionLevel, noinit_allocator<std::allocator<DecisionLevel>>>;
+using UnitClausesContainer = std::vector<ClauseIndexLiteralPair>;
+using UnitClauseMapContainer = std::vector<bool, noinit_allocator<std::allocator<bool>>>;
+using ClauseWatchedLiteralsMapContainer = std::unordered_map<ClauseIndex, LiteralPair>;
+using WatchedLiteralClauseMapContainer = std::unordered_map<Literal, std::vector<ClauseIndex>>;
+using LiteralPriorityContainer = std::vector<int>;
+using ClausePriorityContainer = std::vector<int>;
+using LockedClauseMapContainer = std::vector<unsigned>;
 
 struct LiteralRange {
     LiteralIndex start; // inclusive
@@ -65,10 +76,12 @@ struct LiteralRange {
         return end - start;
     }
 
-    [[nodiscard]] Clause clause(const std::vector<Literal, noinit_allocator<std::allocator<Literal>>>& literals) const {
+    [[nodiscard]] Clause clause(const LiteralsContainer& literals) const {
         return std::span{literals.data() + start, literals.data() + end};
     }
 };
+
+using LiteralRangeContainer = std::vector<LiteralRange, noinit_allocator<std::allocator<LiteralRange>>>;
 
 /**
  * \brief
@@ -126,6 +139,8 @@ struct Assignment {
     }
 };
 
+using AssignmentTrailContainer = std::vector<Assignment, noinit_allocator<std::allocator<Assignment>>>;
+
 /**
  * \brief
  */
@@ -143,6 +158,8 @@ struct ComparePriorityLiteralPair {
     }
 };
 
+using NextLiteralContainer = std::set<PriorityLiteralPair, ComparePriorityLiteralPair>;
+
 /**
  * \brief
  */
@@ -159,6 +176,8 @@ struct ComparePriorityClauseIndexPair {
         return std::tie(a.first, a.second) > std::tie(b.first, b.second);
     }
 };
+
+using ClauseActivityContainer = std::set<PriorityClauseIndexPair, ComparePriorityClauseIndexPair>;
 
 class Formula {
     struct impl {
@@ -230,35 +249,35 @@ class Formula {
         return m_number_of_input_clauses;
     }
 
-    [[nodiscard]] std::vector<Assignment>& assignment_trail() {
+    [[nodiscard]] AssignmentTrailContainer& assignment_trail() {
         return m_assignment_trail;
     }
 
-    [[nodiscard]] std::vector<Literal, noinit_allocator<std::allocator<Literal>>>& literals() {
+    [[nodiscard]] LiteralsContainer& literals() {
         return m_literals;
     }
 
-    [[nodiscard]] std::vector<ClauseIndexLiteralPair>& unit_clauses() {
+    [[nodiscard]] UnitClausesContainer& unit_clauses() {
         return m_unit_clauses;
     }
 
-    [[nodiscard]] std::vector<bool>& unit_clause_map() {
+    [[nodiscard]] UnitClauseMapContainer& unit_clause_map() {
         return m_unit_clause_map;
     }
 
-    [[nodiscard]] std::unordered_map<ClauseIndex, LiteralPair>& clause_watched_literals_map() {
+    [[nodiscard]] ClauseWatchedLiteralsMapContainer& clause_watched_literals_map() {
         return m_clause_watched_literals_map;
     }
 
-    [[nodiscard]] std::vector<Value>& assignment_map() {
+    [[nodiscard]] AssignmentMapContainer& assignment_map() {
         return m_assignment_map;
     }
 
-    [[nodiscard]] std::vector<std::size_t>& variable_assignment_index() {
+    [[nodiscard]] VariableAssignmentIndexContainer& variable_assignment_index() {
         return m_variable_assignment_index;
     }
 
-    [[nodiscard]] std::vector<DecisionLevel>& variable_decision_level() {
+    [[nodiscard]] VariableDecisionLevelContainer& variable_decision_level() {
         return m_variable_decision_level;
     }
 
@@ -288,7 +307,7 @@ class Formula {
         return m_learned_clause_limit;
     }
 
-    [[nodiscard]] std::unordered_map<Literal, std::vector<ClauseIndex>>& watched_literal_clause_map() {
+    [[nodiscard]] WatchedLiteralClauseMapContainer& watched_literal_clause_map() {
         return m_watched_literal_clause_map;
     }
 
@@ -309,19 +328,19 @@ class Formula {
         return m_conflicting_clause;
     }
 
-    [[nodiscard]] std::set<PriorityLiteralPair, ComparePriorityLiteralPair>& next_literal() {
+    [[nodiscard]] NextLiteralContainer& next_literal() {
         return m_next_literal;
     }
 
-    [[nodiscard]] std::set<PriorityClauseIndexPair, ComparePriorityClauseIndexPair>& clause_activity() {
+    [[nodiscard]] ClauseActivityContainer& clause_activity() {
         return m_clause_activity;
     }
 
-    [[nodiscard]] std::vector<unsigned>& locked_clause_map() {
+    [[nodiscard]] LockedClauseMapContainer& locked_clause_map() {
         return m_locked_clause_map;
     }
 
-    [[nodiscard]] std::vector<LiteralRange>& literal_ranges() {
+    [[nodiscard]] LiteralRangeContainer& literal_ranges() {
         return m_literal_ranges;
     }
 
@@ -350,7 +369,7 @@ class Formula {
     /**
      * \brief We can have up to 2^31 variables.
      */
-    std::vector<Literal, noinit_allocator<std::allocator<Literal>>> m_literals;
+    LiteralsContainer m_literals;
 
     /**
      * \brief Stores `LiteralRange` into the ::m_literals vector.
@@ -358,27 +377,27 @@ class Formula {
      * `LiteralRange` should never own a pointer into the ::m_literals vector.
      * It should always be constructed adhoc.
      */
-    std::vector<LiteralRange> m_literal_ranges;
+     LiteralRangeContainer m_literal_ranges;
 
     /**
      * \brief
      */
-    std::vector<Assignment> m_assignment_trail;
+    AssignmentTrailContainer m_assignment_trail;
 
     /**
      * \brief
      */
-    std::vector<Value> m_assignment_map;
+     AssignmentMapContainer m_assignment_map;
 
     /**
      * \brief
      */
-    std::vector<std::size_t> m_variable_assignment_index;
+    VariableAssignmentIndexContainer m_variable_assignment_index;
 
     /**
      * \brief
      */
-    std::vector<DecisionLevel> m_variable_decision_level;
+    VariableDecisionLevelContainer m_variable_decision_level;
 
     /**
      * \brief
@@ -386,32 +405,32 @@ class Formula {
      * The literal in the pair is the last unassigned literal of this clause.
      * We store it for convenient assignment
      */
-    std::vector<ClauseIndexLiteralPair> m_unit_clauses;
+    UnitClausesContainer m_unit_clauses;
 
     /**
      * \brief
      */
-    std::vector<bool> m_unit_clause_map;
+    UnitClauseMapContainer m_unit_clause_map;
 
     /**
      * \brief
      */
-    std::unordered_map<ClauseIndex, LiteralPair> m_clause_watched_literals_map;
+    ClauseWatchedLiteralsMapContainer m_clause_watched_literals_map;
 
     /**
      * \brief
      */
-    std::unordered_map<Literal, std::vector<ClauseIndex>> m_watched_literal_clause_map;
+    WatchedLiteralClauseMapContainer m_watched_literal_clause_map;
 
     /**
      * \brief
      */
-    std::vector<int> m_literal_priority;
+    LiteralPriorityContainer m_literal_priority;
 
     /**
      * \brief Simple lookup table for a clauses priority score
      */
-    std::vector<int> m_clause_priority;
+    ClausePriorityContainer m_clause_priority;
 
     /**
      * \brief Provides a limit for the number of learned clauses. Once the limit is reached,
@@ -424,7 +443,7 @@ class Formula {
     /**
      * \brief
      */
-    std::set<PriorityLiteralPair, ComparePriorityLiteralPair> m_next_literal;
+    NextLiteralContainer m_next_literal;
 
     /**
      * \brief Orders pairs for (ClausePriority, ClauseIndex) according to ClausePriority
@@ -432,12 +451,12 @@ class Formula {
      * TODO: Currently, this contains problem input clauses, it doesn't necessarily have to do that,
      * it could improve performance to only track learnt clauses
      */
-    std::set<PriorityClauseIndexPair, ComparePriorityClauseIndexPair> m_clause_activity;
+    ClauseActivityContainer m_clause_activity;
 
     /**
      * \brief
      */
-    std::vector<unsigned> m_locked_clause_map;
+    LockedClauseMapContainer m_locked_clause_map;
 
     std::ofstream m_certificate_output_stream;
 };
