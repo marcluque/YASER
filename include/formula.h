@@ -11,6 +11,7 @@
 
 #include "literal.h"
 #include "log.h"
+#include "noinit_allocator.h"
 
 /**
  * Only use unsigned int for literals.
@@ -64,7 +65,7 @@ struct LiteralRange {
         return end - start;
     }
 
-    [[nodiscard]] Clause clause(const std::vector<Literal>& literals) const {
+    [[nodiscard]] Clause clause(const std::vector<Literal, noinit_allocator<std::allocator<Literal>>>& literals) const {
         return std::span{literals.data() + start, literals.data() + end};
     }
 };
@@ -233,7 +234,7 @@ class Formula {
         return m_assignment_trail;
     }
 
-    [[nodiscard]] std::vector<Literal>& literals() {
+    [[nodiscard]] std::vector<Literal, noinit_allocator<std::allocator<Literal>>>& literals() {
         return m_literals;
     }
 
@@ -349,7 +350,7 @@ class Formula {
     /**
      * \brief We can have up to 2^31 variables.
      */
-    std::vector<Literal> m_literals;
+    std::vector<Literal, noinit_allocator<std::allocator<Literal>>> m_literals;
 
     /**
      * \brief Stores `LiteralRange` into the ::m_literals vector.
