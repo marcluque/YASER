@@ -68,6 +68,27 @@ jobs:
             ctest --output-on-failure -j 4
           fi
 
+      - name: Verify certificates
+        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN')}} # Causes timeout
+        run: |
+          curl -L https://www.cs.utexas.edu/\~marijn/drat-trim/drat-trim.c -o drat-trim.c
+          gcc -O3 -o drat-trim drat-trim.c
+          set -e
+
+          run_one() {
+            i="$1"
+            path="$2"
+            file_name="$3"
+            ./drat-trim \
+            "../satlib/${path}/${file_name}-0${i}.cnf" \
+            "./test/certificates/${file_name}-0${i}.crt" \
+            -v -S
+          }
+
+          export -f run_one
+
+          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf20"' _ {}
+
       - uses: actions/upload-artifact@v4
         if: ${{matrix.build_type == 'Release'}}
         with:
