@@ -1,5 +1,4 @@
-#ifndef YASER_FORMULA_H
-#define YASER_FORMULA_H
+#pragma once
 
 #include <vector>
 #include <unordered_map>
@@ -441,5 +440,3 @@ class Formula {
 
     std::ofstream m_certificate_output_stream;
 };
-
-#endif // YASER_FORMULA_H

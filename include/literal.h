@@ -1,5 +1,4 @@
-#ifndef YASER_LITERAL_H
-#define YASER_LITERAL_H
+#pragma once
 
 #include "fmt/format.h"
 
@@ -78,5 +77,3 @@ inline std::string print_variable(const Literal literal) {
 }
 
 } // namespace literal
-
-#endif // YASER_LITERAL_H

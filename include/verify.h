@@ -1,5 +1,4 @@
-#ifndef YASER_VERIFY_H
-#define YASER_VERIFY_H
+#pragma once
 
 #include "log.h"
 #include "fmt/format.h"
@@ -44,5 +43,3 @@ log_assert_failed(const char* file, const int line, const char* _lhs_string, [[m
 #endif
 
 #define VERIFY_NOT_REACHED() VERIFY(false, std::equals_to<>{}, true)
-
-#endif // YASER_VERIFY_H

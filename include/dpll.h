@@ -1,6 +1,4 @@
-
-#ifndef YASER_DPLL_H
-#define YASER_DPLL_H
+#pragma once
 
 #include "formula.h"
 
@@ -36,5 +34,3 @@ void backtrack(Formula& formula, DecisionLevel backtrack_level);
  */
 bool run(Formula& formula);
 } // namespace DPLL
-
-#endif // YASER_DPLL_H

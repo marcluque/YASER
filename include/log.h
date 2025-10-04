@@ -1,5 +1,4 @@
-#ifndef YASER_LOG_H
-#define YASER_LOG_H
+#pragma once
 
 #include "fmt/format.h"
 
@@ -31,5 +30,3 @@ void log(const char* log_level, const char* file, int line, fmt::format_string<T
 #define WARNING_LOG(format, ...) log("WARNING", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)
 
 #define ERROR_LOG(format, ...) log("ERROR", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)
-
-#endif // YASER_LOG_H
