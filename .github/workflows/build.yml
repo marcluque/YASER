@@ -62,7 +62,11 @@ jobs:
         if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN')}} # Causes timeout
         run: |
           cd build
-          ctest --output-on-failure -j 4
+          if [[ "${{ matrix.build_type }}" == "Debug" ]]; then
+            ctest --output-on-failure -j 4 -E "UniformRandom3Sat100Vars"
+          else
+            ctest --output-on-failure -j 4
+          fi
 
       - uses: actions/upload-artifact@v4
         if: ${{matrix.build_type == 'Release'}}
