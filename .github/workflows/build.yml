@@ -69,7 +69,7 @@ jobs:
           fi
 
       - name: Verify certificates
-        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN') || matrix.build_type == 'Debug'}}
+        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN') && matrix.build_type != 'Debug'}}
         run: |
           curl -L https://www.cs.utexas.edu/\~marijn/drat-trim/drat-trim.c -o drat-trim.c
           gcc -O3 -o drat-trim drat-trim.c
@@ -88,12 +88,12 @@ jobs:
 
           export -f run_one
 
-          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf20-0" "-S"' _ {}
-          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf50-0" "-S"' _ {}
-          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf100-0" "-S"' _ {}
-          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf50-0" "-f"' _ {}
-          seq 1 1000 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf100-0" "-f"' _ {}
-          seq 1 11 | xargs -n1 -P 8 -I{} bash -c 'run_one "$@" "pigeonhole" "pigeon-" "-f"' _ {}
+          seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf20-0" "-S"' _ {}
+          seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf50-0" "-S"' _ {}
+          seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf100-0" "-S"' _ {}
+          seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf50-0" "-f"' _ {}
+          seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf100-0" "-f"' _ {}
+          seq 1 11 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "pigeonhole" "pigeon-" "-f"' _ {}
 
       - uses: actions/upload-artifact@v4
         if: ${{matrix.build_type == 'Release'}}
