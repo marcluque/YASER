@@ -61,12 +61,12 @@ using AssignmentMapContainer  = std::vector<Value, noinit_allocator<std::allocat
 using VariableAssignmentIndexContainer = std::vector<std::size_t, noinit_allocator<std::allocator<std::size_t>>>;
 using VariableDecisionLevelContainer = std::vector<DecisionLevel, noinit_allocator<std::allocator<DecisionLevel>>>;
 using UnitClausesContainer = std::vector<ClauseIndexLiteralPair>;
-using UnitClauseMapContainer = std::vector<bool, noinit_allocator<std::allocator<bool>>>;
+using UnitClauseMapContainer = std::vector<bool>;
 using ClauseWatchedLiteralsMapContainer = std::unordered_map<ClauseIndex, LiteralPair>;
 using WatchedLiteralClauseMapContainer = std::unordered_map<Literal, std::vector<ClauseIndex>>;
-using LiteralPriorityContainer = std::vector<int>;
+using LiteralPriorityContainer = std::vector<int, noinit_allocator<std::allocator<int>>>;
 using ClausePriorityContainer = std::vector<int>;
-using LockedClauseMapContainer = std::vector<unsigned>;
+using LockedClauseMapContainer = std::vector<unsigned, noinit_allocator<std::allocator<unsigned>>>;
 
 struct LiteralRange {
     LiteralIndex start; // inclusive
