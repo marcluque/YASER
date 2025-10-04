@@ -37,7 +37,7 @@ endif()
 
 if (CMAKE_BUILD_TYPE MATCHES "Debug")
     message("[YASER] Using yaser debug mode (NOT NDEBUG)")
-    add_definitions(-DYASER_DEBUG)
+    add_compile_definitions(YASER_DEBUG)
 endif()
 
 if (CMAKE_BUILD_TYPE MATCHES "Release")
@@ -46,6 +46,12 @@ if (CMAKE_BUILD_TYPE MATCHES "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTIMIZATION_FLAGS}")
     set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} ${OPTIMIZATION_FLAGS}")
 endif()
+
+option(YASER_CERTIFICATE "Create certificate" OFF)
+if (YASER_CERTIFICATE)
+    message("[YASER] Creating certificates at runtime (impacts performance)")
+    add_compile_definitions(YASER_CERTIFICATE)
+endif ()
 
 add_subdirectory(src)
 
@@ -62,10 +68,4 @@ if (YASER_BUILD_BENCHMARKS)
     message("[YASER] Building benchmarks")
     set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Suppressing benchmark's tests" FORCE)
     add_subdirectory(benchmark)
-endif ()
-
-option(YASER_CERTIFICATE "Create certificate" OFF)
-if (YASER_CERTIFICATE)
-    add_definitions(-DYASER_CERTIFICATE)
-    message("[YASER] Creating certificates at runtime (impacts performance)")
 endif ()
