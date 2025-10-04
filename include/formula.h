@@ -325,6 +325,10 @@ class Formula {
         return m_literal_ranges;
     }
 
+    [[nodiscard]] std::ofstream& certificate_output_stream() {
+        return m_certificate_output_stream;
+    }
+
   private:
     /**
      * \brief

@@ -34,6 +34,11 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat20VarsSAT) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf20-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf20-0{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.is_assignment_trail_valid());
@@ -45,6 +50,11 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf50-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf50-0{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.is_assignment_trail_valid());
@@ -56,6 +66,11 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsSAT) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf100-0{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     ASSERT_TRUE(DPLL::run(f));
     ASSERT_TRUE(f.is_assignment_trail_valid());
@@ -68,6 +83,11 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf50-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uuf50-0{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     ASSERT_FALSE(DPLL::run(f));
 }
@@ -78,6 +98,11 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsUNSAT) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uuf100-0{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     ASSERT_FALSE(DPLL::run(f));
 }
@@ -118,6 +143,11 @@ TEST_P(PigeonholeTestSuite, Unsatisfiable) {
     auto p = std::filesystem::current_path();
     p /= fmt::format("../../satlib/pigeonhole/pigeon-{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
+#ifdef YASER_CERTIFICATE
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("pigeon-{}.crt", i);
+    std::filesystem::create_directories(certificate_file_path.parent_path());
+    f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
+#endif
 
     EXPECT_FALSE(DPLL::run(f));
 }
