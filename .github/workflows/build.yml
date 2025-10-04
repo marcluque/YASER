@@ -50,7 +50,8 @@ jobs:
           echo "PATCH=$(( ${PATCH:-0} + 1 ))" >> $GITHUB_ENV
           cmake -S . -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-          -DYASER_BUILD_TESTS=ON
+          -DYASER_BUILD_TESTS=ON \
+          -DYASER_CERTIFICATE=ON
 
       - name: Build
         run: |
