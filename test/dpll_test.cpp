@@ -136,7 +136,7 @@ TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0_2) {
 
 class PigeonholeTestSuite : public testing::TestWithParam<int> {};
 
-TEST_P(PigeonholeTestSuite, Unsatisfiable) {
+TEST_P(PigeonholeTestSuite, Pigeonhole) {
     int i = GetParam();
     std::cout << "Pigeonhole " << i << std::endl;
 

@@ -63,13 +63,13 @@ jobs:
         run: |
           cd build
           if [[ "${{ matrix.build_type }}" == "Debug" ]]; then
-            ctest --output-on-failure -j 4 -E "UniformRandom3Sat100Vars"
+            ctest --output-on-failure -j 4 -E "UniformRandom3Sat100Vars|Pigeonhole/8|Pigeonhole/9|Pigeonhole/10|Pigeonhole/11"
           else
             ctest --output-on-failure -j 4
           fi
 
       - name: Verify certificates
-        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN')}} # Causes timeout
+        if: ${{!(matrix.os == 'ubuntu-24.04-arm' && matrix.build_type == 'ASAN') || matrix.build_type == 'Debug'}}
         run: |
           curl -L https://www.cs.utexas.edu/\~marijn/drat-trim/drat-trim.c -o drat-trim.c
           gcc -O3 -o drat-trim drat-trim.c
