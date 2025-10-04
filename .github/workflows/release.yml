@@ -45,9 +45,9 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            yaser-1.0.1-aarch64-darwin/yaser-1.0.1-aarch64-darwin
-            yaser-1.0.1-aarch64-linux-gnu/yaser-1.0.1-aarch64-linux-gnu
-            yaser-1.0.1-x86_64-linux-gnu/yaser-1.0.1-x86_64-linux-gnu
+            yaser-${{ env.NEXT_VERSION }}-aarch64-darwin/yaser-${{ env.NEXT_VERSION }}-aarch64-darwin
+            yaser-${{ env.NEXT_VERSION }}-aarch64-linux-gnu/yaser-${{ env.NEXT_VERSION }}-aarch64-linux-gnu
+            yaser-${{ env.NEXT_VERSION }}-x86_64-linux-gnu/yaser-${{ env.NEXT_VERSION }}-x86_64-linux-gnu
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
