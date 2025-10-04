@@ -3,7 +3,7 @@ name: Benchmark
 on:
   push:
     branches:
-      - rework-gh-actions
+      - mainline
 
 permissions:
   # deployments permission to deploy GitHub pages website

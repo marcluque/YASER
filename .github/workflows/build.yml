@@ -14,7 +14,7 @@ jobs:
         build_type: [Debug, ASAN, MSAN, UBSAN, Release]
         exclude:
           - os: macos-15
-            build_type: MSAN
+            build_type: MSAN # MSAN is not supported on aarch64 mac
 
     runs-on: ${{ matrix.os }}
 
