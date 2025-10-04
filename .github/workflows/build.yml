@@ -81,8 +81,8 @@ jobs:
             path="$2"
             file_name="$3"
             ./drat-trim \
-            "../satlib/${path}/${file_name}${i}.cnf" \
-            "./test/certificates/${file_name}${i}.crt" \
+            "./satlib/${path}/${file_name}${i}.cnf" \
+            "./build/test/certificates/${file_name}${i}.crt" \
             $4
           }
 
