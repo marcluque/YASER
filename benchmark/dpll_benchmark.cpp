@@ -54,10 +54,10 @@ BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_4_20vars_45clauses, std::filesystem::curr
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_5_30vars_81clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-5.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_6_42vars_133clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-6.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_7_56vars_204clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-7.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_8_72vars_297clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-8.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_9_90vars_415clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-9.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_10_110vars_561clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-10.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_11_132vars_738clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-11.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_8_72vars_297clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-8.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_9_90vars_415clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-9.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_10_110vars_561clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-10.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_11_132vars_738clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-11.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_12_156vars_949clauses,  std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-12.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_13_182vars_1197clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-13.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_14_210vars_1485clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-14.cnf");
