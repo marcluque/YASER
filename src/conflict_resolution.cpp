@@ -75,7 +75,7 @@ std::optional<std::pair<DecisionLevel, Literal>> is_clause_asserting(Formula& fo
 } // namespace impl
 
 DecisionLevel analyze_conflict(Formula& formula) {
-    VERIFY(formula.conflicting_clause().has_value(), std::equal_to<>{}, true);
+    VERIFY(formula.conflicting_clause().has_value(), std::equal_to{}, true);
 
     if (formula.decision_level() == 0) {
         return -1;
@@ -107,8 +107,8 @@ DecisionLevel analyze_conflict(Formula& formula) {
             }
         }
 
-        VERIFY(antecedent.has_value(), std::equal_to<>{}, true);
-        VERIFY(last_assigned_variable.has_value(), std::equal_to<>{}, true);
+        VERIFY(antecedent.has_value(), std::equal_to{}, true);
+        VERIFY(last_assigned_variable.has_value(), std::equal_to{}, true);
 
         // We reward clauses that help with conflict resolution
         VSIDS::update_clause_priority(formula, antecedent.value());

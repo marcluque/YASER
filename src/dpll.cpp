@@ -71,7 +71,7 @@ bool decide(Formula& formula) {
             break;
         }
     }
-    VERIFY(variable, std::not_equal_to<>{}, INVALID_VARIABLE);
+    VERIFY(variable, std::not_equal_to{}, INVALID_VARIABLE);
 
     // TODO: use a more sophisticated polarity heuristic
     //const Literal literal = literal::convert(variable, rand() % 2);
@@ -98,7 +98,7 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
         if (assignment.antecedent.has_value()) {
-            VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater<>{}, 0);
+            VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater{}, 0);
             formula.locked_clause_map()[assignment.antecedent.value()] -= 1;
         }
         formula.polarity()[assignment.variable] = formula.assignment_map()[assignment.variable] == Value::FALSE;

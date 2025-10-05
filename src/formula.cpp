@@ -69,7 +69,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
 
     // 1. Remove mapping of clause -> Pair(WatchedLiteral1, WatchedLiteral2)
     const auto watched_literal_it = f.m_clause_watched_literals_map.find(least_active_clause_index);
-    VERIFY(watched_literal_it, std::not_equal_to<>{}, f.m_clause_watched_literals_map.end());
+    VERIFY(watched_literal_it, std::not_equal_to{}, f.m_clause_watched_literals_map.end());
     const auto first_watched_literal = watched_literal_it->second.first;
     const auto second_watched_literal = watched_literal_it->second.second;
     f.m_clause_watched_literals_map.erase(watched_literal_it);
@@ -91,7 +91,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
 }
 
 void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
-    VERIFY(m_unit_clauses.size(), std::equal_to<>{}, 0);
+    VERIFY(m_unit_clauses.size(), std::equal_to{}, 0);
 
     // Check if we will be over the limit of allowed learned clauses,
     // if so, we drop the clause with the least activity/priority (that is not locked)
@@ -134,8 +134,8 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
     // and automatically be locked
     m_locked_clause_map.push_back(false);
 
-    VERIFY(m_unit_clause_map.size(), std::equal_to<>{}, m_literal_ranges.size());
-    VERIFY(m_clause_priority.size(), std::equal_to<>{}, m_literal_ranges.size());
+    VERIFY(m_unit_clause_map.size(), std::equal_to{}, m_literal_ranges.size());
+    VERIFY(m_clause_priority.size(), std::equal_to{}, m_literal_ranges.size());
     DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(clause), m_decision_level);
 }
 
