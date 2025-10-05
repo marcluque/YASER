@@ -82,9 +82,10 @@ public:
         m_variable_to_index[m_max_heap[0].variable] = 0;
         m_variable_to_index[node.variable] = INDEX_NOT_PRESENT;
         m_max_heap.pop_back();
-        //if (m_max_heap.size() > 1) {
+
+        if (m_max_heap.size() > 1) {
             sift_down(0);
-        //}
+        }
 
         return node;
     }
