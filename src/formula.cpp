@@ -45,6 +45,8 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
         return std::nullopt;
     }
 
+    f.m_number_of_deleted_clauses += 1;
+
     // Convert reverse_iterator to normal iterator for erase
     const auto forward_it = std::next(clause_activity_it).base();
     ClauseIndex least_active_clause_index = forward_it->second;

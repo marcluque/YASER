@@ -328,6 +328,26 @@ class Formula {
         return m_number_of_conflicts;
     }
 
+    [[nodiscard]] std::size_t& number_of_decisions() {
+        return m_number_of_decisions;
+    }
+
+    [[nodiscard]] std::size_t& number_of_propagations() {
+        return m_number_of_propagations;
+    }
+
+    [[nodiscard]] std::size_t& number_of_deleted_clauses() {
+        return m_number_of_deleted_clauses;
+    }
+
+    [[nodiscard]] double& parse_time() {
+        return m_parse_time;
+    }
+
+    [[nodiscard]] double& cpu_time() {
+        return m_cpu_time;
+    }
+
     [[nodiscard]] std::vector<bool>& polarity() {
         return m_polarity;
     }
@@ -446,6 +466,16 @@ class Formula {
     double m_variable_increment_factor;
 
     std::size_t m_number_of_conflicts{0};
+
+    std::size_t m_number_of_decisions{0};
+
+    std::size_t m_number_of_propagations{0};
+
+    std::size_t m_number_of_deleted_clauses{0};
+
+    double m_parse_time{0};
+
+    double m_cpu_time{0};
 
     /**
      * true <=> literal is negated

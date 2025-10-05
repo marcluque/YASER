@@ -26,6 +26,8 @@ bool bcp(Formula& formula) {
 
         formula.unit_clause_map()[clause_index] = false;
 
+        formula.number_of_propagations() += 1;
+
         if (formula.assignment_map()[literal::variable(literal)] != Value::UNASSIGNED) {
             // TODO: Investigate why this is happening
             continue;
@@ -58,6 +60,7 @@ bool decide(Formula& formula) {
     }
 
     ++formula.decision_level();
+    formula.number_of_decisions() += 1;
 
     DEBUG_LOG("formula.next_variable().size()={}", formula.next_variable().size());
 
