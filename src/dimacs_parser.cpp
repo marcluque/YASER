@@ -48,14 +48,16 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
 }
 
 std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start) {
-    unsigned raw_literal_index = 0;
+    Variable variable = INVALID_VARIABLE;
     bool is_negated = false;
-    while (parse_number(buffer_it, raw_literal_index, is_negated)) {
-        VERIFY(static_cast<std::size_t>(raw_literal_index), std::less_equal<>{}, formula.number_of_variables());
-        VERIFY(raw_literal_index, std::less_equal<>{}, 1U << 31);
+    while (parse_number(buffer_it, variable, is_negated)) {
+        VERIFY(static_cast<std::size_t>(variable), std::less_equal<>{}, formula.number_of_variables());
+        VERIFY(variable, std::less_equal<>{}, 1U << 31);
 
-        formula.literal(clause_start) = literal::convert(raw_literal_index, is_negated);
-        formula.next_literal().emplace(0, formula.literal(clause_start));
+        formula.literal(clause_start) = literal::convert(variable, is_negated);
+        if (!formula.next_variable().contains(variable)) {
+            formula.next_variable().push({0, variable});
+        }
         ++clause_start;
     }
 

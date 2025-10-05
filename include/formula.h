@@ -8,9 +8,11 @@
 #include <filesystem>
 #include <fstream>
 #include <set>
+#include <queue>
 
 #include "literal.h"
 #include "log.h"
+#include "max_heap.h"
 #include "noinit_allocator.h"
 
 /**
@@ -52,8 +54,6 @@ using LiteralIndex            = std::size_t;
 using Clause                  = std::span<const Literal>;
 using ClauseIndex             = std::size_t;
 using PriorityClauseIndexPair = std::pair<int, ClauseIndex>;
-using PriorityLiteralPair     = std::pair<int, Literal>;
-using LiteralPair             = std::pair<Literal, Literal>;
 using ClauseIndexLiteralPair  = std::pair<ClauseIndex, Literal>;
 using DecisionLevel           = std::ptrdiff_t; // We need -1 to indicate "conflicting" decision level
 using LiteralsContainer       = std::vector<Literal, noinit_allocator<std::allocator<Literal>>>;
@@ -64,7 +64,6 @@ using UnitClausesContainer = std::vector<ClauseIndexLiteralPair>;
 using UnitClauseMapContainer = std::vector<bool>;
 using ClauseWatchedLiteralsMapContainer = std::unordered_map<ClauseIndex, LiteralPair>;
 using WatchedLiteralClauseMapContainer = std::unordered_map<Literal, std::vector<ClauseIndex>>;
-using LiteralPriorityContainer = std::vector<int>;
 using ClausePriorityContainer = std::vector<int>;
 using LockedClauseMapContainer = std::vector<unsigned>;
 
@@ -141,24 +140,7 @@ struct Assignment {
 
 using AssignmentTrailContainer = std::vector<Assignment, noinit_allocator<std::allocator<Assignment>>>;
 
-/**
- * \brief
- */
-struct ComparePriorityLiteralPair {
-    using is_transparent = void;
-
-    /**
-     * \brief
-     * \param a
-     * \param b
-     * \return
-     */
-    bool operator()(const PriorityLiteralPair& a, const PriorityLiteralPair& b) const {
-        return std::tie(a.first, a.second) > std::tie(b.first, b.second);
-    }
-};
-
-using NextLiteralContainer = std::set<PriorityLiteralPair, ComparePriorityLiteralPair>;
+using NextVariableContainer = MaxHeap;
 
 /**
  * \brief
@@ -281,20 +263,6 @@ class Formula {
         return m_variable_decision_level;
     }
 
-    [[nodiscard]] int& literal_priority(Literal literal) {
-#ifdef YASER_DEBUG
-        return m_literal_priority.at(literal::is_positive(literal)
-                                         ? literal::variable(literal)
-                                         : number_of_variables()
-                                               + literal::variable(literal)); // Allow range checks
-#else
-
-        return m_literal_priority[literal::is_positive(literal)
-                                      ? literal::variable(literal)
-                                      : number_of_variables() + literal::variable(literal)];
-#endif
-    }
-
     [[nodiscard]] int& clause_priority(ClauseIndex clause_index) {
 #ifdef YASER_DEBUG
         return m_clause_priority.at(clause_index); // Allow range checks
@@ -328,8 +296,8 @@ class Formula {
         return m_conflicting_clause;
     }
 
-    [[nodiscard]] NextLiteralContainer& next_literal() {
-        return m_next_literal;
+    [[nodiscard]] NextVariableContainer& next_variable() {
+        return m_next_variable;
     }
 
     [[nodiscard]] ClauseActivityContainer& clause_activity() {
@@ -346,6 +314,22 @@ class Formula {
 
     [[nodiscard]] std::ofstream& certificate_output_stream() {
         return m_certificate_output_stream;
+    }
+
+    [[nodiscard]] double& variable_decay_factor() {
+        return m_variable_decay_factor;
+    }
+
+    [[nodiscard]] double& variable_increment_factor() {
+        return m_variable_increment_factor;
+    }
+
+    [[nodiscard]] std::size_t& number_of_conflicts() {
+        return m_number_of_conflicts;
+    }
+
+    [[nodiscard]] std::vector<bool>& polarity() {
+        return m_polarity;
     }
 
   private:
@@ -423,12 +407,9 @@ class Formula {
     WatchedLiteralClauseMapContainer m_watched_literal_clause_map;
 
     /**
-     * \brief
-     */
-    LiteralPriorityContainer m_literal_priority;
-
-    /**
      * \brief Simple lookup table for a clauses priority score
+     *
+     * TODO: Use this when removing clauses
      */
     ClausePriorityContainer m_clause_priority;
 
@@ -443,7 +424,7 @@ class Formula {
     /**
      * \brief
      */
-    NextLiteralContainer m_next_literal;
+    NextVariableContainer m_next_variable;
 
     /**
      * \brief Orders pairs for (ClausePriority, ClauseIndex) according to ClausePriority
@@ -459,4 +440,15 @@ class Formula {
     LockedClauseMapContainer m_locked_clause_map;
 
     std::ofstream m_certificate_output_stream;
+
+    double m_variable_decay_factor;
+
+    double m_variable_increment_factor;
+
+    std::size_t m_number_of_conflicts{0};
+
+    /**
+     * true <=> literal is negated
+     */
+    std::vector<bool> m_polarity;
 };

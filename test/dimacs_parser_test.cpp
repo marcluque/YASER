@@ -153,7 +153,7 @@ TEST(DimacsParserTest, CheckNextLiteralQueue) {
     p /= "../../satlib/small-sat-01.cnf";
     Formula f = DimacsParser::parse_formula(p);
 
-    EXPECT_EQ(f.next_literal().size(), 2);
+    EXPECT_EQ(f.next_variable().size(), 2);
 }
 
 TEST(DimacsParserTest, CheckNextLiteralQueue2) {
@@ -161,5 +161,5 @@ TEST(DimacsParserTest, CheckNextLiteralQueue2) {
     p /= "../../satlib/small-sat-02.cnf";
     Formula f = DimacsParser::parse_formula(p);
 
-    EXPECT_EQ(f.next_literal().size(), 4);
+    EXPECT_EQ(f.next_variable().size(), 4);
 }

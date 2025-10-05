@@ -6,7 +6,8 @@ target_sources(${CMAKE_PROJECT_NAME}lib PRIVATE formula.cpp watched_literals.cpp
 target_link_libraries(${CMAKE_PROJECT_NAME}lib PUBLIC fmt)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
-add_executable(${CMAKE_PROJECT_NAME} main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp
+        ../include/max_heap.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE ${CMAKE_PROJECT_NAME}lib)
 

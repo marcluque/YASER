@@ -12,14 +12,29 @@ using Literal = uint32_t;
  */
 using Variable = uint32_t;
 
+struct VariableActivityPair {
+    double activity;
+    Variable variable;
+
+    bool operator<(const VariableActivityPair& other) const {
+        return activity < other.activity;
+    }
+
+    bool operator>(const VariableActivityPair& other) const {
+        return activity > other.activity;
+    }
+};
+using LiteralPair = std::pair<Literal, Literal>;
+
 constexpr Literal INVALID_LITERAL = 0;
+constexpr Variable INVALID_VARIABLE = 0;
 
 enum class Value { UNASSIGNED = 0, TRUE = 1, FALSE = 2 };
 
 namespace literal {
 
 inline Literal convert(const unsigned raw_literal_index, const bool is_negated) {
-    return (raw_literal_index << 1U) | !is_negated; // NOLINT(*-narrowing-conversions)
+    return raw_literal_index << 1U | !is_negated;
 }
 
 inline Literal negate(const Literal literal) {

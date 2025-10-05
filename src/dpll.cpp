@@ -8,6 +8,8 @@
 #include "clause.h"
 #include "verify.h"
 
+#include <random>
+
 namespace DPLL {
 
 namespace impl {
@@ -57,20 +59,25 @@ bool decide(Formula& formula) {
 
     ++formula.decision_level();
 
-    Literal literal = INVALID_LITERAL;
-    for (const auto next_literal : formula.next_literal() | std::views::values) {
-        if (formula.assignment_map()[literal::variable(next_literal)] == Value::UNASSIGNED) {
-            literal = next_literal;
+    DEBUG_LOG("formula.next_variable().size()={}", formula.next_variable().size());
+
+    Variable variable = INVALID_VARIABLE;
+    while (!formula.next_variable().empty()) {
+        variable = formula.next_variable().removeMax().variable;
+        if (formula.assignment_map()[variable] == Value::UNASSIGNED) {
             break;
         }
     }
+    VERIFY(variable, std::not_equal_to<>{}, INVALID_VARIABLE);
 
-    VERIFY(literal, std::not_equal_to<>{}, INVALID_LITERAL);
+    // TODO: use a more sophisticated polarity heuristic
+    //const Literal literal = literal::convert(variable, rand() % 2);
+    const auto is_negative = formula.polarity()[variable];
+    const Literal literal = literal::convert(variable, is_negative);
 
     DEBUG_LOG("Deciding {} @ DL {}", literal::print_literal(literal), formula.decision_level());
 
-    formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE
-                                                                                                    : Value::FALSE;
+    formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE : Value::FALSE;
     formula.variable_assignment_index()[literal::variable(literal)] = formula.assignment_trail().size();
     formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal::variable(literal),
                                             formula.assignment_map()[literal::variable(literal)], false);
@@ -91,8 +98,11 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
             VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater<>{}, 0);
             formula.locked_clause_map()[assignment.antecedent.value()] -= 1;
         }
+        formula.polarity()[assignment.variable] = formula.assignment_map()[assignment.variable] == Value::FALSE;
         formula.assignment_map()[assignment.variable] = Value::UNASSIGNED;
-        formula.next_literal().emplace(0, literal::convert(assignment.variable, assignment.value == Value::FALSE));
+        if (!formula.next_variable().contains(assignment.variable)) {
+            formula.next_variable().push({0, assignment.variable});
+        }
         formula.variable_decision_level()[assignment.variable] = 0;
 
         // NOTE: We do not have to adjust the watched literals when backtracking!
@@ -112,6 +122,8 @@ bool run(Formula& formula) {
     while (true) {
         (void) impl::bcp(formula);
         if (formula.conflicting_clause().has_value()) {
+            formula.number_of_conflicts() += 1;
+
             // We have found a conflict, we can erase the currently stored unit clauses
             formula.unit_clauses().clear();
             std::ranges::fill(formula.unit_clause_map(), false);
@@ -128,6 +140,8 @@ bool run(Formula& formula) {
 
             // Backtracking was successful, reset decision level
             formula.decision_level() = backtrack_level;
+
+            formula.variable_increment_factor() *= 1 / formula.variable_decay_factor();
         } else {
             if (!impl::decide(formula)) {
                 // No more variables to assign and no conflict -> SAT

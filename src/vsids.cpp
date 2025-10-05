@@ -2,17 +2,29 @@
 #include "formula.h"
 #include "verify.h"
 
+#include <algorithm>
+
 namespace VSIDS {
 
 void update_variable_priorities(Formula& formula, const Clause literals_to_update) {
-    // TODO: Periodically divide by factor
-
     for (const auto& literal : literals_to_update) {
-        auto priority                        = formula.literal_priority(literal);
-        const auto number_of_elements_erased = formula.next_literal().erase({priority, literal});
-        ++formula.literal_priority(literal);
-        VERIFY(number_of_elements_erased, std::equal_to<>{}, static_cast<size_t>(1));
-        formula.next_literal().emplace(formula.literal_priority(literal), literal);
+        if (const auto variable = literal::variable(literal); formula.next_variable().contains(variable)) {
+            auto& [priority, _] = formula.next_variable().get(variable);
+            priority += formula.variable_decay_factor();
+
+            // Rescale
+            if (priority > 1e100) {
+                for (int i = 1; i < formula.number_of_variables(); i++) {
+                    if (formula.next_variable().contains(variable)) {
+                        formula.next_variable().get(i).activity *= 1e-100;
+                    }
+                }
+
+                formula.variable_increment_factor() *= 1e-100;
+            }
+
+            formula.next_variable().decrease(variable);
+        }
     }
 }
 

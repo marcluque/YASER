@@ -10,3 +10,6 @@ gcov
 
 # MacOS
 .DS_Store
+
+# Other
+traces/
