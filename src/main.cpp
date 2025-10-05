@@ -21,14 +21,16 @@ std::string format_time_ns(double nanoseconds) {
 
 void print_solver_stats(Formula& formula) {
     fmt::print("\n============================[ Solver Statistics ]============================\n");
-    fmt::print("| {:<27} {:>12}                                    |\n", "Variables:", formula.number_of_variables());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Clauses:", formula.number_of_input_clauses());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Conflicts:", formula.number_of_conflicts());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Decisions:", formula.number_of_decisions());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Propagations:", formula.number_of_propagations());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Deleted Clauses:", formula.number_of_deleted_clauses());
-    fmt::print("| {:<27} {:>12}                                    |\n", "Parse time:", format_time_ns(formula.parse_time()));
-    fmt::print("| {:<27} {:>12}                                    |\n", "CPU time:", format_time_ns(formula.cpu_time()));
+    fmt::println("|                                                                           |");
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Variables:", formula.number_of_variables());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Clauses:", formula.number_of_input_clauses());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Conflicts:", formula.number_of_conflicts());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Decisions:", formula.number_of_decisions());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Propagations:", formula.number_of_propagations());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Deleted Clauses:", formula.number_of_deleted_clauses());
+    fmt::print("|  {:<27} {:>12}                                 |\n", "Parse time:", format_time_ns(formula.parse_time()));
+    fmt::print("|  {:<27} {:>12}                                 |\n", "CPU time:", format_time_ns(formula.cpu_time()));
+    fmt::println("|                                                                           |");
     fmt::print("=============================================================================\n\n");
 }
 
