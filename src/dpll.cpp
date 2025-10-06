@@ -62,8 +62,6 @@ bool decide(Formula& formula) {
     ++formula.decision_level();
     formula.number_of_decisions() += 1;
 
-    DEBUG_LOG("formula.next_variable().size()={}", formula.next_variable().size());
-
     Variable variable = INVALID_VARIABLE;
     while (!formula.next_variable().empty()) {
         variable = formula.next_variable().removeMax().variable;
@@ -73,8 +71,6 @@ bool decide(Formula& formula) {
     }
     VERIFY(variable, std::not_equal_to{}, INVALID_VARIABLE);
 
-    // TODO: use a more sophisticated polarity heuristic
-    //const Literal literal = literal::convert(variable, rand() % 2);
     const auto is_negative = formula.polarity()[variable];
     const Literal literal = literal::convert(variable, is_negative);
 
@@ -136,7 +132,7 @@ bool run(Formula& formula) {
                 return false;
             }
 
-            // Conflict analysis was successful, we reset the conflict
+            // Conflict analysis was successful, reset the conflict
             formula.conflicting_clause() = std::nullopt;
 
             impl::backtrack(formula, backtrack_level);
