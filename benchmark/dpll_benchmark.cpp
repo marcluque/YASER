@@ -22,15 +22,15 @@ BENCHMARK_CAPTURE(BM_DPLL, uniform_random_3_sat_250vars_1065clauses, std::filesy
 
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_1_sat_9685vars_55870clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-1.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_2_sat_2810vars_11683clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-2.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_3_sat_14930vars_72106clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-3.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_3_sat_14930vars_72106clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-3.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_4_sat_28161vars_139716clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-4.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_5_sat_9396vars_41207clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-5.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_6_sat_51639vars_368352clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-6.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_6_sat_51639vars_368352clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-6.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_7_sat_8710vars_39774clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-7.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_galileo_8_sat_58074vars_294821clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-galileo-8.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_galileo_9_sat_63624vars_326999clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-galileo-9.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_10_sat_59056vars_323700clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-10.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_11_sat_32109vars_150027clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-11.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_galileo_8_sat_58074vars_294821clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-galileo-8.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_galileo_9_sat_63624vars_326999clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-galileo-9.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_10_sat_59056vars_323700clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-10.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_11_sat_32109vars_150027clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-11.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_12_sat_39598vars_194778clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-12.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_13_sat_13215vars_65728clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-13.cnf");
 
@@ -45,7 +45,7 @@ BENCHMARK_CAPTURE(BM_DPLL, blocksworld_huge_sat_459vars_7054clauses, std::filesy
 BENCHMARK_CAPTURE(BM_DPLL, blocksworld_bw_large_a_sat_459vars_4675clauses, std::filesystem::current_path() / "../satlib/blocksworld/bw_large.a.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, blocksworld_bw_large_b_sat_1087vars_13772clauses, std::filesystem::current_path() / "../satlib/blocksworld/bw_large.b.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, blocksworld_bw_large_c_sat_3016vars_50457clauses, std::filesystem::current_path() / "../satlib/blocksworld/bw_large.c.cnf");
-//BENCHMARK_CAPTURE(BM_DPLL, blocksworld_bw_large_d_sat_6325vars_131973clauses, std::filesystem::current_path() / "../satlib/blocksworld/bw_large.d.cnf");
+BENCHMARK_CAPTURE(BM_DPLL, blocksworld_bw_large_d_sat_6325vars_131973clauses, std::filesystem::current_path() / "../satlib/blocksworld/bw_large.d.cnf");
 
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_1_2vars_3clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-1.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_2_6vars_9clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-2.cnf");
