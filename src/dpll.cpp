@@ -41,7 +41,7 @@ bool bcp(Formula& formula) {
 
         formula.assignment_map()[literal::variable(literal)] = literal::is_positive(literal) ? Value::TRUE
                                                                                              : Value::FALSE;
-        formula.variable_assignment_index()[literal::variable(literal)] = formula.assignment_trail().size();
+        formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
         formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal::variable(literal),
                                                 formula.assignment_map()[literal::variable(literal)], false);
         formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
@@ -81,7 +81,7 @@ bool decide(Formula& formula) {
     DEBUG_LOG("Deciding {} @ DL {}", literal::print_literal(literal), formula.decision_level());
 
     formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE : Value::FALSE;
-    formula.variable_assignment_index()[literal::variable(literal)] = formula.assignment_trail().size();
+    formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
     formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal::variable(literal),
                                             formula.assignment_map()[literal::variable(literal)], false);
     formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();

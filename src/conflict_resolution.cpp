@@ -93,28 +93,26 @@ DecisionLevel analyze_conflict(Formula& formula) {
      * In that case, there won't be any binary resolution necessary.
      */
     while (!pair.has_value()) {
-        std::optional<ClauseIndex> antecedent          = std::nullopt;
-        std::optional<Variable> last_assigned_variable = std::nullopt;
-        std::size_t max                                = 0;
+        ClauseIndex antecedent = INVALID_CLAUSE;
+        Variable last_assigned_variable = INVALID_VARIABLE;
+        std::size_t max = 0;
         for (const auto literal : current_clause) {
-            for (std::size_t i = formula.assignment_trail().size() - 1; i > 0; i--) {
-                if (i > max && formula.assignment_trail()[i].variable == literal::variable(literal)) {
-                    antecedent             = formula.assignment_trail()[i].antecedent;
-                    last_assigned_variable = formula.assignment_trail()[i].variable;
-                    max                    = i;
-                    break;
-                }
+            if (const auto assignment_trail_index = formula.assignment_trail_index()[literal::variable(literal)];
+                assignment_trail_index > max) {
+                antecedent             = formula.assignment_trail()[assignment_trail_index].antecedent.value_or(INVALID_CLAUSE);
+                last_assigned_variable = formula.assignment_trail()[assignment_trail_index].variable;
+                max                    = assignment_trail_index;
             }
         }
 
-        VERIFY(antecedent.has_value(), std::equal_to{}, true);
-        VERIFY(last_assigned_variable.has_value(), std::equal_to{}, true);
+        VERIFY(antecedent, std::not_equal_to{}, INVALID_CLAUSE);
+        VERIFY(last_assigned_variable, std::not_equal_to{}, INVALID_VARIABLE);
 
         // We reward clauses that help with conflict resolution
-        VSIDS::update_clause_priority(formula, antecedent.value());
+        VSIDS::update_clause_priority(formula, antecedent);
 
-        const auto antecedent_clause = formula.literal_range(antecedent.value()).clause(formula.literals());
-        current_clause = impl::binary_resolve(current_clause, antecedent_clause, last_assigned_variable.value());
+        const auto antecedent_clause = formula.literal_range(antecedent).clause(formula.literals());
+        current_clause = impl::binary_resolve(current_clause, antecedent_clause, last_assigned_variable);
         VSIDS::update_variable_priorities(formula, current_clause);
         pair = impl::is_clause_asserting(formula, current_clause, formula.decision_level());
     }

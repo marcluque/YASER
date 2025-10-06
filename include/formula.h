@@ -8,10 +8,9 @@
 #include <filesystem>
 #include <fstream>
 #include <set>
-#include <queue>
 
 #include "literal.h"
-#include "log.h"
+#include "clause.h"
 #include "max_heap.h"
 #include "noinit_allocator.h"
 
@@ -51,8 +50,6 @@
  * - SAT clause set: unordered_set<Clause>
  */
 using LiteralIndex            = std::size_t;
-using Clause                  = std::span<const Literal>;
-using ClauseIndex             = std::size_t;
 using PriorityClauseIndexPair = std::pair<int, ClauseIndex>;
 using ClauseIndexLiteralPair  = std::pair<ClauseIndex, Literal>;
 using DecisionLevel           = std::ptrdiff_t; // We need -1 to indicate "conflicting" decision level
@@ -255,8 +252,8 @@ class Formula {
         return m_assignment_map;
     }
 
-    [[nodiscard]] VariableAssignmentIndexContainer& variable_assignment_index() {
-        return m_variable_assignment_index;
+    [[nodiscard]] VariableAssignmentIndexContainer& assignment_trail_index() {
+        return m_assignment_trail_index;
     }
 
     [[nodiscard]] VariableDecisionLevelContainer& variable_decision_level() {
@@ -396,7 +393,7 @@ class Formula {
     /**
      * \brief
      */
-    VariableAssignmentIndexContainer m_variable_assignment_index;
+    VariableAssignmentIndexContainer m_assignment_trail_index;
 
     /**
      * \brief

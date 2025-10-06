@@ -1,7 +1,14 @@
 #pragma once
 
-#include "formula.h"
+#include <span>
+
+#include "literal.h"
 #include "fmt/format.h"
+
+using Clause                  = std::span<const Literal>;
+using ClauseIndex             = std::size_t;
+
+constexpr std::size_t INVALID_CLAUSE = std::numeric_limits<ClauseIndex>::max();
 
 namespace clause {
 
