@@ -109,21 +109,27 @@ TEST(ConflictResolutionTest, AnalyzeConflict) {
 
     // antecedent == std::nullopt indicates a decision (i.e., not inferred via BCP)
     f.assignment_trail().emplace_back(3, std::nullopt, 2, Value::FALSE, false);
+    f.assignment_trail_index()[2] = f.assignment_trail().size() - 1;
     f.assignment_map()[2]          = Value::FALSE;
     f.variable_decision_level()[2] = 3;
     f.assignment_trail().emplace_back(5, std::nullopt, 4, Value::TRUE, false);
+    f.assignment_trail_index()[4] = f.assignment_trail().size() - 1;
     f.assignment_map()[4]          = Value::TRUE;
     f.variable_decision_level()[4] = 5;
     f.assignment_trail().emplace_back(3, std::nullopt, 10, Value::FALSE, false);
+    f.assignment_trail_index()[10] = f.assignment_trail().size() - 1;
     f.assignment_map()[10]          = Value::FALSE;
     f.variable_decision_level()[10] = 3;
     f.assignment_trail().emplace_back(5, 0, 5, Value::TRUE, false);
+    f.assignment_trail_index()[5] = f.assignment_trail().size() - 1;
     f.assignment_map()[5]          = Value::TRUE;
     f.variable_decision_level()[5] = 5;
     f.assignment_trail().emplace_back(5, 1, 6, Value::TRUE, false);
+    f.assignment_trail_index()[6] = f.assignment_trail().size() - 1;
     f.assignment_map()[6]          = Value::TRUE;
     f.variable_decision_level()[6] = 5;
     f.assignment_trail().emplace_back(5, 2, 7, Value::FALSE, false);
+    f.assignment_trail_index()[7] = f.assignment_trail().size() - 1;
     f.assignment_map()[7]          = Value::FALSE;
     f.variable_decision_level()[7] = 5;
 
