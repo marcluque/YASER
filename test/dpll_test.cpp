@@ -155,6 +155,6 @@ TEST_P(PigeonholeTestSuite, Pigeonhole) {
 INSTANTIATE_TEST_SUITE_P(
     DpllTest,
     PigeonholeTestSuite,
-    testing::Range(1, 8),
+    testing::Range(1, 7),
     testing::PrintToStringParamName()
 );

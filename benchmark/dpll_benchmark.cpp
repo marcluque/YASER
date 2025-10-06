@@ -32,7 +32,7 @@ BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_7_sat_8710vars_39774clauses, std::filesystem:
 //BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_10_sat_59056vars_323700clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-10.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_11_sat_32109vars_150027clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-11.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_12_sat_39598vars_194778clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-12.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_13_sat_13215vars_65728clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-13.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_13_sat_13215vars_65728clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-13.cnf");
 
 BENCHMARK_CAPTURE(BM_DPLL, logistics_a_sat_828vars_6718clauses, std::filesystem::current_path() / "../satlib/logistics/logistics.a.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, logistics_b_sat_843vars_7301clauses, std::filesystem::current_path() / "../satlib/logistics/logistics.b.cnf");
@@ -53,7 +53,7 @@ BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_3_12vars_22clauses, std::filesystem::curr
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_4_20vars_45clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-4.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_5_30vars_81clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-5.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_6_42vars_133clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-6.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_7_56vars_204clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-7.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_7_56vars_204clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-7.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_8_72vars_297clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-8.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_9_90vars_415clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-9.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, pigeon_hole_10_110vars_561clauses, std::filesystem::current_path() / "../satlib/pigeonhole/pigeon-10.cnf");

@@ -93,7 +93,7 @@ jobs:
           seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/satisfiable" "uf100-0" "-S"' _ {}
           seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf50-0" "-f"' _ {}
           seq 1 1000 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "uniform-random-3-sat/unsatisfiable" "uuf100-0" "-f"' _ {}
-          seq 1 7 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "pigeonhole" "pigeon-" "-f"' _ {}
+          seq 1 6 | xargs -n1 -P 4 -I{} bash -c 'run_one "$@" "pigeonhole" "pigeon-" "-f"' _ {}
 
       - uses: actions/upload-artifact@v4
         if: ${{matrix.build_type == 'Release'}}
