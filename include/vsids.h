@@ -11,6 +11,9 @@ namespace VSIDS {
  */
 void update_variable_priorities(Formula& formula, Clause literals_to_update);
 
+
+void update_variable_priority(Formula& formula, Variable variable);
+
 /**
  *
  * @param formula

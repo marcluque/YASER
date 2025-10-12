@@ -87,7 +87,6 @@ struct Assignment {
     std::optional<ClauseIndex> antecedent;
     Variable variable;
     Value value;
-    bool negated_literal_visited;
 
     /**
      * \brief
@@ -95,12 +94,10 @@ struct Assignment {
      * \param antecedent
      * \param variable
      * \param value
-     * \param negated_literal_visited
      */
     Assignment(const DecisionLevel decision_level, const std::optional<ClauseIndex>& antecedent, const Variable variable,
-               const Value value, const bool negated_literal_visited)
-        : decision_level(decision_level), antecedent(antecedent), variable(variable), value(value),
-          negated_literal_visited(negated_literal_visited) {
+               const Value value)
+        : decision_level(decision_level), antecedent(antecedent), variable(variable), value(value) {
     }
 
     /**
@@ -111,8 +108,7 @@ struct Assignment {
      */
     friend bool operator==(const Assignment& lhs, const Assignment& rhs) {
         return lhs.decision_level == rhs.decision_level && lhs.antecedent == rhs.antecedent
-               && lhs.variable == rhs.variable && lhs.value == rhs.value
-               && lhs.negated_literal_visited == rhs.negated_literal_visited;
+               && lhs.variable == rhs.variable && lhs.value == rhs.value;
     }
 
     /**
@@ -122,7 +118,7 @@ struct Assignment {
      * \return
      */
     friend bool operator!=(const Assignment& lhs, const Assignment& rhs) {
-        return !operator==(lhs, rhs);
+        return !(lhs == rhs);
     }
 
     /**
@@ -132,6 +128,10 @@ struct Assignment {
         return fmt::format("x_{}={}@{} (antecedent=c_{})", variable,
                            static_cast<int>(literal::is_positive(variable)), decision_level,
                            antecedent.has_value() ? std::to_string(antecedent.value()) : "");
+    }
+
+    [[nodiscard]] Literal literal() const {
+        return literal::convert(variable, value == Value::FALSE);
     }
 };
 
@@ -195,7 +195,7 @@ class Formula {
 #endif
     }
 
-    void learn_clause(Clause clause, Literal literal_to_imply);
+    void learn_clause(LiteralRange literal_range);
 
     bool is_assignment_trail_valid();
 
@@ -349,6 +349,10 @@ class Formula {
         return m_polarity;
     }
 
+    [[nodiscard]] std::vector<bool>& variable_seen_in_conflict_analysis() {
+        return m_variable_seen_in_conflict_analysis;
+    }
+
   private:
     /**
      * \brief
@@ -478,4 +482,9 @@ class Formula {
      * true <=> literal is negated
      */
     std::vector<bool> m_polarity;
+
+    /**
+     * true <=> variable has appeared during an instance of a conflict analysis
+     */
+    std::vector<bool> m_variable_seen_in_conflict_analysis;
 };

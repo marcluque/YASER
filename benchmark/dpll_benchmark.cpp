@@ -32,7 +32,7 @@ BENCHMARK_CAPTURE(BM_DPLL, bmc_galileo_9_sat_63624vars_326999clauses, std::files
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_10_sat_59056vars_323700clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-10.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_11_sat_32109vars_150027clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-11.cnf");
 //BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_12_sat_39598vars_194778clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-12.cnf");
-BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_13_sat_13215vars_65728clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-13.cnf");
+//BENCHMARK_CAPTURE(BM_DPLL, bmc_ibm_13_sat_13215vars_65728clauses, std::filesystem::current_path() / "../satlib/bmc/bmc-ibm-13.cnf");
 
 BENCHMARK_CAPTURE(BM_DPLL, logistics_a_sat_828vars_6718clauses, std::filesystem::current_path() / "../satlib/logistics/logistics.a.cnf");
 BENCHMARK_CAPTURE(BM_DPLL, logistics_b_sat_843vars_7301clauses, std::filesystem::current_path() / "../satlib/logistics/logistics.b.cnf");

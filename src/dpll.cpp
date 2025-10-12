@@ -16,13 +16,14 @@ namespace impl {
 
 bool bcp(Formula& formula) {
     while (!formula.unit_clauses().empty()) {
-        // We have a conflict, stop propagating
         if (formula.conflicting_clause().has_value()) {
             return false;
         }
 
         const auto [clause_index, literal] = formula.unit_clauses().back();
         formula.unit_clauses().pop_back();
+
+        VERIFY(formula.literal_ranges()[clause_index].clause(formula.literals())[0], std::equal_to{}, literal);
 
         formula.unit_clause_map()[clause_index] = false;
 
@@ -43,7 +44,7 @@ bool bcp(Formula& formula) {
                                                                                              : Value::FALSE;
         formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
         formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal::variable(literal),
-                                                formula.assignment_map()[literal::variable(literal)], false);
+                                                formula.assignment_map()[literal::variable(literal)]);
         formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
         formula.locked_clause_map()[clause_index] += 1;
 
@@ -59,7 +60,7 @@ bool decide(Formula& formula) {
         return false;
     }
 
-    ++formula.decision_level();
+    formula.decision_level() += 1;
     formula.number_of_decisions() += 1;
 
     Variable variable = INVALID_VARIABLE;
@@ -79,7 +80,7 @@ bool decide(Formula& formula) {
     formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE : Value::FALSE;
     formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
     formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal::variable(literal),
-                                            formula.assignment_map()[literal::variable(literal)], false);
+                                            formula.assignment_map()[literal::variable(literal)]);
     formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
     WatchedLiterals::update(formula, literal::negate(literal));
 

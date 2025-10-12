@@ -23,7 +23,7 @@ Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses,
       m_unit_clause_map(num_clauses), m_clause_priority(num_clauses),
       m_learned_clause_limit(num_clauses * 100), m_next_variable(num_variables + 1),
       m_locked_clause_map(num_clauses), m_certificate_output_stream(certificate_path, std::ios::app), m_variable_decay_factor(0.95),
-      m_variable_increment_factor(1), m_polarity(num_variables + 1) {
+      m_variable_increment_factor(1), m_polarity(num_variables + 1), m_variable_seen_in_conflict_analysis(num_variables + 1) {
     DEBUG_LOG("Using certificate path {}", certificate_path.string());
     DEBUG_LOG("Number of allowed learned clauses: {}", m_learned_clause_limit);
 }
@@ -90,7 +90,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
     return least_active_clause_index;
 }
 
-void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
+void Formula::learn_clause(LiteralRange literal_range) {
     VERIFY(m_unit_clauses.size(), std::equal_to{}, 0);
 
     // Check if we will be over the limit of allowed learned clauses,
@@ -104,22 +104,17 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
     }
 
 #ifdef YASER_CERTIFICATE
-    const auto clause_dimacs_format = clause::print_clause_dimacs(clause);
+    const auto clause_dimacs_format = clause::print_clause_dimacs(literal_range.clause(m_literals));
     m_certificate_output_stream << clause_dimacs_format << std::endl;
 #endif
 
-    // Might be a no-op if we have enough space in `m_literals`.
-    m_literals.reserve(m_literals.size() + clause.size());
-    const auto it = m_literals.insert(m_literals.end(), clause.begin(), clause.end());
-
-    const auto new_literal_range_start = std::distance(m_literals.begin(), it);
-    auto new_literal_range = LiteralRange{static_cast<std::size_t>(new_literal_range_start), new_literal_range_start + clause.size()};
-    m_literal_ranges.emplace_back(new_literal_range);
+    m_literal_ranges.emplace_back(literal_range);
 
     auto clause_index = m_literal_ranges.size() - 1;
 
     // We know clauses learnt after conflicts will be unit after backtracking by definition
     // Hence, we can simply add them already
+    const auto literal_to_imply = m_literals[literal_range.start];
     m_unit_clauses.emplace_back(clause_index, literal_to_imply);
     m_unit_clause_map.push_back(true);
 
@@ -136,7 +131,7 @@ void Formula::learn_clause(Clause clause, Literal literal_to_imply) {
 
     VERIFY(m_unit_clause_map.size(), std::equal_to{}, m_literal_ranges.size());
     VERIFY(m_clause_priority.size(), std::equal_to{}, m_literal_ranges.size());
-    DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(clause), m_decision_level);
+    DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(literal_range.clause(m_literals)), m_decision_level);
 }
 
 bool Formula::is_assignment_trail_valid() {

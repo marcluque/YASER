@@ -111,8 +111,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         if (literal::is_satisfied(partner_literal, formula.assignment_map()[literal::variable(partner_literal)])) {
             continue;
         }
-        if (auto new_partner_literal = impl::find_new_partner_literal(formula, affected_clause_index,
-                                                                      negated_watched_literal, partner_literal);
+        if (auto new_partner_literal = impl::find_new_partner_literal(formula, affected_clause_index, negated_watched_literal, partner_literal);
             new_partner_literal.has_value()) {
             // Try to find a new literal to watch
 
@@ -133,14 +132,36 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             formula.watched_literal_clause_map()[new_partner_literal.value()].push_back(affected_clause_index);
             VERIFY(DimacsParser::impl::watched_clauses_contains_duplicates(formula), std::equal_to{}, false);
         } else if (formula.assignment_map()[literal::variable(partner_literal)] == Value::UNASSIGNED) {
+            // Swap implied literal to 0th position in clause (assumption by conflict analysis)
+            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index].start;
+                formula.literals()[clause_start_index] != partner_literal) {
+                // TODO: fix this
+                auto clause = formula.literal_range(affected_clause_index).clause(formula.literals());
+                if (auto it = std::ranges::find(clause, partner_literal); it != clause.end()) {
+                    const auto partner_index = clause_start_index + std::distance(clause.begin(), it);
+                    std::swap(formula.literals()[clause_start_index], formula.literals()[partner_index]);
+                }
+            }
+
             // Clause is unit, partner_literal is unassigned
             formula.unit_clauses().emplace_back(affected_clause_index, partner_literal);
             formula.unit_clause_map()[affected_clause_index] = true;
         } else if (!literal::is_satisfied(partner_literal,
                                           formula.assignment_map()[literal::variable(partner_literal)])) {
+            // Swap implied literal to 0th position in clause (assumption by conflict analysis)
+            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index].start;
+                formula.literals()[clause_start_index] != negated_watched_literal) {
+                // TODO: fix this
+                auto clause = formula.literal_range(affected_clause_index).clause(formula.literals());
+                if (auto it = std::ranges::find(clause, negated_watched_literal); it != clause.end()) {
+                    const auto negated_watched_literal_index = clause_start_index + std::distance(clause.begin(), it);
+                    std::swap(formula.literals()[clause_start_index], formula.literals()[negated_watched_literal_index]);
+                }
+            }
+
             // Clause is conflicting -> resolve
-            DEBUG_LOG("Clause {} ({}) is conflicting @ DL {}", affected_clause_index,
-                      clause::print_clause(formula.literal_range(affected_clause_index).clause(formula.literals())), formula.decision_level());
+            DEBUG_LOG("Clause {} ({}) is conflicting @ DL {} (conflict #{})", affected_clause_index,
+                      clause::print_clause(formula.literal_range(affected_clause_index).clause(formula.literals())), formula.decision_level(), formula.number_of_conflicts() + 1);
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will
