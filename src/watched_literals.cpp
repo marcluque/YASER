@@ -93,25 +93,25 @@ void update(Formula& formula, const Literal negated_watched_literal) {
     // IMPORTANT: We have to copy the list of affected clauses to avoid changing it during the iteration
     for (const auto affected_clause_indices = affected_clause_indices_it->second;
          const auto affected_clause_index : affected_clause_indices) {
+        const auto& literal_range = formula.literal_ranges()[affected_clause_index];
         // Find partner literal of `negated_watched_literal`
         const auto watched_literals_it = formula.clause_watched_literals_map().find(affected_clause_index);
         VERIFY(watched_literals_it, std::not_equal_to{}, formula.clause_watched_literals_map().end());
 
-        Literal partner_literal;
-        if (formula.unit_clause_map()[affected_clause_index]) {
-            partner_literal = watched_literals_it->second.first;
-        } else {
-            partner_literal = watched_literals_it->second.first == negated_watched_literal
-                                  ? watched_literals_it->second.second
-                                  : watched_literals_it->second.first;
+        if (negated_watched_literal == formula.literal(literal_range.literal_index(0))) {
+            std::swap(formula.literal(literal_range.literal_index(0)), formula.literal(literal_range.literal_index(1)));
         }
+
+        Literal partner_literal = formula.literal(literal_range.literal_index(0));
 
         // TODO: Maybe this could start with a check whether clause is unit?
 
         if (literal::is_satisfied(partner_literal, formula.assignment_map()[literal::variable(partner_literal)])) {
             continue;
         }
-        if (auto new_partner_literal = impl::find_new_partner_literal(formula, affected_clause_index, negated_watched_literal, partner_literal);
+
+        if (auto new_partner_literal = impl::find_new_partner_literal(formula, affected_clause_index,
+                                                                      negated_watched_literal, partner_literal);
             new_partner_literal.has_value()) {
             // Try to find a new literal to watch
 
@@ -121,8 +121,10 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             }
 
             // Remove mapping of negated_watched_literal -> clause
-            auto negated_watched_literal_watched_clause_subrange = std::ranges::remove(affected_clause_indices_it->second, affected_clause_index);
-            affected_clause_indices_it->second.erase(negated_watched_literal_watched_clause_subrange.begin(), negated_watched_literal_watched_clause_subrange.end());
+            auto negated_watched_literal_watched_clause_subrange =
+                std::ranges::remove(affected_clause_indices_it->second, affected_clause_index);
+            affected_clause_indices_it->second.erase(negated_watched_literal_watched_clause_subrange.begin(),
+                                                     negated_watched_literal_watched_clause_subrange.end());
 
             // Update clause_literal_map by simply updating the watched_literals
             watched_literals_it->second.first  = new_partner_literal.value();
@@ -154,14 +156,18 @@ void update(Formula& formula, const Literal negated_watched_literal) {
                 // TODO: fix this
                 auto clause = formula.literal_range(affected_clause_index).clause(formula.literals());
                 if (auto it = std::ranges::find(clause, negated_watched_literal); it != clause.end()) {
-                    const auto negated_watched_literal_index = clause_start_index + std::distance(clause.begin(), it);
-                    std::swap(formula.literals()[clause_start_index], formula.literals()[negated_watched_literal_index]);
+                    const auto negated_watched_literal_index = clause_start_index
+                                                               + std::distance(clause.begin(), it);
+                    std::swap(formula.literals()[clause_start_index],
+                              formula.literals()[negated_watched_literal_index]);
                 }
             }
 
             // Clause is conflicting -> resolve
             DEBUG_LOG("Clause {} ({}) is conflicting @ DL {} (conflict #{})", affected_clause_index,
-                      clause::print_clause(formula.literal_range(affected_clause_index).clause(formula.literals())), formula.decision_level(), formula.number_of_conflicts() + 1);
+                      clause::print_clause(
+                          formula.literal_range(affected_clause_index).clause(formula.literals())),
+                      formula.decision_level(), formula.number_of_conflicts() + 1);
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will
