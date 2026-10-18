@@ -76,6 +76,10 @@ struct LiteralRange {
     [[nodiscard]] Clause clause(const LiteralsContainer& literals) const {
         return std::span{literals.data() + start, literals.data() + end};
     }
+
+    [[nodiscard]] LiteralIndex literal_index(const LiteralIndex index) const {
+        return start + index;
+    }
 };
 
 using LiteralRangeContainer = std::vector<LiteralRange, noinit_allocator<std::allocator<LiteralRange>>>;
