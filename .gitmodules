@@ -10,6 +10,3 @@
 [submodule "extern/google/googletest"]
 	path = extern/google/googletest
 	url = https://github.com/google/googletest.git
-[submodule "extern/fmtlib/fmt"]
-	path = extern/fmtlib/fmt
-	url = https://github.com/fmtlib/fmt.git

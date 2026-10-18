@@ -1,37 +1,38 @@
 #include <cstdlib>
-#include "fmt/format.h"
+#include <format>
 #include "log.h"
 #include "formula.h"
 #include "dimacs_parser.h"
 #include "dpll.h"
 
+
 std::string format_time_ns(double nanoseconds) {
     if (nanoseconds < 1'000.0) {
-        return fmt::format("{:.3f} ns", nanoseconds);
+        return std::format("{:.3f} ns", nanoseconds);
     }
     if (nanoseconds < 1'000'000.0) {
-        return fmt::format("{:.3f} µs", nanoseconds / 1'000.0);
+        return std::format("{:.3f} µs", nanoseconds / 1'000.0);
     }
     if (nanoseconds < 1'000'000'000.0) {
-        return fmt::format("{:.3f} ms", nanoseconds / 1'000'000.0);
+        return std::format("{:.3f} ms", nanoseconds / 1'000'000.0);
     }
 
-    return fmt::format("{:.3f} s", nanoseconds / 1'000'000'000.0);
+    return std::format("{:.3f} s", nanoseconds / 1'000'000'000.0);
 }
 
 void print_solver_stats(Formula& formula) {
-    fmt::print("\n============================[ Solver Statistics ]============================\n");
-    fmt::println("|                                                                           |");
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Variables:", formula.number_of_variables());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Clauses:", formula.number_of_input_clauses());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Conflicts:", formula.number_of_conflicts());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Decisions:", formula.number_of_decisions());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Propagations:", formula.number_of_propagations());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Deleted Clauses:", formula.number_of_deleted_clauses());
-    fmt::print("|  {:<27} {:>12}                                 |\n", "Parse time:", format_time_ns(formula.parse_time()));
-    fmt::print("|  {:<27} {:>12}                                 |\n", "CPU time:", format_time_ns(formula.cpu_time()));
-    fmt::println("|                                                                           |");
-    fmt::print("=============================================================================\n\n");
+    std::print("\n============================[ Solver Statistics ]============================\n");
+    std::println("|                                                                           |");
+    std::print("|  {:<27} {:>12}                                 |\n", "Variables:", formula.number_of_variables());
+    std::print("|  {:<27} {:>12}                                 |\n", "Clauses:", formula.number_of_input_clauses());
+    std::print("|  {:<27} {:>12}                                 |\n", "Conflicts:", formula.number_of_conflicts());
+    std::print("|  {:<27} {:>12}                                 |\n", "Decisions:", formula.number_of_decisions());
+    std::print("|  {:<27} {:>12}                                 |\n", "Propagations:", formula.number_of_propagations());
+    std::print("|  {:<27} {:>12}                                 |\n", "Deleted Clauses:", formula.number_of_deleted_clauses());
+    std::print("|  {:<27} {:>12}                                 |\n", "Parse time:", format_time_ns(formula.parse_time()));
+    std::print("|  {:<27} {:>12}                                 |\n", "CPU time:", format_time_ns(formula.cpu_time()));
+    std::println("|                                                                           |");
+    std::print("=============================================================================\n\n");
 }
 
 void print_assignment_trail(Formula& formula) {
@@ -40,7 +41,7 @@ void print_assignment_trail(Formula& formula) {
     std::string assignment_trail;
     for (const auto& assignment : formula.assignment_trail()) {
         auto value = static_cast<int>(literal::is_positive(assignment.variable));
-        assignment_trail += fmt::format("x_{}={}@{}, ", assignment.variable, value, assignment.decision_level);
+        assignment_trail += std::format("x_{}={}@{}, ", assignment.variable, value, assignment.decision_level);
     }
     assignment_trail.pop_back();
     assignment_trail.pop_back();
@@ -70,7 +71,7 @@ int main([[maybe_unused]] int _argc, char** argv) {
 
     print_solver_stats(formula);
 
-    fmt::println("s {}", result ? "SATISFIABLE" : "UNSATISFIABLE");
+    std::println("s {}", result ? "SATISFIABLE" : "UNSATISFIABLE");
 
 #ifdef YASER_DEBUG
     if (result && !formula.is_assignment_trail_valid()) {

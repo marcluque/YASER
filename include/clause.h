@@ -1,9 +1,9 @@
 #pragma once
 
 #include <span>
+#include <format>
 
 #include "literal.h"
-#include "fmt/format.h"
 
 using Clause                  = std::span<const Literal>;
 using ClauseIndex             = std::size_t;
@@ -20,7 +20,7 @@ namespace clause {
 inline std::string print_clause(const Clause clause) {
     std::string s;
     for (const auto& literal : clause) {
-        s.append(fmt::format("{} ∨ ", literal::print_literal(literal)));
+        s.append(std::format("{} ∨ ", literal::print_literal(literal)));
     }
 
     s.resize(s.length() - 5);
@@ -31,7 +31,7 @@ inline std::string print_clause(const Clause clause) {
 inline std::string print_clause_dimacs(const Clause clause) {
     std::string s;
     for (const auto& literal : clause) {
-        s.append(fmt::format("{} ", literal::print_literal_dimacs(literal)));
+        s.append(std::format("{} ", literal::print_literal_dimacs(literal)));
     }
 
     s.append("0");

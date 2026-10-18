@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <set>
+#include <format>
 
 #include "literal.h"
 #include "clause.h"
@@ -125,7 +126,7 @@ struct Assignment {
      * \brief
      */
     explicit operator std::string() const {
-        return fmt::format("x_{}={}@{} (antecedent=c_{})", variable,
+        return std::format("x_{}={}@{} (antecedent=c_{})", variable,
                            static_cast<int>(literal::is_positive(variable)), decision_level,
                            antecedent.has_value() ? std::to_string(antecedent.value()) : "");
     }
@@ -209,7 +210,7 @@ class Formula {
         for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
             for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause) {
-                s.append(fmt::format("{} ∨ ", literal::print_literal(literal)));
+                s.append(std::format("{} ∨ ", literal::print_literal(literal)));
             }
             s.resize(s.length() - 5);
             s.append(") ∧ ");

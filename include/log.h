@@ -1,22 +1,24 @@
 #pragma once
 
-#include "fmt/format.h"
+#include <format>
+#include <print>
+#include <filesystem>
 
-inline void vlog(const char* log_level, const char* file, int line, const fmt::string_view format,
-                 const fmt::format_args args) {
-  fmt::print("[{:7}]: ", log_level);
-  fmt::vprint(format, args);
+inline void vlog(const char* log_level, const char* file, int line, std::string_view format, std::format_args args) {
+    std::print("[{:7}]: ", log_level);
+    std::print("{}", std::vformat(format, args));
+
 #ifdef PIPELINE
-  std::filesystem::path p(file);
-  fmt::print(" ({}:{})\n", p.filename(), line);
+    std::filesystem::path p(file);
+    std::print(" ({}:{})\n", p.filename().string(), line);
 #else
-  fmt::print(" ({}:{})\n", file, line);
+    std::print(" ({}:{})\n", file, line);
 #endif
 }
 
 template <typename... T>
-void log(const char* log_level, const char* file, int line, fmt::format_string<T...> format, T&&... args) {
-  vlog(log_level, file, line, format, fmt::make_format_args(args...));
+void log(const char* log_level, const char* file, const int line, std::format_string<T...> format, T&&... args) {
+    vlog(log_level, file, line, format.get(), std::make_format_args(args...));
 }
 
 #ifdef YASER_DEBUG

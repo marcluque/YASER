@@ -1,31 +1,33 @@
 #pragma once
 
+#include <format>
 #include "log.h"
-#include "fmt/format.h"
 
 #ifdef YASER_DEBUG
 
 template <typename LHS, typename RHS>
-std::enable_if_t<fmt::is_formattable<LHS>() && fmt::is_formattable<RHS>(), void>
-log_assert_failed(const char* file, const int line, const char* lhs_string, const LHS& lhs, const char* comparator, const char* rhs_string, const RHS& rhs) {
-    log("DEBUG", file, line, "ASSERT FAILED: {}(={}) {} {}(={})", lhs_string, lhs, comparator, rhs_string, rhs);
+    requires std::formattable<LHS, char> && std::formattable<RHS, char>
+void log_assert_failed(const char* file, const int line, const char* lhs_string, const LHS& lhs, const char* comparator, const char* rhs_string, const RHS& rhs) {
+    log("DEBUG", file, line,
+        "ASSERT FAILED: {}(={}) {} {}(={})",
+        lhs_string, lhs, comparator, rhs_string, rhs);
 }
 
 template <typename LHS, typename RHS>
-std::enable_if_t<!fmt::is_formattable<LHS>() && fmt::is_formattable<RHS>(), void>
-log_assert_failed(const char* file, const int line, const char* _lhs_string, [[maybe_unused]]  const LHS& lhs, const char* comparator, const char* rhs_string, const RHS& rhs) {
+    requires (!std::formattable<LHS, char>) && std::formattable<RHS, char>
+void log_assert_failed(const char* file, const int line, const char* _lhs_string, [[maybe_unused]]  const LHS& lhs, const char* comparator, const char* rhs_string, const RHS& rhs) {
     log("DEBUG", file, line, "ASSERT FAILED: {} {} {}(={})", _lhs_string, comparator, rhs_string, rhs);
 }
 
 template <typename LHS, typename RHS>
-std::enable_if_t<fmt::is_formattable<LHS>() && !fmt::is_formattable<RHS>(), void>
-log_assert_failed(const char* file, const int line, const char* lhs_string, const LHS& lhs, const char* comparator, const char* _rhs_string, [[maybe_unused]]  const RHS& rhs) {
+    requires std::formattable<LHS, char> && (!std::formattable<RHS, char>)
+void log_assert_failed(const char* file, const int line, const char* lhs_string, const LHS& lhs, const char* comparator, const char* _rhs_string, [[maybe_unused]]  const RHS& rhs) {
     log("DEBUG", file, line, "ASSERT FAILED: {}(={}) {} {}", lhs_string, lhs, comparator, _rhs_string);
 }
 
 template <typename LHS, typename RHS>
-std::enable_if_t<!fmt::is_formattable<LHS>() && !fmt::is_formattable<RHS>(), void>
-log_assert_failed(const char* file, const int line, const char* _lhs_string, [[maybe_unused]] const LHS& lhs, const char* comparator, const char* _rhs_string, [[maybe_unused]]  const RHS& rhs) {
+    requires (!std::formattable<LHS, char>) && (!std::formattable<RHS, char>)
+void log_assert_failed(const char* file, const int line, const char* _lhs_string, [[maybe_unused]] const LHS& lhs, const char* comparator, const char* _rhs_string, [[maybe_unused]]  const RHS& rhs) {
     log("DEBUG", file, line, "ASSERT FAILED: {} {} {}", _lhs_string, comparator, _rhs_string);
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "fmt/format.h"
+#include <format>
 
 /**
  * \brief Uses 32 bits. Bit 0 is the literal's sign. The remaining 31 bits are the variable's index.
@@ -70,7 +70,7 @@ inline std::string print_literal(const Literal literal) {
         sign.append("¬");
     }
 
-    return fmt::format("{}x_{}", sign, variable(literal));
+    return std::format("{}x_{}", sign, variable(literal));
 }
 
 inline std::string print_literal_dimacs(const Literal literal) {
@@ -79,7 +79,7 @@ inline std::string print_literal_dimacs(const Literal literal) {
         sign.append("-");
     }
 
-    return fmt::format("{}{}", sign, variable(literal));
+    return std::format("{}{}", sign, variable(literal));
 }
 
 /**
@@ -88,7 +88,7 @@ inline std::string print_literal_dimacs(const Literal literal) {
  * \return
  */
 inline std::string print_variable(const Literal literal) {
-    return fmt::format("x_{}", variable(literal));
+    return std::format("x_{}", variable(literal));
 }
 
 } // namespace literal
