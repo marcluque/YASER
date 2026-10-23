@@ -6,7 +6,7 @@ on:
       - mainline
 
 permissions:
-  # deployments permission to deploy GitHub pages website
+  # deployments permission to deploy GitHub Pages website
   deployments: write
   # contents permission to update benchmark contents in gh-pages branch
   contents: write
@@ -20,13 +20,25 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install GCC 16
+        uses: egor-tensin/setup-gcc@v2.0.3
+        with:
+          version: 16
+
       - name: Configure CMake
         run: |
+          export CC=gcc-16
+          export CXX=g++-16
+
+          "$CXX" --version
+
           cmake -S . -B build -G Ninja \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DYASER_BUILD_TESTS=OFF \
-          -DYASER_BUILD_BENCHMARKS=ON \
-          -DYASER_CERTIFICATE=OFF
+            -DCMAKE_C_COMPILER="$CC" \
+            -DCMAKE_CXX_COMPILER="$CXX" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DYASER_BUILD_TESTS=OFF \
+            -DYASER_BUILD_BENCHMARKS=ON \
+            -DYASER_CERTIFICATE=OFF
 
       - name: Build
         run: |
