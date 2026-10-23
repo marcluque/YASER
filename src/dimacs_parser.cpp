@@ -2,6 +2,8 @@
 #include <sstream>
 #include <span>
 #include <algorithm>
+#include <cstring>
+
 #include "dimacs_parser.h"
 #include "log.h"
 #include "verify.h"
@@ -79,7 +81,7 @@ bool watched_clauses_contains_duplicates(Formula& formula) {
 }
 
 Formula parse_formula(std::istream& input_stream, const std::size_t size) {
-    VERIFY(std::isgreater(size, std::numeric_limits<std::streamsize>::max()), std::equal_to{}, false);
+    VERIFY(size, std::less_equal<>{}, static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max()));
     std::vector<char> buffer(size + 1);
     input_stream.read(buffer.data(), static_cast<std::streamsize>(size));
     auto buffer_it = std::span<const char>{buffer.data(), size}.begin();
@@ -133,7 +135,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 Formula parse_formula(const char* input_string) {
     std::istringstream input_string_stream{input_string};
     VERIFY(!input_string_stream, std::equal_to{}, false);
-    return impl::parse_formula(input_string_stream, strlen(input_string));
+    return impl::parse_formula(input_string_stream, std::strlen(input_string));
 }
 
 Formula parse_formula(const std::string& input_string) {

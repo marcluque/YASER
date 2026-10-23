@@ -1,11 +1,11 @@
 #include <filesystem>
 #include <iostream>
+#include <format>
 
 #include "gtest/gtest.h"
 #include "dpll.h"
 #include "dimacs_parser.h"
 #include "formula.h"
-#include "log.h"
 #include "gmock/gmock-matchers.h"
 
 TEST(DpllTest, SimpleSAT) {
@@ -32,10 +32,10 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat20VarsSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 20 VARS " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf20-0{}.cnf", i);
+    p /= std::format("../../satlib/uniform-random-3-sat/satisfiable/uf20-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf20-0{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("uf20-0{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
@@ -48,10 +48,10 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 50 VARS " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf50-0{}.cnf", i);
+    p /= std::format("../../satlib/uniform-random-3-sat/satisfiable/uf50-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf50-0{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("uf50-0{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
@@ -64,10 +64,10 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 100 VARS " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/satisfiable/uf100-0{}.cnf", i);
+    p /= std::format("../../satlib/uniform-random-3-sat/satisfiable/uf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uf100-0{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("uf100-0{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
@@ -81,10 +81,10 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat50VarsUNSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 50 VARS (UNSAT) " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf50-0{}.cnf", i);
+    p /= std::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf50-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uuf50-0{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("uuf50-0{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
@@ -96,10 +96,10 @@ TEST_P(UniformRandom3SatTestSuite, UniformRandom3Sat100VarsUNSAT) {
     auto i = GetParam();
     std::cout << "UNIFROM RANDOM 3-SAT 100 VARS (UNSAT) " << i << std::endl;
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf100-0{}.cnf", i);
+    p /= std::format("../../satlib/uniform-random-3-sat/unsatisfiable/uuf100-0{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("uuf100-0{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("uuf100-0{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
@@ -141,10 +141,10 @@ TEST_P(PigeonholeTestSuite, Pigeonhole) {
     std::cout << "Pigeonhole " << i << std::endl;
 
     auto p = std::filesystem::current_path();
-    p /= fmt::format("../../satlib/pigeonhole/pigeon-{}.cnf", i);
+    p /= std::format("../../satlib/pigeonhole/pigeon-{}.cnf", i);
     Formula f = DimacsParser::parse_formula(p);
 #ifdef YASER_CERTIFICATE
-    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / fmt::format("pigeon-{}.crt", i);
+    const auto certificate_file_path = std::filesystem::current_path() / "certificates" / std::format("pigeon-{}.crt", i);
     std::filesystem::create_directories(certificate_file_path.parent_path());
     f.certificate_output_stream() = std::ofstream(certificate_file_path, std::ios::app);
 #endif
