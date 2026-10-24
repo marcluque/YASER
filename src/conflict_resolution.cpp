@@ -75,7 +75,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
         --assignment_trail_index;
     } while (remaining_variables_on_decision_level != 0);
 
-    const auto learned_literal_range = LiteralRange{.start = asserting_literal_index, .end   = formula.literals().size()};
+    const auto learned_literal_range = LiteralRange{.start = asserting_literal_index, .end = formula.literals().size()};
     const auto learned_clause = learned_literal_range.clause(formula.literals());
 
     formula.literals()[asserting_literal_index] = ~last_implied_literal;

@@ -98,7 +98,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
     if (m_literal_ranges.size() >= m_learned_clause_limit) {
         DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_literal_ranges.size(), m_learned_clause_limit);
         if (const auto least_active_clause_index = impl::delete_clause(*this);
-            least_active_clause_index.has_value()) {
+            least_active_clause_index) {
             DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value().index, m_literal_ranges[least_active_clause_index.value().index].clause(m_literals));
         }
     }

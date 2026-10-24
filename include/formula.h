@@ -128,7 +128,7 @@ struct Assignment {
     explicit operator std::string() const {
         return std::format("x_{}={}@{} (antecedent=c_{})", variable.index,
                            std::to_underlying(value), decision_level,
-                           antecedent.has_value() ? std::to_string(antecedent.value().index) : "");
+                           antecedent ? std::to_string(antecedent.value().index) : "");
     }
 
     [[nodiscard]] Literal literal() const {
@@ -210,7 +210,7 @@ class Formula {
         for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
             for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause.literals) {
-                s.append(std::format("{} ∨ ", literal.print()));
+                s.append(std::format("{} ∨ ", literal));
             }
             s.resize(s.length() - 5);
             s.append(") ∧ ");

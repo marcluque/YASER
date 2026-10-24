@@ -23,7 +23,7 @@ struct Clause {
     [[nodiscard]] constexpr auto print() const {
         std::string s;
         for (const auto& literal : literals) {
-            s.append(std::format("{} ∨ ", literal.print()));
+            s.append(std::format("{} ∨ ", literal));
         }
 
         s.resize(s.length() - 5);

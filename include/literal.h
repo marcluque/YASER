@@ -9,6 +9,13 @@ enum class Value : std::uint8_t {
     UNASSIGNED = 0, TRUE = 1, FALSE = 2
 };
 
+template <>
+struct std::formatter<Value> : std::formatter<std::string> {
+    auto format(const auto& value, auto& ctx) const {
+        return std::formatter<std::string>::format(std::to_string(std::to_underlying(value)), ctx);
+    }
+};
+
 /**
  * \brief Same as Literal but only has 31 bit (since bit 32 is not used).
  */
@@ -16,12 +23,16 @@ struct Variable {
     std::uint32_t index{};
 
     template <std::integral T>
-    constexpr explicit Variable(T index) : index(static_cast<std::uint32_t>(index)) {
+    [[nodiscard]] constexpr explicit Variable(T index) : index(static_cast<std::uint32_t>(index)) {
         VERIFY(std::in_range<std::uint32_t>(index), std::equal_to<>{}, true);
         VERIFY(index, std::less<>{}, 1U << 31);
     }
 
     [[nodiscard]] constexpr bool operator==(const Variable& variable) const = default;
+
+    [[nodiscard]] constexpr auto print() const {
+        return std::format("x_{}", index);
+    }
 };
 static_assert(sizeof(Variable) == sizeof(std::uint32_t));
 static_assert(std::is_trivially_copyable_v<Variable>);
@@ -30,6 +41,13 @@ template <>
 struct std::hash<Variable> {
     constexpr std::size_t operator()(const auto v) const noexcept {
         return std::hash<std::uint32_t>{}(v.index);
+    }
+};
+
+template <>
+struct std::formatter<Variable> : std::formatter<std::string> {
+    auto format(const auto& variable, auto& ctx) const {
+        return std::formatter<std::string>::format(variable.print(), ctx);
     }
 };
 
@@ -83,26 +101,22 @@ struct Literal {
         return (positive() && value == Value::TRUE) || (!positive() && value == Value::FALSE);
     }
 
-    [[nodiscard]] constexpr std::string print() const {
+    [[nodiscard]] constexpr auto print() const {
         std::string sign;
         if (!positive()) {
             sign.append("¬");
         }
 
-        return std::format("{}x_{}", sign, variable().index);
+        return std::format("{}x_{}", sign, variable());
     }
 
-    [[nodiscard]] constexpr std::string print_dimacs() const {
+    [[nodiscard]] constexpr auto print_dimacs() const {
         std::string sign;
         if (!positive()) {
             sign.append("-");
         }
 
         return std::format("{}{}", sign, variable().index);
-    }
-
-    [[nodiscard]] constexpr std::string print_variable() const {
-        return std::format("x_{}", variable().index);
     }
 };
 static_assert(sizeof(Literal) == sizeof(std::uint32_t));
@@ -112,6 +126,13 @@ template <>
 struct std::hash<Literal> {
     constexpr std::size_t operator()(const auto l) const noexcept {
         return std::hash<std::uint32_t>{}(l.literal);
+    }
+};
+
+template <>
+struct std::formatter<Literal> : std::formatter<std::string> {
+    auto format(const auto& clause, auto& ctx) const {
+        return std::formatter<std::string>::format(clause.print(), ctx);
     }
 };
 

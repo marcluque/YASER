@@ -16,14 +16,15 @@ namespace impl {
 
 bool bcp(Formula& formula) {
     while (!formula.unit_clauses().empty()) {
-        if (formula.conflicting_clause().has_value()) {
+        if (formula.conflicting_clause()) {
             return false;
         }
 
         const auto [clause_index, literal] = formula.unit_clauses().back();
         formula.unit_clauses().pop_back();
+        const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
 
-        VERIFY(formula.literal_ranges()[clause_index.index].clause(formula.literals()).literals[0], std::equal_to{}, literal);
+        VERIFY(clause.literals[0], std::equal_to{}, literal);
 
         formula.unit_clause_map()[clause_index.index] = false;
 
@@ -34,11 +35,7 @@ bool bcp(Formula& formula) {
             continue;
         }
 
-        DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}",
-            clause_index,
-            formula.literal_range(clause_index.index).clause(formula.literals()),
-            literal.print(),
-            formula.decision_level());
+        DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}", clause_index, clause, literal, formula.decision_level());
 
         formula.assignment_map()[literal.index()] = literal.value();
         formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
@@ -62,7 +59,7 @@ bool decide(Formula& formula) {
     formula.decision_level() += 1;
     formula.number_of_decisions() += 1;
 
-    Variable variable = INVALID_VARIABLE;
+    auto variable = INVALID_VARIABLE;
     while (!formula.next_variable().empty()) {
         variable = formula.next_variable().removeMax().variable;
         if (formula.assignment_map()[variable.index] == Value::UNASSIGNED) {
@@ -73,7 +70,7 @@ bool decide(Formula& formula) {
 
     const auto literal = Literal{variable, formula.polarity()[variable.index]};;
 
-    DEBUG_LOG("Deciding {} @ DL {}", literal.print(), formula.decision_level());
+    DEBUG_LOG("Deciding {} @ DL {}", literal, formula.decision_level());
 
     formula.assignment_map()[literal.index()] = literal.value();
     formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
@@ -88,13 +85,12 @@ bool decide(Formula& formula) {
 void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
     DEBUG_LOG("Backtracking to level {}", backtrack_level);
 
-    while (!formula.assignment_trail().empty()
-           && formula.assignment_trail().back().decision_level > backtrack_level) {
+    while (!formula.assignment_trail().empty() && formula.assignment_trail().back().decision_level > backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
-        if (assignment.antecedent.has_value()) {
-            VERIFY(formula.locked_clause_map()[assignment.antecedent.value().index], std::greater{}, 0);
-            formula.locked_clause_map()[assignment.antecedent.value().index] -= 1;
+        if (assignment.antecedent) {
+            VERIFY(formula.locked_clause_map()[assignment.antecedent->index], std::greater{}, 0);
+            formula.locked_clause_map()[assignment.antecedent->index] -= 1;
         }
         formula.polarity()[assignment.variable.index] = formula.assignment_map()[assignment.variable.index] == Value::FALSE;
         formula.assignment_map()[assignment.variable.index] = Value::UNASSIGNED;
@@ -119,7 +115,7 @@ bool run(Formula& formula) {
 
     while (true) {
         (void) impl::bcp(formula);
-        if (formula.conflicting_clause().has_value()) {
+        if (formula.conflicting_clause()) {
             formula.number_of_conflicts() += 1;
 
             // We have found a conflict, we can erase the currently stored unit clauses

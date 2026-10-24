@@ -119,7 +119,7 @@ TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0) {
     // Note that we do not check which clause is conflicting since that is implementation defined,
     // i.e., the order of the unit clause processing is important.
     // We use a stack, instead of a queue, for instance.
-    EXPECT_TRUE(f.conflicting_clause().has_value());
+    EXPECT_TRUE(f.conflicting_clause());
 }
 
 TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0_2) {
@@ -131,7 +131,7 @@ TEST(DpllTest, BCPLeadsToConflictAtDecisionLevel0_2) {
     // Note that we do not check which clause is conflicting since that is implementation defined,
     // i.e., the order of the unit clause processing is important.
     // We use a stack, instead of a queue, for instance.
-    EXPECT_TRUE(f.conflicting_clause().has_value());
+    EXPECT_TRUE(f.conflicting_clause());
 }
 
 class PigeonholeTestSuite : public testing::TestWithParam<int> {};
