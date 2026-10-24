@@ -23,9 +23,9 @@ bool bcp(Formula& formula) {
         const auto [clause_index, literal] = formula.unit_clauses().back();
         formula.unit_clauses().pop_back();
 
-        VERIFY(formula.literal_ranges()[clause_index].clause(formula.literals())[0], std::equal_to{}, literal);
+        VERIFY(formula.literal_ranges()[clause_index.index].clause(formula.literals()).literals[0], std::equal_to{}, literal);
 
-        formula.unit_clause_map()[clause_index] = false;
+        formula.unit_clause_map()[clause_index.index] = false;
 
         formula.number_of_propagations() += 1;
 
@@ -36,7 +36,7 @@ bool bcp(Formula& formula) {
 
         DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}",
             clause_index,
-            clause::print_clause(formula.literal_range(clause_index).clause(formula.literals())),
+            formula.literal_range(clause_index.index).clause(formula.literals()),
             literal.print(),
             formula.decision_level());
 
@@ -45,7 +45,7 @@ bool bcp(Formula& formula) {
         formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal.variable(),
                                                 formula.assignment_map()[literal.index()]);
         formula.variable_decision_level()[literal.index()] = formula.decision_level();
-        formula.locked_clause_map()[clause_index] += 1;
+        formula.locked_clause_map()[clause_index.index] += 1;
 
         WatchedLiterals::update(formula, ~literal);
     }
@@ -93,8 +93,8 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
         if (assignment.antecedent.has_value()) {
-            VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater{}, 0);
-            formula.locked_clause_map()[assignment.antecedent.value()] -= 1;
+            VERIFY(formula.locked_clause_map()[assignment.antecedent.value().index], std::greater{}, 0);
+            formula.locked_clause_map()[assignment.antecedent.value().index] -= 1;
         }
         formula.polarity()[assignment.variable.index] = formula.assignment_map()[assignment.variable.index] == Value::FALSE;
         formula.assignment_map()[assignment.variable.index] = Value::UNASSIGNED;

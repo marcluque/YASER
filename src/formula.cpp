@@ -36,7 +36,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
         f.m_clause_activity.rend(),
         [&](const auto& pair) {
             const ClauseIndex clause_index = pair.second;
-            return clause_index >= f.m_number_of_input_clauses && f.m_locked_clause_map[clause_index] == 0;
+            return clause_index >= ClauseIndex{f.m_number_of_input_clauses} && f.m_locked_clause_map[clause_index.index] == 0;
         }
     );
 
@@ -99,7 +99,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
         DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_literal_ranges.size(), m_learned_clause_limit);
         if (const auto least_active_clause_index = impl::delete_clause(*this);
             least_active_clause_index.has_value()) {
-            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value(), clause::print_clause(m_literal_ranges[least_active_clause_index.value()].clause(m_literals)));
+            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value().index, m_literal_ranges[least_active_clause_index.value().index].clause(m_literals));
         }
     }
 
@@ -110,7 +110,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
 
     m_literal_ranges.emplace_back(literal_range);
 
-    auto clause_index = m_literal_ranges.size() - 1;
+    auto clause_index = ClauseIndex{m_literal_ranges.size() - 1};
 
     // We know clauses learnt after conflicts will be unit after backtracking by definition
     // Hence, we can simply add them already
@@ -131,7 +131,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
 
     VERIFY(m_unit_clause_map.size(), std::equal_to{}, m_literal_ranges.size());
     VERIFY(m_clause_priority.size(), std::equal_to{}, m_literal_ranges.size());
-    DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index, clause::print_clause(literal_range.clause(m_literals)), m_decision_level);
+    DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index.index, literal_range.clause(m_literals), m_decision_level);
 }
 
 bool Formula::is_assignment_trail_valid() {

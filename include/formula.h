@@ -74,7 +74,7 @@ struct LiteralRange {
     }
 
     [[nodiscard]] Clause clause(const LiteralsContainer& literals) const {
-        return std::span{literals.data() + start, literals.data() + end};
+        return {std::span{literals.data() + start, literals.data() + end}};
     }
 };
 
@@ -128,7 +128,7 @@ struct Assignment {
     explicit operator std::string() const {
         return std::format("x_{}={}@{} (antecedent=c_{})", variable.index,
                            std::to_underlying(value), decision_level,
-                           antecedent.has_value() ? std::to_string(antecedent.value()) : "");
+                           antecedent.has_value() ? std::to_string(antecedent.value().index) : "");
     }
 
     [[nodiscard]] Literal literal() const {
@@ -209,7 +209,7 @@ class Formula {
         std::string s;
         for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
-            for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause) {
+            for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause.literals) {
                 s.append(std::format("{} ∨ ", literal.print()));
             }
             s.resize(s.length() - 5);
@@ -261,11 +261,11 @@ class Formula {
         return m_variable_decision_level;
     }
 
-    [[nodiscard]] int& clause_priority(ClauseIndex clause_index) {
+    [[nodiscard]] int& clause_priority(const ClauseIndex clause_index) {
 #ifdef YASER_DEBUG
-        return m_clause_priority.at(clause_index); // Allow range checks
+        return m_clause_priority.at(clause_index.index); // Allow range checks
 #else
-        return m_clause_priority[clause_index];
+        return m_clause_priority[clause_index.index];
 #endif
     }
 

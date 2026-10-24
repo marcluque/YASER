@@ -72,7 +72,7 @@ bool watched_clauses_contains_duplicates(Formula& formula) {
         std::ranges::sort(sorted_clauses);
 
         if (auto it = std::ranges::adjacent_find(sorted_clauses); it != sorted_clauses.end()) {
-            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", *it, literal.print());
+            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", it->index, literal.print());
             return true;
         }
     }
@@ -113,11 +113,11 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 
         // Collect unit clauses
         if (formula.literal_range(current_clause_index).size() == 1) {
-            formula.unit_clauses().emplace_back(current_clause_index, formula.literal_range(current_clause_index).clause(formula.literals()).front());
+            formula.unit_clauses().emplace_back(current_clause_index, formula.literal_range(current_clause_index).clause(formula.literals()).literals.front());
             formula.unit_clause_map()[current_clause_index] = true;
-            WatchedLiterals::add_clause_to_watch(formula, current_clause_index, true);
+            WatchedLiterals::add_clause_to_watch(formula, ClauseIndex{current_clause_index}, true);
         } else {
-            WatchedLiterals::add_clause_to_watch(formula, current_clause_index, false);
+            WatchedLiterals::add_clause_to_watch(formula, ClauseIndex{current_clause_index}, false);
         }
     }
 

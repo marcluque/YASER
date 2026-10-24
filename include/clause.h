@@ -5,37 +5,75 @@
 
 #include "literal.h"
 
-using Clause                  = std::span<const Literal>;
-using ClauseIndex             = std::size_t;
+struct Clause {
+    std::span<const Literal> literals{};
 
-constexpr std::size_t INVALID_CLAUSE = std::numeric_limits<ClauseIndex>::max();
-
-namespace clause {
-
-/**
- * \brief
- * \param clause
- * \return
- */
-inline std::string print_clause(const Clause clause) {
-    std::string s;
-    for (const auto& literal : clause) {
-        s.append(std::format("{} ∨ ", literal.print()));
+    [[nodiscard]] constexpr auto begin() const {
+        return literals.begin();
     }
 
-    s.resize(s.length() - 5);
-
-    return s;
-}
-
-inline std::string print_clause_dimacs(const Clause clause) {
-    std::string s;
-    for (const auto& literal : clause) {
-        s.append(std::format("{} ", literal.print_dimacs()));
+    [[nodiscard]] constexpr auto end() const {
+        return literals.end();
     }
 
-    s.append("0");
+    [[nodiscard]] constexpr auto size() const {
+        return literals.size();
+    }
 
-    return s;
-}
-} // namespace clause
+    [[nodiscard]] constexpr auto print() const {
+        std::string s;
+        for (const auto& literal : literals) {
+            s.append(std::format("{} ∨ ", literal.print()));
+        }
+
+        s.resize(s.length() - 5);
+
+        return s;
+    }
+
+    [[nodiscard]] constexpr auto print_dimacs() const {
+        std::string s;
+        for (const auto& literal : literals) {
+            s.append(std::format("{} ", literal.print_dimacs()));
+        }
+
+        s.append("0");
+
+        return s;
+    }
+};
+static_assert(sizeof(Clause) == sizeof(std::span<Literal>));
+static_assert(std::is_trivially_copyable_v<Clause>);
+
+template <>
+struct std::formatter<Clause> : std::formatter<std::string> {
+    auto format(const auto& clause, auto& ctx) const {
+        return std::formatter<std::string>::format(clause.print(), ctx);
+    }
+};
+
+struct ClauseIndex {
+    std::size_t index;
+
+    [[nodiscard]] constexpr bool operator==(const ClauseIndex&) const = default;
+
+    [[nodiscard]] constexpr auto operator<=>(const ClauseIndex&) const = default;
+};
+static_assert(sizeof(ClauseIndex) == sizeof(std::size_t));
+static_assert(std::is_trivially_copyable_v<ClauseIndex>);
+
+template <>
+struct std::hash<ClauseIndex> {
+    constexpr std::size_t operator()(const auto c) const noexcept {
+        return std::hash<std::size_t>{}(c.index);
+    }
+};
+
+template <>
+struct std::formatter<ClauseIndex> : std::formatter<std::size_t> {
+    auto format(const auto& c, auto& ctx) const {
+        return std::formatter<std::size_t>::format(c.index, ctx);
+    }
+};
+
+constexpr auto INVALID_CLAUSE = ClauseIndex{std::numeric_limits<ClauseIndex>::max()};

@@ -19,8 +19,8 @@ namespace impl {
 std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIndex clause_index,
                                                 const Literal old_partner_literal,
                                                 const Literal current_partner_literal) {
-    for (const auto clauses = formula.literal_range(clause_index).clause(formula.literals());
-         const auto& literal : clauses) {
+    for (const auto clauses = formula.literal_range(clause_index.index).clause(formula.literals());
+         const auto& literal : clauses.literals) {
         const auto value = formula.assignment_map()[literal.index()];
         if (literal != old_partner_literal && literal != current_partner_literal && value == Value::UNASSIGNED) {
             return literal;
@@ -38,30 +38,30 @@ std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIn
 } // namespace impl
 
 void add_clause_to_watch(Formula& formula, const ClauseIndex clause_index, const bool is_unit_clause) {
-    const auto clause = formula.literal_range(clause_index).clause(formula.literals());
+    const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
 
     if (is_unit_clause) {
         // We set the second literal in the literal pair to an invalid one since we have a unit clause with only
         // one literal. This will be checked for in the watched literals update function, so we do not use the
         // invalid literal
         formula.clause_watched_literals_map().emplace(clause_index,
-                                                      std::make_pair(clause[0], INVALID_LITERAL));
-        formula.watched_literal_clause_map()[clause[0]].push_back(clause_index);
+                                                      std::make_pair(clause.literals[0], INVALID_LITERAL));
+        formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
     } else {
         VERIFY(clause.size(), std::greater_equal{}, static_cast<std::size_t>(2));
-        formula.clause_watched_literals_map().emplace(clause_index, std::make_pair(clause[0], clause[1]));
-        formula.watched_literal_clause_map()[clause[0]].push_back(clause_index);
-        formula.watched_literal_clause_map()[clause[1]].push_back(clause_index);
+        formula.clause_watched_literals_map().emplace(clause_index, std::make_pair(clause.literals[0], clause.literals[1]));
+        formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
+        formula.watched_literal_clause_map()[clause.literals[1]].push_back(clause_index);
     }
 }
 
 void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex clause_index, Literal literal_to_imply) {
-    if (const auto& clause = formula.literal_range(clause_index).clause(formula.literals()); clause.size() == 1) {
+    if (const auto& clause = formula.literal_range(clause_index.index).clause(formula.literals()); clause.size() == 1) {
         // We set the second literal in the literal pair to an invalid one since we have a unit clause with only
         // one literal. This will be checked for in the watched literals update function, so we do not use the
         // invalid literal
-        formula.clause_watched_literals_map().emplace(clause_index, std::pair{clause[0], INVALID_LITERAL});
-        formula.watched_literal_clause_map()[clause[0]].push_back(clause_index);
+        formula.clause_watched_literals_map().emplace(clause_index, std::pair{clause.literals[0], INVALID_LITERAL});
+        formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
     } else {
         VERIFY(clause.size(), std::greater_equal{}, static_cast<std::size_t>(2));
 
@@ -97,7 +97,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         VERIFY(watched_literals_it, std::not_equal_to{}, formula.clause_watched_literals_map().end());
 
         Literal partner_literal{INVALID_LITERAL};
-        if (formula.unit_clause_map()[affected_clause_index]) {
+        if (formula.unit_clause_map()[affected_clause_index.index]) {
             partner_literal = watched_literals_it->second.first;
         } else {
             partner_literal = watched_literals_it->second.first == negated_watched_literal
@@ -133,10 +133,10 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             VERIFY(DimacsParser::impl::watched_clauses_contains_duplicates(formula), std::equal_to{}, false);
         } else if (formula.assignment_map()[partner_literal.index()] == Value::UNASSIGNED) {
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
-            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index].start;
+            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index.index].start;
                 formula.literals()[clause_start_index] != partner_literal) {
                 // TODO: fix this
-                auto clause = formula.literal_range(affected_clause_index).clause(formula.literals());
+                auto clause = formula.literal_range(affected_clause_index.index).clause(formula.literals());
                 if (auto it = std::ranges::find(clause, partner_literal); it != clause.end()) {
                     const auto partner_index = clause_start_index + std::distance(clause.begin(), it);
                     std::swap(formula.literals()[clause_start_index], formula.literals()[partner_index]);
@@ -145,13 +145,13 @@ void update(Formula& formula, const Literal negated_watched_literal) {
 
             // Clause is unit, partner_literal is unassigned
             formula.unit_clauses().emplace_back(affected_clause_index, partner_literal);
-            formula.unit_clause_map()[affected_clause_index] = true;
+            formula.unit_clause_map()[affected_clause_index.index] = true;
         } else if (!partner_literal.satisfied_by(formula.assignment_map()[partner_literal.index()])) {
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
-            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index].start;
+            if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index.index].start;
                 formula.literals()[clause_start_index] != negated_watched_literal) {
                 // TODO: fix this
-                auto clause = formula.literal_range(affected_clause_index).clause(formula.literals());
+                auto clause = formula.literal_range(affected_clause_index.index).clause(formula.literals());
                 if (auto it = std::ranges::find(clause, negated_watched_literal); it != clause.end()) {
                     const auto negated_watched_literal_index = clause_start_index + std::distance(clause.begin(), it);
                     std::swap(formula.literals()[clause_start_index], formula.literals()[negated_watched_literal_index]);
@@ -159,8 +159,8 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             }
 
             // Clause is conflicting -> resolve
-            DEBUG_LOG("Clause {} ({}) is conflicting @ DL {} (conflict #{})", affected_clause_index,
-                      clause::print_clause(formula.literal_range(affected_clause_index).clause(formula.literals())), formula.decision_level(), formula.number_of_conflicts() + 1);
+            DEBUG_LOG("Clause {} ({}) is conflicting @ DL {} (conflict #{})", affected_clause_index.index,
+                      formula.literal_range(affected_clause_index.index).clause(formula.literals()).print(), formula.decision_level(), formula.number_of_conflicts() + 1);
             formula.conflicting_clause() = affected_clause_index;
 
             // We can stop here, even if the literal appears in other clauses since the conflict resolution will

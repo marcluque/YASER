@@ -28,23 +28,23 @@ DecisionLevel analyze_conflict(Formula& formula) {
     auto current_clause_index = formula.conflicting_clause().value();
     auto assignment_trail_index = formula.assignment_trail().size() - 1;
     auto remaining_variables_on_decision_level = 1;
-    auto current_clause = formula.literal_range(current_clause_index).clause(formula.literals());
+    auto current_clause = formula.literal_range(current_clause_index.index).clause(formula.literals());
 
-    auto last_implied_literal = current_clause[0];
+    auto last_implied_literal = current_clause.literals[0];
     formula.variable_seen_in_conflict_analysis()[last_implied_literal.index()] = true;
     VSIDS::update_variable_priority(formula, last_implied_literal.variable());
 
     do {
         VERIFY(current_clause_index, std::not_equal_to{}, INVALID_CLAUSE);
-        // Every clause has the last assigned literal at the 0th position
-        current_clause = formula.literal_range(current_clause_index).clause(formula.literals()) | std::views::drop(1);
+        current_clause = formula.literal_range(current_clause_index.index).clause(formula.literals());
 
         // Reward learned clauses involved in conflict resolution
-        if (current_clause_index >= formula.number_of_input_clauses()) {
+        if (current_clause_index >= ClauseIndex{formula.number_of_input_clauses()}) {
             VSIDS::update_clause_priority(formula, current_clause_index);
         }
 
-        for (const auto& literal : current_clause) {
+        // Every clause has the last assigned literal at the 0th position
+        for (const auto& literal : current_clause.literals | std::views::drop(1)) {
             if (const auto index = literal.index();
                 !formula.variable_seen_in_conflict_analysis()[index] && formula.variable_decision_level()[index] > 0) {
                 // TODO: Make the priority update lazy (update all, then heapify)

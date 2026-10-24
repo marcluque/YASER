@@ -21,9 +21,7 @@ struct Variable {
         VERIFY(index, std::less<>{}, 1U << 31);
     }
 
-    constexpr bool operator==(const Variable variable) const {
-        return variable.index == index;
-    };
+    [[nodiscard]] constexpr bool operator==(const Variable& variable) const = default;
 };
 static_assert(sizeof(Variable) == sizeof(std::uint32_t));
 static_assert(std::is_trivially_copyable_v<Variable>);
@@ -63,7 +61,7 @@ struct Literal {
 
     constexpr bool operator==(const Literal other) const {
         return other.literal == literal;
-    };
+    }
 
     [[nodiscard]] constexpr Variable variable() const {
         return Variable{literal >> 1U};

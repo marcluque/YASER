@@ -7,7 +7,7 @@
 namespace VSIDS {
 
 void update_variable_priorities(Formula& formula, const Clause literals_to_update) {
-    for (const auto& literal : literals_to_update) {
+    for (const auto& literal : literals_to_update.literals) {
         update_variable_priority(formula, literal.variable());
     }
 }
