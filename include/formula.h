@@ -136,7 +136,7 @@ class Formula {
      * @param i
      * @return
      */
-    [[nodiscard]] Literal& literal(std::size_t i) {
+    [[nodiscard]] Literal& literal(const std::size_t i) {
 #ifdef YASER_DEBUG
         return m_literals.at(i); // Allow range checks
 #else
@@ -150,7 +150,7 @@ class Formula {
      * @param i
      * @return
      */
-    [[nodiscard]] LiteralRange& literal_range(std::size_t i) {
+    [[nodiscard]] LiteralRange& literal_range(const std::size_t i) {
 #ifdef YASER_DEBUG
         return m_literal_ranges.at(i); // Allow range checks
 #else
@@ -161,27 +161,6 @@ class Formula {
     void learn_clause(LiteralRange literal_range);
 
     bool is_assignment_trail_valid();
-
-    /**
-     * No need to be efficient here, this should only be used for debugging and test purposes.
-     *
-     * @return
-     */
-    explicit operator std::string() const {
-        std::string s{};
-        for (const auto& literal_range : m_literal_ranges) {
-            s.append("(");
-            for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause.literals) {
-                s.append(std::format("{} ∨ ", literal));
-            }
-            s.resize(s.length() - 5);
-            s.append(") ∧ ");
-        }
-
-        s.resize(s.length() - 5);
-
-        return s;
-    }
 
     [[nodiscard]] std::size_t number_of_variables() const {
         return m_number_of_variables;
@@ -450,4 +429,40 @@ class Formula {
      * true <=> variable has appeared during an instance of a conflict analysis
      */
     std::vector<bool> m_variable_seen_in_conflict_analysis;
+};
+
+template <>
+struct std::formatter<Formula> {
+    static constexpr auto parse(const std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    static auto format(Formula& formula, std::format_context& ctx) {
+        auto out = ctx.out();
+        bool first_clause = true;
+
+        for (const auto& literal_range : formula.literal_ranges()) {
+            if (!first_clause) {
+                out = std::format_to(out, " ∧ ");
+            }
+
+            out = std::format_to(out, "(");
+            const auto clause = literal_range.clause(formula.literals());
+            bool first_literal = true;
+
+            for (const auto& literal : clause) {
+                if (!first_literal) {
+                    out = std::format_to(out, " ∨ ");
+                }
+
+                out = std::format_to(out, "{}", literal);
+                first_literal = false;
+            }
+
+            out = std::format_to(out, ")");
+            first_clause = false;
+        }
+
+        return out;
+    }
 };

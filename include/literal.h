@@ -19,6 +19,7 @@ struct std::formatter<Value> {
         return std::format_to(ctx.out(), "{}", std::to_underlying(value));
     }
 };
+
 /**
  * \brief Same as Literal but only has 31 bit (since bit 32 is not used).
  */

@@ -22,8 +22,8 @@ bool bcp(Formula& formula) {
 
         const auto [clause_index, literal] = formula.unit_clauses().back();
         formula.unit_clauses().pop_back();
-        const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
 
+        [[maybe_unused]] const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
         VERIFY_EQ(clause.literals[0], literal);
 
         formula.unit_clause_map()[clause_index.index] = false;
