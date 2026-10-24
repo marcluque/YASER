@@ -70,8 +70,22 @@ constexpr void verify_compare(const char* file, int line, const char* lhs_string
             std::abort();                                                 \
         }                                                                 \
     } while (false)
-#else
-    #define VERIFY(lhs_, comparator_, rhs_) std::ignore = 0;
-#endif
 
-#define VERIFY_NOT_REACHED() VERIFY(false, std::equals_to<>{}, true)
+#define VERIFY_NOT_REACHED()                            \
+    do {                                                \
+        log("DEBUG", __FILE__, __LINE__,                \
+            "ASSERT FAILED: reached unreachable code"); \
+        std::fflush(stdout);                            \
+        std::fflush(stderr);                            \
+        std::abort();                                   \
+    } while (false)
+#else
+#define VERIFY(condition_)
+#define VERIFY_EQ(lhs_, rhs_)
+#define VERIFY_NE(lhs_, rhs_)
+#define VERIFY_LT(lhs_, rhs_)
+#define VERIFY_LE(lhs_, rhs_)
+#define VERIFY_GT(lhs_, rhs_)
+#define VERIFY_GE(lhs_, rhs_)
+#define VERIFY_NOT_REACHED()
+#endif
