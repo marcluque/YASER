@@ -10,12 +10,15 @@ enum class Value : std::uint8_t {
 };
 
 template <>
-struct std::formatter<Value> : std::formatter<std::string> {
-    auto format(const auto& value, auto& ctx) const {
-        return std::formatter<std::string>::format(std::to_string(std::to_underlying(value)), ctx);
+struct std::formatter<Value> {
+    static constexpr auto parse(const std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    static auto format(const Value value, std::format_context& ctx) {
+        return std::format_to(ctx.out(), "{}", std::to_underlying(value));
     }
 };
-
 /**
  * \brief Same as Literal but only has 31 bit (since bit 32 is not used).
  */
