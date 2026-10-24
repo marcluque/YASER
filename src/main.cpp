@@ -40,8 +40,7 @@ void print_assignment_trail(Formula& formula) {
     // Format the assignment trail for printing (remove trailing ", ")
     std::string assignment_trail;
     for (const auto& assignment : formula.assignment_trail()) {
-        auto value = static_cast<int>(literal::is_positive(assignment.variable));
-        assignment_trail += std::format("x_{}={}@{}, ", assignment.variable, value, assignment.decision_level);
+        assignment_trail += std::format("x_{}={}@{}, ", assignment.variable.index, std::to_underlying(assignment.value), assignment.decision_level);
     }
     assignment_trail.pop_back();
     assignment_trail.pop_back();

@@ -135,12 +135,12 @@ void Formula::learn_clause(LiteralRange literal_range) {
 }
 
 bool Formula::is_assignment_trail_valid() {
-    std::unordered_set<Variable> variables;
+    std::unordered_set<Variable> variables{};
 
     // Check if any variable appears more than once in the assignment trail
-    const auto duplicate_exists = std::ranges::any_of(m_assignment_trail, [&](const Assignment& assignment) {
+    const auto duplicate_exists = std::ranges::any_of(m_assignment_trail, [&](const auto& assignment) {
         if (variables.contains(assignment.variable)) {
-            DEBUG_LOG("Duplicate variable in assignment trail: {}", assignment.variable);
+            DEBUG_LOG("Duplicate variable in assignment trail: {}", assignment.variable.index);
             return true;
         }
         variables.insert(assignment.variable);
@@ -158,15 +158,14 @@ bool Formula::is_assignment_trail_valid() {
     }
 
     auto anyVariableInClauseSatisfied = [&](const Clause& clause) {
-        return std::ranges::any_of(clause, [&](const Literal lit) {
-            const Variable var = literal::variable(lit);
-            const Value val    = m_assignment_map[var];
-            const bool is_positive = literal::is_positive(lit);
-            return (val == Value::TRUE && is_positive) || (val == Value::FALSE && !is_positive);
+        return std::ranges::any_of(clause, [&](const auto l) {
+            const auto value = m_assignment_map[l.index()];
+            const auto positive = l.positive();
+            return (value == Value::TRUE && positive) || (value == Value::FALSE && !positive);
         });
     };
 
-    auto clauses = m_literal_ranges | std::ranges::views::transform([&](const LiteralRange& r) {
+    auto clauses = m_literal_ranges | std::ranges::views::transform([&](const auto& r) {
         return r.clause(m_literals);
     });
 

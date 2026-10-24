@@ -37,11 +37,11 @@ void log_assert_failed(const char* file, const int line, const char* _lhs_string
                 log_assert_failed(__FILE__, __LINE__, #lhs_, lhs_, #comparator_, #rhs_, rhs_);                    \
                 fflush(stdout);                                                                                   \
                 fflush(stderr);                                                                                   \
-                __builtin_trap();                                                                                 \
+                std::abort();                                                                                     \
             }                                                                                                     \
         } while (0)
 #else
-    #define VERIFY(lhs_, comparator_, rhs_) (void) 0;
+    #define VERIFY(lhs_, comparator_, rhs_) std::ignore = 0;
 #endif
 
 #define VERIFY_NOT_REACHED() VERIFY(false, std::equals_to<>{}, true)

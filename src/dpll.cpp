@@ -29,7 +29,7 @@ bool bcp(Formula& formula) {
 
         formula.number_of_propagations() += 1;
 
-        if (formula.assignment_map()[literal::variable(literal)] != Value::UNASSIGNED) {
+        if (formula.assignment_map()[literal.index()] != Value::UNASSIGNED) {
             // TODO: Investigate why this is happening
             continue;
         }
@@ -37,18 +37,17 @@ bool bcp(Formula& formula) {
         DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}",
             clause_index,
             clause::print_clause(formula.literal_range(clause_index).clause(formula.literals())),
-            literal::print_literal(literal),
+            literal.print(),
             formula.decision_level());
 
-        formula.assignment_map()[literal::variable(literal)] = literal::is_positive(literal) ? Value::TRUE
-                                                                                             : Value::FALSE;
-        formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
-        formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal::variable(literal),
-                                                formula.assignment_map()[literal::variable(literal)]);
-        formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
+        formula.assignment_map()[literal.index()] = literal.value();
+        formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
+        formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal.variable(),
+                                                formula.assignment_map()[literal.index()]);
+        formula.variable_decision_level()[literal.index()] = formula.decision_level();
         formula.locked_clause_map()[clause_index] += 1;
 
-        WatchedLiterals::update(formula, literal::negate(literal));
+        WatchedLiterals::update(formula, ~literal);
     }
 
     // All assignments resulting from unit clauses have been propagated without encountering a conflict
@@ -66,23 +65,22 @@ bool decide(Formula& formula) {
     Variable variable = INVALID_VARIABLE;
     while (!formula.next_variable().empty()) {
         variable = formula.next_variable().removeMax().variable;
-        if (formula.assignment_map()[variable] == Value::UNASSIGNED) {
+        if (formula.assignment_map()[variable.index] == Value::UNASSIGNED) {
             break;
         }
     }
     VERIFY(variable, std::not_equal_to{}, INVALID_VARIABLE);
 
-    const auto is_negative = formula.polarity()[variable];
-    const Literal literal = literal::convert(variable, is_negative);
+    const auto literal = Literal{variable, formula.polarity()[variable.index]};;
 
-    DEBUG_LOG("Deciding {} @ DL {}", literal::print_literal(literal), formula.decision_level());
+    DEBUG_LOG("Deciding {} @ DL {}", literal.print(), formula.decision_level());
 
-    formula.assignment_map()[literal::variable(literal)]            = literal::is_positive(literal) ? Value::TRUE : Value::FALSE;
-    formula.assignment_trail_index()[literal::variable(literal)] = formula.assignment_trail().size();
-    formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal::variable(literal),
-                                            formula.assignment_map()[literal::variable(literal)]);
-    formula.variable_decision_level()[literal::variable(literal)] = formula.decision_level();
-    WatchedLiterals::update(formula, literal::negate(literal));
+    formula.assignment_map()[literal.index()] = literal.value();
+    formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
+    formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal.variable(),
+                                            formula.assignment_map()[literal.index()]);
+    formula.variable_decision_level()[literal.index()] = formula.decision_level();
+    WatchedLiterals::update(formula, ~literal);
 
     return true;
 }
@@ -98,12 +96,12 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
             VERIFY(formula.locked_clause_map()[assignment.antecedent.value()], std::greater{}, 0);
             formula.locked_clause_map()[assignment.antecedent.value()] -= 1;
         }
-        formula.polarity()[assignment.variable] = formula.assignment_map()[assignment.variable] == Value::FALSE;
-        formula.assignment_map()[assignment.variable] = Value::UNASSIGNED;
+        formula.polarity()[assignment.variable.index] = formula.assignment_map()[assignment.variable.index] == Value::FALSE;
+        formula.assignment_map()[assignment.variable.index] = Value::UNASSIGNED;
         if (!formula.next_variable().contains(assignment.variable)) {
-            formula.next_variable().push({0, assignment.variable});
+            formula.next_variable().push({.activity = 0, .variable = assignment.variable});
         }
-        formula.variable_decision_level()[assignment.variable] = 0;
+        formula.variable_decision_level()[assignment.variable.index] = 0;
 
         // NOTE: We do not have to adjust the watched literals when backtracking!
 

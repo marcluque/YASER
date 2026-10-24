@@ -19,12 +19,12 @@ class MaxHeap {
         auto parent = PARENT(idx);
         while (idx > 0 && m_max_heap[parent] < node) {
             m_max_heap[idx] = m_max_heap[parent];
-            m_variable_to_index[m_max_heap[idx].variable] = idx;
+            m_variable_to_index[m_max_heap[idx].variable.index] = idx;
             idx = parent;
             parent = PARENT(idx);
         }
         m_max_heap[idx] = node;
-        m_variable_to_index[node.variable] = idx;
+        m_variable_to_index[node.variable.index] = idx;
     }
 
     void sift_down(IndexType idx) {
@@ -41,12 +41,12 @@ class MaxHeap {
             }
 
             m_max_heap[idx] = m_max_heap[child];
-            m_variable_to_index[m_max_heap[idx].variable] = idx;
+            m_variable_to_index[m_max_heap[idx].variable.index] = idx;
             idx = child;
         }
 
         m_max_heap[idx] = node;
-        m_variable_to_index[node.variable] = idx;
+        m_variable_to_index[node.variable.index] = idx;
     }
 
 public:
@@ -64,23 +64,23 @@ public:
 
     VariableActivityPair& get(const Variable variable) {
         VERIFY(contains(variable), std::equal_to{}, true);
-        return m_max_heap[m_variable_to_index[variable]];
+        return m_max_heap[m_variable_to_index[variable.index]];
     }
 
     void push(const VariableActivityPair& e) {
-        VERIFY(m_variable_to_index[e.variable], std::equal_to{}, INDEX_NOT_PRESENT);
+        VERIFY(m_variable_to_index[e.variable.index], std::equal_to{}, INDEX_NOT_PRESENT);
 
         // TODO: use narrow from gsl
-        m_variable_to_index[e.variable] = static_cast<IndexType>(m_max_heap.size());
+        m_variable_to_index[e.variable.index] = static_cast<IndexType>(m_max_heap.size());
         m_max_heap.push_back(e);
-        sift_up(m_variable_to_index[e.variable]);
+        sift_up(m_variable_to_index[e.variable.index]);
     }
 
     VariableActivityPair removeMax() {
         const auto node = m_max_heap[0];
         m_max_heap[0] = m_max_heap.back();
-        m_variable_to_index[m_max_heap[0].variable] = 0;
-        m_variable_to_index[node.variable] = INDEX_NOT_PRESENT;
+        m_variable_to_index[m_max_heap[0].variable.index] = 0;
+        m_variable_to_index[node.variable.index] = INDEX_NOT_PRESENT;
         m_max_heap.pop_back();
 
         if (m_max_heap.size() > 1) {
@@ -91,11 +91,11 @@ public:
     }
 
     [[nodiscard]] bool contains(const Variable variable) const {
-        return m_variable_to_index[variable] != INDEX_NOT_PRESENT;
+        return m_variable_to_index[variable.index] != INDEX_NOT_PRESENT;
     }
 
     void decrease(const Variable variable) {
         VERIFY(contains(variable), std::equal_to{}, true);
-        sift_up(m_variable_to_index[variable]);
+        sift_up(m_variable_to_index[variable.index]);
     }
 };

@@ -52,13 +52,13 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
 std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start) {
     Variable variable = INVALID_VARIABLE;
     bool is_negated = false;
-    while (parse_number(buffer_it, variable, is_negated)) {
-        VERIFY(static_cast<std::size_t>(variable), std::less_equal{}, formula.number_of_variables());
-        VERIFY(variable, std::less_equal{}, 1U << 31);
+    while (parse_number(buffer_it, variable.index, is_negated)) {
+        VERIFY(variable.index, std::less_equal{}, formula.number_of_variables());
+        VERIFY(variable.index, std::less_equal{}, 1U << 31);
 
-        formula.literal(clause_start) = literal::convert(variable, is_negated);
+        formula.literal(clause_start) = Literal{variable, is_negated};
         if (!formula.next_variable().contains(variable)) {
-            formula.next_variable().push({0, variable});
+            formula.next_variable().push({.activity = 0, .variable = variable});
         }
         ++clause_start;
     }
@@ -72,7 +72,7 @@ bool watched_clauses_contains_duplicates(Formula& formula) {
         std::ranges::sort(sorted_clauses);
 
         if (auto it = std::ranges::adjacent_find(sorted_clauses); it != sorted_clauses.end()) {
-            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", *it, literal);
+            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", *it, literal.print());
             return true;
         }
     }
@@ -104,7 +104,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
         const std::size_t clause_start = clause_end;
         clause_end                     = parse_clause(formula, buffer_it, clause_start);
 
-        formula.literal_range(current_clause_index) = LiteralRange{clause_start, clause_end};
+        formula.literal_range(current_clause_index) = {.start = clause_start, .end = clause_end};
         formula.clause_activity().emplace(0, current_clause_index);
 
         VERIFY(formula.literal_range(current_clause_index).size(), std::greater{}, static_cast<size_t>(0));

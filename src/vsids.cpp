@@ -8,7 +8,7 @@ namespace VSIDS {
 
 void update_variable_priorities(Formula& formula, const Clause literals_to_update) {
     for (const auto& literal : literals_to_update) {
-        update_variable_priority(formula, literal::variable(literal));
+        update_variable_priority(formula, literal.variable());
     }
 }
 
@@ -19,9 +19,9 @@ void update_variable_priority(Formula& formula, const Variable variable) {
 
         // Rescale
         if (priority > 1e100) {
-            for (int i = 1; i < formula.number_of_variables(); i++) {
+            for (auto i = 1; i < formula.number_of_variables(); i++) {
                 if (formula.next_variable().contains(variable)) {
-                    formula.next_variable().get(i).activity *= 1e-100;
+                    formula.next_variable().get(Variable{i}).activity *= 1e-100;
                 }
             }
 

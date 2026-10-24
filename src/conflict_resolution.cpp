@@ -31,8 +31,8 @@ DecisionLevel analyze_conflict(Formula& formula) {
     auto current_clause = formula.literal_range(current_clause_index).clause(formula.literals());
 
     auto last_implied_literal = current_clause[0];
-    formula.variable_seen_in_conflict_analysis()[literal::variable(last_implied_literal)] = true;
-    VSIDS::update_variable_priority(formula, literal::variable(last_implied_literal));
+    formula.variable_seen_in_conflict_analysis()[last_implied_literal.index()] = true;
+    VSIDS::update_variable_priority(formula, last_implied_literal.variable());
 
     do {
         VERIFY(current_clause_index, std::not_equal_to{}, INVALID_CLAUSE);
@@ -45,13 +45,13 @@ DecisionLevel analyze_conflict(Formula& formula) {
         }
 
         for (const auto& literal : current_clause) {
-            if (const auto variable = literal::variable(literal);
-                !formula.variable_seen_in_conflict_analysis()[variable] && formula.variable_decision_level()[variable] > 0) {
+            if (const auto index = literal.index();
+                !formula.variable_seen_in_conflict_analysis()[index] && formula.variable_decision_level()[index] > 0) {
                 // TODO: Make the priority update lazy (update all, then heapify)
-                VSIDS::update_variable_priority(formula, variable);
-                formula.variable_seen_in_conflict_analysis()[variable] = true;
+                VSIDS::update_variable_priority(formula, literal.variable());
+                formula.variable_seen_in_conflict_analysis()[index] = true;
                 //VERIFY(formula.variable_decision_level()[variable], std::less_equal{}, formula.decision_level());
-                if (formula.variable_decision_level()[variable] >= formula.decision_level()) {
+                if (formula.variable_decision_level()[index] >= formula.decision_level()) {
                     ++remaining_variables_on_decision_level;
                 } else {
                     // Write to learned clause
@@ -61,7 +61,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
         }
 
         // Find next clause to resolve
-        while (!formula.variable_seen_in_conflict_analysis()[formula.assignment_trail()[assignment_trail_index].variable]) {
+        while (!formula.variable_seen_in_conflict_analysis()[formula.assignment_trail()[assignment_trail_index].variable.index]) {
             --assignment_trail_index;
         }
 
@@ -75,10 +75,10 @@ DecisionLevel analyze_conflict(Formula& formula) {
         --assignment_trail_index;
     } while (remaining_variables_on_decision_level != 0);
 
-    const auto learned_literal_range = LiteralRange{asserting_literal_index, formula.literals().size()};
+    const auto learned_literal_range = LiteralRange{.start = asserting_literal_index, .end   = formula.literals().size()};
     const auto learned_clause = learned_literal_range.clause(formula.literals());
 
-    formula.literals()[asserting_literal_index] = literal::negate(last_implied_literal);
+    formula.literals()[asserting_literal_index] = ~last_implied_literal;
 
     formula.learn_clause(learned_literal_range);
 
@@ -89,9 +89,9 @@ DecisionLevel analyze_conflict(Formula& formula) {
     }
 
     // Find the second-highest decision level (w.r.t. the asserting literal's decision level)
-    const auto second_highest_decision_level = std::ranges::max_element(learned_clause | std::views::drop(1), {}, [&](const auto l) { return formula.variable_decision_level()[literal::variable(l)]; });
+    const auto second_highest_decision_level = std::ranges::max_element(learned_clause | std::views::drop(1), {}, [&](const auto l) { return formula.variable_decision_level()[l.index()]; });
 
-    return formula.variable_decision_level()[literal::variable(*second_highest_decision_level)];
+    return formula.variable_decision_level()[second_highest_decision_level->index()];
 }
 
 } // namespace ConflictResolution

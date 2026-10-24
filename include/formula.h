@@ -126,13 +126,13 @@ struct Assignment {
      * \brief
      */
     explicit operator std::string() const {
-        return std::format("x_{}={}@{} (antecedent=c_{})", variable,
-                           static_cast<int>(literal::is_positive(variable)), decision_level,
+        return std::format("x_{}={}@{} (antecedent=c_{})", variable.index,
+                           std::to_underlying(value), decision_level,
                            antecedent.has_value() ? std::to_string(antecedent.value()) : "");
     }
 
     [[nodiscard]] Literal literal() const {
-        return literal::convert(variable, value == Value::FALSE);
+        return {variable, value};
     }
 };
 
@@ -210,7 +210,7 @@ class Formula {
         for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
             for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause) {
-                s.append(std::format("{} ∨ ", literal::print_literal(literal)));
+                s.append(std::format("{} ∨ ", literal.print()));
             }
             s.resize(s.length() - 5);
             s.append(") ∧ ");

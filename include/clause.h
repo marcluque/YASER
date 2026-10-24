@@ -20,7 +20,7 @@ namespace clause {
 inline std::string print_clause(const Clause clause) {
     std::string s;
     for (const auto& literal : clause) {
-        s.append(std::format("{} ∨ ", literal::print_literal(literal)));
+        s.append(std::format("{} ∨ ", literal.print()));
     }
 
     s.resize(s.length() - 5);
@@ -31,7 +31,7 @@ inline std::string print_clause(const Clause clause) {
 inline std::string print_clause_dimacs(const Clause clause) {
     std::string s;
     for (const auto& literal : clause) {
-        s.append(std::format("{} ", literal::print_literal_dimacs(literal)));
+        s.append(std::format("{} ", literal.print_dimacs()));
     }
 
     s.append("0");
