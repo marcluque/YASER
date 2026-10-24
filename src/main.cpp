@@ -58,7 +58,7 @@ int main([[maybe_unused]] int _argc, char** argv) {
     // TODO: Use narrow from gsl
     formula.parse_time() = static_cast<double>(std::chrono::duration_cast<std::chrono::nanoseconds>(end_parse_time - start_parse_time).count());
 
-    DEBUG_LOG("Parsed formula {}", static_cast<std::string>(formula));
+    DEBUG_LOG("Parsed formula {}", formula);
 
     const auto start_run_time = std::chrono::high_resolution_clock::now();
     const auto result = DPLL::run(formula);

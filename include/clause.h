@@ -19,6 +19,18 @@ struct Clause {
     [[nodiscard]] constexpr auto size() const {
         return literals.size();
     }
+
+    [[nodiscard]] std::string dimacs() const {
+        std::string s{};
+        s.reserve(literals.size() * 12 + 1);
+
+        for (const auto& literal : literals) {
+            std::format_to(std::back_inserter(s), "{} ", literal.dimacs());
+        }
+
+        s.push_back('0');
+        return s;
+    }
 };
 static_assert(sizeof(Clause) == sizeof(std::span<Literal>));
 static_assert(std::is_trivially_copyable_v<Clause>);

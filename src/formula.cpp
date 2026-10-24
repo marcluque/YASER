@@ -48,7 +48,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
     ClauseIndex least_active_clause_index = forward_it->second;
 
 #ifdef YASER_CERTIFICATE
-    const auto clause_dimacs_format = clause::print_clause_dimacs(f.literal_range(least_active_clause_index).clause(f.literals()));
+    const auto clause_dimacs_format = f.literal_range(least_active_clause_index.index).clause(f.literals()).dimacs();
     f.m_certificate_output_stream << "d " << clause_dimacs_format << std::endl;
 #endif
 
@@ -100,7 +100,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
     }
 
 #ifdef YASER_CERTIFICATE
-    const auto clause_dimacs_format = clause::print_clause_dimacs(literal_range.clause(m_literals));
+    const auto clause_dimacs_format = literal_range.clause(m_literals).dimacs();
     m_certificate_output_stream << clause_dimacs_format << std::endl;
 #endif
 

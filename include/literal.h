@@ -66,34 +66,34 @@ constexpr auto INVALID_VARIABLE = Variable{0};
 struct Literal {
     std::uint32_t literal{};
 
-    constexpr Literal() = default;
+    [[nodiscard]] constexpr Literal() = default;
 
-    constexpr explicit Literal(const std::uint32_t literal)
+    [[nodiscard]] constexpr explicit Literal(const std::uint32_t literal)
         : literal(literal) {}
 
-    constexpr Literal(const Variable variable, const bool is_negated)
+    [[nodiscard]] constexpr Literal(const Variable variable, const bool is_negated)
         : literal((variable.index << 1U) | static_cast<std::uint32_t>(!is_negated)) {}
 
-    constexpr Literal(const Variable variable, const Value value)
+    [[nodiscard]] constexpr Literal(const Variable variable, const Value value)
         : literal((variable.index << 1U) | static_cast<std::uint32_t>(value == Value::TRUE)) {}
 
-    [[nodiscard]] constexpr Literal operator~() const {
+    [[nodiscard]] constexpr auto operator~() const {
         return Literal{literal ^ 1U};
     }
 
-    constexpr bool operator==(const Literal other) const {
+    [[nodiscard]] constexpr bool operator==(const Literal other) const {
         return other.literal == literal;
     }
 
-    [[nodiscard]] constexpr Variable variable() const {
+    [[nodiscard]] constexpr auto variable() const {
         return Variable{literal >> 1U};
     }
 
-    [[nodiscard]] constexpr std::uint32_t index() const {
+    [[nodiscard]] constexpr auto index() const {
         return Variable{literal >> 1U}.index;
     }
 
-    [[nodiscard]] constexpr Value value() const {
+    [[nodiscard]] constexpr auto value() const {
         return positive() ? Value::TRUE : Value::FALSE;
     }
 
@@ -101,8 +101,12 @@ struct Literal {
         return literal & 1U;
     }
 
-    [[nodiscard]] constexpr bool satisfied_by(const Value value) const {
+    [[nodiscard]] constexpr auto satisfied_by(const Value value) const {
         return (positive() && value == Value::TRUE) || (!positive() && value == Value::FALSE);
+    }
+
+    [[nodiscard]] constexpr auto dimacs() const {
+        return std::format("{}{}", positive() ? "" : "-", variable());
     }
 };
 static_assert(sizeof(Literal) == sizeof(std::uint32_t));
