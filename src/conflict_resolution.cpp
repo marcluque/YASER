@@ -10,7 +10,7 @@
 namespace ConflictResolution {
 
 DecisionLevel analyze_conflict(Formula& formula) {
-    VERIFY(formula.conflicting_clause().has_value(), std::equal_to{}, true);
+    VERIFY(formula.conflicting_clause());
 
     if (formula.decision_level() == 0) {
         return -1;
@@ -35,7 +35,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
     VSIDS::update_variable_priority(formula, last_implied_literal.variable());
 
     do {
-        VERIFY(current_clause_index, std::not_equal_to{}, INVALID_CLAUSE);
+        VERIFY_NE(current_clause_index, INVALID_CLAUSE);
         current_clause = formula.literal_range(current_clause_index.index).clause(formula.literals());
 
         // Reward learned clauses involved in conflict resolution

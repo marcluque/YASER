@@ -38,11 +38,11 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
     unsigned num_variables = 0;
     bool is_negated = false;
     auto r = parse_number(buffer_it, num_variables, is_negated);
-    VERIFY(r, std::equal_to{}, true);
+    VERIFY(r);
     unsigned num_clauses = 0;
     is_negated = false;
     r = parse_number(buffer_it, num_clauses, is_negated);
-    VERIFY(r, std::equal_to{}, true);
+    VERIFY(r);
 
     DEBUG_LOG("Formula has {} variables and {} clauses", num_variables, num_clauses);
 
@@ -53,8 +53,8 @@ std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_
     Variable variable = INVALID_VARIABLE;
     bool is_negated = false;
     while (parse_number(buffer_it, variable.index, is_negated)) {
-        VERIFY(variable.index, std::less_equal{}, formula.number_of_variables());
-        VERIFY(variable.index, std::less_equal{}, 1U << 31);
+        VERIFY_LE(variable.index, formula.number_of_variables());
+        VERIFY_LE(variable.index, 1U << 31);
 
         formula.literal(clause_start) = Literal{variable, is_negated};
         if (!formula.next_variable().contains(variable)) {
@@ -81,7 +81,7 @@ bool watched_clauses_contains_duplicates(Formula& formula) {
 }
 
 Formula parse_formula(std::istream& input_stream, const std::size_t size) {
-    VERIFY(size, std::less_equal<>{}, static_cast<std::size_t>(std::numeric_limits<std::streamsize>::max()));
+    VERIFY_LE(size, std::numeric_limits<std::streamsize>::max());
     std::vector<char> buffer(size + 1);
     input_stream.read(buffer.data(), static_cast<std::streamsize>(size));
     auto buffer_it = std::span<const char>{buffer.data(), size}.begin();
@@ -104,16 +104,17 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
         const std::size_t clause_start = clause_end;
         clause_end                     = parse_clause(formula, buffer_it, clause_start);
 
-        formula.literal_range(current_clause_index) = {.start = clause_start, .end = clause_end};
+        auto& literal_range = formula.literal_range(current_clause_index);
+        literal_range = {.start = clause_start, .end = clause_end};
         formula.clause_activity().emplace(0, current_clause_index);
 
-        VERIFY(formula.literal_range(current_clause_index).size(), std::greater{}, static_cast<size_t>(0));
+        VERIFY_GT(literal_range.size(), 0);
 
-        num_literals += formula.literal_range(current_clause_index).size();
+        num_literals += literal_range.size();
 
         // Collect unit clauses
-        if (formula.literal_range(current_clause_index).size() == 1) {
-            formula.unit_clauses().emplace_back(current_clause_index, formula.literal_range(current_clause_index).clause(formula.literals()).literals.front());
+        if (literal_range.size() == 1) {
+            formula.unit_clauses().emplace_back(current_clause_index, literal_range.clause(formula.literals()).literals.front());
             formula.unit_clause_map()[current_clause_index] = true;
             WatchedLiterals::add_clause_to_watch(formula, ClauseIndex{current_clause_index}, true);
         } else {
@@ -124,9 +125,9 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     formula.literals().resize(num_literals);
 
     // Sanity checks after parsing
-    VERIFY(formula.clause_watched_literals_map().size(), std::equal_to{}, formula.number_of_input_clauses());
-    VERIFY(watched_clauses_contains_duplicates(formula), std::equal_to{}, false);
-    VERIFY(formula.watched_literal_clause_map().size(), std::less_equal{}, formula.number_of_variables() * 2);
+    VERIFY_EQ(formula.clause_watched_literals_map().size(), formula.number_of_input_clauses());
+    VERIFY_LE(formula.watched_literal_clause_map().size(), formula.number_of_variables() * 2);
+    VERIFY(!watched_clauses_contains_duplicates(formula));
 
     return formula;
 }
@@ -134,20 +135,20 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 
 Formula parse_formula(const char* input_string) {
     std::istringstream input_string_stream{input_string};
-    VERIFY(!input_string_stream, std::equal_to{}, false);
+    VERIFY(input_string_stream);
     return impl::parse_formula(input_string_stream, std::strlen(input_string));
 }
 
 Formula parse_formula(const std::string& input_string) {
     std::istringstream input_string_stream{input_string};
-    VERIFY(!input_string_stream, std::equal_to{}, false);
+    VERIFY(input_string_stream);
     return impl::parse_formula(input_string_stream, input_string.size());
 }
 
 Formula parse_formula(const std::filesystem::path& input_file_path) {
     DEBUG_LOG("Parsing input file from path: {}", input_file_path.string());
     std::ifstream input_file_stream{input_file_path};
-    VERIFY(!input_file_stream, std::equal_to{}, false);
+    VERIFY(input_file_stream);
     const auto file_size = std::filesystem::file_size(input_file_path);
     return impl::parse_formula(input_file_stream, file_size);
 }

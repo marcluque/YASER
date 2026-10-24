@@ -37,7 +37,7 @@ void update_clause_priority(Formula& formula, ClauseIndex clause_index) {
 
     auto priority = formula.clause_priority(clause_index);
     const auto it = formula.clause_activity().find({priority, clause_index});
-    VERIFY(it, std::not_equal_to{}, formula.clause_activity().end());
+    VERIFY_NE(it, formula.clause_activity().end());
 
     formula.clause_activity().erase(it);
 

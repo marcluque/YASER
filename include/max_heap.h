@@ -58,17 +58,17 @@ public:
     [[nodiscard]] std::size_t size() const { return m_max_heap.size(); }
 
     [[nodiscard]] const VariableActivityPair& top() const {
-        VERIFY(m_max_heap.empty(), std::equal_to{}, false);
+        VERIFY(!m_max_heap.empty());
         return m_max_heap.front();
     }
 
     VariableActivityPair& get(const Variable variable) {
-        VERIFY(contains(variable), std::equal_to{}, true);
+        VERIFY(contains(variable));
         return m_max_heap[m_variable_to_index[variable.index]];
     }
 
     void push(const VariableActivityPair& e) {
-        VERIFY(m_variable_to_index[e.variable.index], std::equal_to{}, INDEX_NOT_PRESENT);
+        VERIFY_EQ(m_variable_to_index[e.variable.index], INDEX_NOT_PRESENT);
 
         // TODO: use narrow from gsl
         m_variable_to_index[e.variable.index] = static_cast<IndexType>(m_max_heap.size());
@@ -95,7 +95,7 @@ public:
     }
 
     void decrease(const Variable variable) {
-        VERIFY(contains(variable), std::equal_to{}, true);
+        VERIFY(contains(variable));
         sift_up(m_variable_to_index[variable.index]);
     }
 };

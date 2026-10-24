@@ -24,7 +24,7 @@ bool bcp(Formula& formula) {
         formula.unit_clauses().pop_back();
         const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
 
-        VERIFY(clause.literals[0], std::equal_to{}, literal);
+        VERIFY_EQ(clause.literals[0], literal);
 
         formula.unit_clause_map()[clause_index.index] = false;
 
@@ -66,7 +66,7 @@ bool decide(Formula& formula) {
             break;
         }
     }
-    VERIFY(variable, std::not_equal_to{}, INVALID_VARIABLE);
+    VERIFY_NE(variable, INVALID_VARIABLE);
 
     const auto literal = Literal{variable, formula.polarity()[variable.index]};;
 
@@ -89,7 +89,7 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
         if (assignment.antecedent) {
-            VERIFY(formula.locked_clause_map()[assignment.antecedent->index], std::greater{}, 0);
+            VERIFY_GT(formula.locked_clause_map()[assignment.antecedent->index], 0);
             formula.locked_clause_map()[assignment.antecedent->index] -= 1;
         }
         formula.polarity()[assignment.variable.index] = formula.assignment_map()[assignment.variable.index] == Value::FALSE;

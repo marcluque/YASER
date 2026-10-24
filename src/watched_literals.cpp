@@ -48,7 +48,7 @@ void add_clause_to_watch(Formula& formula, const ClauseIndex clause_index, const
                                                       std::make_pair(clause.literals[0], INVALID_LITERAL));
         formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
     } else {
-        VERIFY(clause.size(), std::greater_equal{}, static_cast<std::size_t>(2));
+        VERIFY_GE(clause.size(), 2);
         formula.clause_watched_literals_map().emplace(clause_index, std::make_pair(clause.literals[0], clause.literals[1]));
         formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
         formula.watched_literal_clause_map()[clause.literals[1]].push_back(clause_index);
@@ -63,7 +63,7 @@ void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex cla
         formula.clause_watched_literals_map().emplace(clause_index, std::pair{clause.literals[0], INVALID_LITERAL});
         formula.watched_literal_clause_map()[clause.literals[0]].push_back(clause_index);
     } else {
-        VERIFY(clause.size(), std::greater_equal{}, static_cast<std::size_t>(2));
+        VERIFY_GE(clause.size(), 2);
 
         // Find first literal that is not literal_to_imply
         auto second_literal_to_watch = INVALID_LITERAL;
@@ -79,7 +79,7 @@ void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex cla
         formula.watched_literal_clause_map()[second_literal_to_watch].push_back(clause_index);
     }
 
-    VERIFY(DimacsParser::impl::watched_clauses_contains_duplicates(formula), std::equal_to{}, false);
+    VERIFY(!DimacsParser::impl::watched_clauses_contains_duplicates(formula));
 }
 
 void update(Formula& formula, const Literal negated_watched_literal) {
@@ -94,7 +94,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
          const auto affected_clause_index : affected_clause_indices) {
         // Find partner literal of `negated_watched_literal`
         const auto watched_literals_it = formula.clause_watched_literals_map().find(affected_clause_index);
-        VERIFY(watched_literals_it, std::not_equal_to{}, formula.clause_watched_literals_map().end());
+        VERIFY_NE(watched_literals_it, formula.clause_watched_literals_map().end());
 
         Literal partner_literal{INVALID_LITERAL};
         if (formula.unit_clause_map()[affected_clause_index.index]) {
@@ -130,7 +130,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
 
             // Update watched_literal_clause_map: We need to make sure that new_literal is mapped to its new clause
             formula.watched_literal_clause_map()[new_partner_literal.value()].push_back(affected_clause_index);
-            VERIFY(DimacsParser::impl::watched_clauses_contains_duplicates(formula), std::equal_to{}, false);
+            VERIFY(!DimacsParser::impl::watched_clauses_contains_duplicates(formula));
         } else if (formula.assignment_map()[partner_literal.index()] == Value::UNASSIGNED) {
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
             if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index.index].start;

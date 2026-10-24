@@ -24,8 +24,8 @@ struct Variable {
 
     template <std::integral T>
     [[nodiscard]] constexpr explicit Variable(T index) : index(static_cast<std::uint32_t>(index)) {
-        VERIFY(std::in_range<std::uint32_t>(index), std::equal_to<>{}, true);
-        VERIFY(index, std::less<>{}, 1U << 31);
+        VERIFY(std::in_range<std::uint32_t>(index));
+        VERIFY_LT(index, 1U << 31);
     }
 
     [[nodiscard]] constexpr bool operator==(const Variable& variable) const = default;

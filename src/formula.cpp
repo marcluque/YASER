@@ -8,10 +8,6 @@
 #include "verify.h"
 #include "watched_literals.h"
 
-#ifdef YASER_DEBUG
-#include "clause.h"
-#endif
-
 Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses)
  : Formula(num_variables, num_clauses, std::filesystem::temp_directory_path() / "yaser.tmp") {
 }
@@ -69,7 +65,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
 
     // 1. Remove mapping of clause -> Pair(WatchedLiteral1, WatchedLiteral2)
     const auto watched_literal_it = f.m_clause_watched_literals_map.find(least_active_clause_index);
-    VERIFY(watched_literal_it, std::not_equal_to{}, f.m_clause_watched_literals_map.end());
+    VERIFY_NE(watched_literal_it, f.m_clause_watched_literals_map.end());
     const auto first_watched_literal = watched_literal_it->second.first;
     const auto second_watched_literal = watched_literal_it->second.second;
     f.m_clause_watched_literals_map.erase(watched_literal_it);
@@ -91,7 +87,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
 }
 
 void Formula::learn_clause(LiteralRange literal_range) {
-    VERIFY(m_unit_clauses.size(), std::equal_to{}, 0);
+    VERIFY_EQ(m_unit_clauses.size(), 0);
 
     // Check if we will be over the limit of allowed learned clauses,
     // if so, we drop the clause with the least activity/priority (that is not locked)
@@ -129,8 +125,8 @@ void Formula::learn_clause(LiteralRange literal_range) {
     // and automatically be locked
     m_locked_clause_map.push_back(false);
 
-    VERIFY(m_unit_clause_map.size(), std::equal_to{}, m_literal_ranges.size());
-    VERIFY(m_clause_priority.size(), std::equal_to{}, m_literal_ranges.size());
+    VERIFY_EQ(m_unit_clause_map.size(), m_literal_ranges.size());
+    VERIFY_EQ(m_clause_priority.size(), m_literal_ranges.size());
     DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index.index, literal_range.clause(m_literals), m_decision_level);
 }
 
