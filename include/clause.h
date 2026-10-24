@@ -19,38 +19,30 @@ struct Clause {
     [[nodiscard]] constexpr auto size() const {
         return literals.size();
     }
-
-    [[nodiscard]] constexpr auto print() const {
-        std::string s{};
-        for (const auto& literal : literals) {
-            s.append(std::format("{} ∨ ", literal));
-        }
-
-        if (s.length() > 5) {
-            s.resize(s.length() - 5);
-        }
-
-        return s;
-    }
-
-    [[nodiscard]] constexpr auto print_dimacs() const {
-        std::string s;
-        for (const auto& literal : literals) {
-            s.append(std::format("{} ", literal.print_dimacs()));
-        }
-
-        s.append("0");
-
-        return s;
-    }
 };
 static_assert(sizeof(Clause) == sizeof(std::span<Literal>));
 static_assert(std::is_trivially_copyable_v<Clause>);
 
 template <>
-struct std::formatter<Clause> : std::formatter<std::string> {
-    auto format(const auto& clause, auto& ctx) const {
-        return std::formatter<std::string>::format(clause.print(), ctx);
+struct std::formatter<Clause> {
+    static constexpr auto parse(const std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    static auto format(const Clause& clause, std::format_context& ctx) {
+        auto out = ctx.out();
+        auto first = true;
+
+        for (const auto& literal : clause) {
+            if (!first) {
+                out = std::format_to(out, " ∨ ");
+            }
+
+            out = std::format_to(out, "{}", literal);
+            first = false;
+        }
+
+        return out;
     }
 };
 

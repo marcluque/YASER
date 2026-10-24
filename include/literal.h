@@ -29,10 +29,6 @@ struct Variable {
     }
 
     [[nodiscard]] constexpr bool operator==(const Variable& variable) const = default;
-
-    [[nodiscard]] constexpr auto print() const {
-        return std::format("x_{}", index);
-    }
 };
 static_assert(sizeof(Variable) == sizeof(std::uint32_t));
 static_assert(std::is_trivially_copyable_v<Variable>);
@@ -45,9 +41,13 @@ struct std::hash<Variable> {
 };
 
 template <>
-struct std::formatter<Variable> : std::formatter<std::string> {
-    auto format(const auto& variable, auto& ctx) const {
-        return std::formatter<std::string>::format(variable.print(), ctx);
+struct std::formatter<Variable> {
+    static constexpr auto parse(const std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    static auto format(const Variable& variable, std::format_context& ctx) {
+        return std::format_to(ctx.out(), "x_{}", variable.index);
     }
 };
 
@@ -100,24 +100,6 @@ struct Literal {
     [[nodiscard]] constexpr bool satisfied_by(const Value value) const {
         return (positive() && value == Value::TRUE) || (!positive() && value == Value::FALSE);
     }
-
-    [[nodiscard]] constexpr auto print() const {
-        std::string sign;
-        if (!positive()) {
-            sign.append("¬");
-        }
-
-        return std::format("{}x_{}", sign, variable());
-    }
-
-    [[nodiscard]] constexpr auto print_dimacs() const {
-        std::string sign;
-        if (!positive()) {
-            sign.append("-");
-        }
-
-        return std::format("{}{}", sign, variable().index);
-    }
 };
 static_assert(sizeof(Literal) == sizeof(std::uint32_t));
 static_assert(std::is_trivially_copyable_v<Literal>);
@@ -130,9 +112,13 @@ struct std::hash<Literal> {
 };
 
 template <>
-struct std::formatter<Literal> : std::formatter<std::string> {
-    auto format(const auto& clause, auto& ctx) const {
-        return std::formatter<std::string>::format(clause.print(), ctx);
+struct std::formatter<Literal> {
+    static constexpr auto parse(const std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    static auto format(const Literal& literal, std::format_context& ctx) {
+        return std::format_to(ctx.out(), "{}x_{}", literal.positive() ? "" : "¬", literal.variable());
     }
 };
 
@@ -140,7 +126,7 @@ constexpr auto INVALID_LITERAL = Literal{0};
 
 struct VariableActivityPair {
     double activity{};
-    Variable variable;
+    Variable variable{INVALID_VARIABLE};
 
     bool operator<(const VariableActivityPair& other) const {
         return activity < other.activity;
@@ -150,4 +136,3 @@ struct VariableActivityPair {
         return activity > other.activity;
     }
 };
-using LiteralPair = std::pair<Literal, Literal>;

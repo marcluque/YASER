@@ -60,6 +60,7 @@ using VariableAssignmentIndexContainer = std::vector<std::size_t, noinit_allocat
 using VariableDecisionLevelContainer = std::vector<DecisionLevel, noinit_allocator<std::allocator<DecisionLevel>>>;
 using UnitClausesContainer = std::vector<ClauseIndexLiteralPair>;
 using UnitClauseMapContainer = std::vector<bool>;
+using LiteralPair = std::pair<Literal, Literal>;
 using ClauseWatchedLiteralsMapContainer = std::unordered_map<ClauseIndex, LiteralPair>;
 using WatchedLiteralClauseMapContainer = std::unordered_map<Literal, std::vector<ClauseIndex>>;
 using ClausePriorityContainer = std::vector<int>;
@@ -80,59 +81,26 @@ struct LiteralRange {
 
 using LiteralRangeContainer = std::vector<LiteralRange, noinit_allocator<std::allocator<LiteralRange>>>;
 
-/**
- * \brief
- */
 struct Assignment {
     DecisionLevel decision_level;
     std::optional<ClauseIndex> antecedent;
     Variable variable;
     Value value;
 
-    /**
-     * \brief
-     * \param decision_level
-     * \param antecedent
-     * \param variable
-     * \param value
-     */
-    Assignment(const DecisionLevel decision_level, const std::optional<ClauseIndex>& antecedent, const Variable variable,
-               const Value value)
-        : decision_level(decision_level), antecedent(antecedent), variable(variable), value(value) {
-    }
-
-    /**
-     * \brief
-     * \param lhs
-     * \param rhs
-     * \return
-     */
-    friend bool operator==(const Assignment& lhs, const Assignment& rhs) {
-        return lhs.decision_level == rhs.decision_level && lhs.antecedent == rhs.antecedent
-               && lhs.variable == rhs.variable && lhs.value == rhs.value;
-    }
-
-    /**
-     * \brief
-     * \param lhs
-     * \param rhs
-     * \return
-     */
-    friend bool operator!=(const Assignment& lhs, const Assignment& rhs) {
-        return !(lhs == rhs);
-    }
-
-    /**
-     * \brief
-     */
-    explicit operator std::string() const {
-        return std::format("x_{}={}@{} (antecedent=c_{})", variable.index,
-                           std::to_underlying(value), decision_level,
-                           antecedent ? std::to_string(antecedent.value().index) : "");
-    }
-
     [[nodiscard]] Literal literal() const {
         return {variable, value};
+    }
+};
+
+template <>
+struct std::formatter<Assignment> : std::formatter<std::string> {
+    static auto format(const Assignment& assignment, std::format_context& ctx) {
+        return std::format_to(
+            ctx.out(), "x_{}={}@{} (antecedent=c_{})",
+            assignment.variable.index,
+            std::to_underlying(assignment.value),
+            assignment.decision_level,
+            assignment.antecedent ? std::format("{}", *assignment.antecedent) : "");
     }
 };
 
@@ -146,12 +114,6 @@ using NextVariableContainer = MaxHeap;
 struct ComparePriorityClauseIndexPair {
     using is_transparent = void;
 
-    /**
-     * \brief
-     * \param a
-     * \param b
-     * \return
-     */
     bool operator()(const PriorityClauseIndexPair& a, const PriorityClauseIndexPair& b) const {
         return std::tie(a.first, a.second) > std::tie(b.first, b.second);
     }

@@ -74,7 +74,7 @@ void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex cla
             }
         }
 
-        formula.clause_watched_literals_map().emplace(clause_index, std::pair(literal_to_imply, second_literal_to_watch));
+        formula.clause_watched_literals_map().emplace(clause_index, std::pair{literal_to_imply, second_literal_to_watch});
         formula.watched_literal_clause_map()[literal_to_imply].push_back(clause_index);
         formula.watched_literal_clause_map()[second_literal_to_watch].push_back(clause_index);
     }
@@ -107,7 +107,8 @@ void update(Formula& formula, const Literal negated_watched_literal) {
 
         // TODO: Maybe this could start with a check whether clause is unit?
 
-        if (partner_literal.satisfied_by(formula.assignment_map()[partner_literal.index()])) {
+        const auto partner_assignment = formula.assignment_map()[partner_literal.index()];
+        if (partner_literal.satisfied_by(partner_assignment)) {
             continue;
         }
 
@@ -131,7 +132,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             // Update watched_literal_clause_map: We need to make sure that new_literal is mapped to its new clause
             formula.watched_literal_clause_map()[new_partner_literal.value()].push_back(affected_clause_index);
             VERIFY(!DimacsParser::impl::watched_clauses_contains_duplicates(formula));
-        } else if (formula.assignment_map()[partner_literal.index()] == Value::UNASSIGNED) {
+        } else if (partner_assignment == Value::UNASSIGNED) {
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
             if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index.index].start;
                 formula.literals()[clause_start_index] != partner_literal) {
@@ -146,7 +147,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             // Clause is unit, partner_literal is unassigned
             formula.unit_clauses().emplace_back(affected_clause_index, partner_literal);
             formula.unit_clause_map()[affected_clause_index.index] = true;
-        } else if (!partner_literal.satisfied_by(formula.assignment_map()[partner_literal.index()])) {
+        } else if (!partner_literal.satisfied_by(partner_assignment)) {
             auto clause = formula.literal_range(affected_clause_index.index).clause(formula.literals());
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
             if (const auto clause_start_index = formula.literal_ranges()[affected_clause_index.index].start;
