@@ -6,7 +6,7 @@
 #include "dpll.h"
 
 
-std::string format_time_ns(double nanoseconds) {
+[[nodiscard]] constexpr auto format_time_ns(const double nanoseconds) {
     if (nanoseconds < 1'000.0) {
         return std::format("{:.3f} ns", nanoseconds);
     }

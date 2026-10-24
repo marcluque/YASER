@@ -126,7 +126,7 @@ struct std::formatter<Literal> {
     }
 
     static auto format(const Literal& literal, std::format_context& ctx) {
-        return std::format_to(ctx.out(), "{}x_{}", literal.positive() ? "" : "¬", literal.variable());
+        return std::format_to(ctx.out(), "{}{}", literal.positive() ? "" : "¬", literal.variable());
     }
 };
 

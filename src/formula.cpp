@@ -16,7 +16,7 @@ Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses,
     : m_number_of_variables(num_variables), m_number_of_input_clauses(num_clauses), m_conflicting_clause(std::nullopt),
       m_decision_level(0), m_literals(std::min(num_variables * num_clauses, 1'500'000'000UL)), m_literal_ranges(num_clauses), m_assignment_map(num_variables + 1),
       m_assignment_trail_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
-      m_unit_clause_map(num_clauses), m_clause_priority(num_clauses),
+      m_unit_clause_map(num_clauses), m_clause_priority(num_clauses), m_clause_watched_literals_map(num_clauses),
       m_learned_clause_limit(num_clauses * 100), m_next_variable(num_variables + 1),
       m_locked_clause_map(num_clauses), m_certificate_output_stream(certificate_path, std::ios::app), m_variable_decay_factor(0.95),
       m_variable_increment_factor(1), m_polarity(num_variables + 1), m_variable_seen_in_conflict_analysis(num_variables + 1) {
@@ -64,11 +64,10 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
     //f.m_clause_priority.erase(f.m_clause_priority.begin() + least_active_clause_index);
 
     // 1. Remove mapping of clause -> Pair(WatchedLiteral1, WatchedLiteral2)
-    const auto watched_literal_it = f.m_clause_watched_literals_map.find(least_active_clause_index);
-    VERIFY_NE(watched_literal_it, f.m_clause_watched_literals_map.end());
-    const auto first_watched_literal = watched_literal_it->second.first;
-    const auto second_watched_literal = watched_literal_it->second.second;
-    f.m_clause_watched_literals_map.erase(watched_literal_it);
+    const auto [first_watched_literal, second_watched_literal] = f.m_clause_watched_literals_map[least_active_clause_index.index];
+    VERIFY_NE(first_watched_literal, INVALID_LITERAL);
+    VERIFY_NE(second_watched_literal, INVALID_LITERAL);
+    f.m_clause_watched_literals_map[least_active_clause_index.index] = INVALID_LITERAL_PAIR;
 
     // 2. Remove mapping of WatchedLiteral1 -> clause
     const auto first_watched_literal_watched_clauses_it = f.m_watched_literal_clause_map.find(first_watched_literal);
@@ -95,7 +94,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
         DEBUG_LOG("Current number of learnt clauses {} exceeds learnt clauses limit {}", m_literal_ranges.size(), m_learned_clause_limit);
         if (const auto least_active_clause_index = impl::delete_clause(*this);
             least_active_clause_index) {
-            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index.value().index, m_literal_ranges[least_active_clause_index.value().index].clause(m_literals));
+            DEBUG_LOG("Deleted clause c_{}: ({})", least_active_clause_index->index, m_literal_ranges[least_active_clause_index.value().index].clause(m_literals));
         }
     }
 
@@ -105,6 +104,7 @@ void Formula::learn_clause(LiteralRange literal_range) {
 #endif
 
     m_literal_ranges.emplace_back(literal_range);
+    m_clause_watched_literals_map.emplace_back(INVALID_LITERAL_PAIR);
 
     auto clause_index = ClauseIndex{m_literal_ranges.size() - 1};
 
@@ -127,6 +127,8 @@ void Formula::learn_clause(LiteralRange literal_range) {
 
     VERIFY_EQ(m_unit_clause_map.size(), m_literal_ranges.size());
     VERIFY_EQ(m_clause_priority.size(), m_literal_ranges.size());
+    VERIFY_EQ(m_clause_watched_literals_map.size(), m_literal_ranges.size());
+    VERIFY_EQ(m_locked_clause_map.size(), m_literal_ranges.size());
     DEBUG_LOG("Learnt clause c_{}: ({}) @ DL {}", clause_index.index, literal_range.clause(m_literals), m_decision_level);
 }
 

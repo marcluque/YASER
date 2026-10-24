@@ -72,7 +72,7 @@ bool watched_clauses_contains_duplicates(Formula& formula) {
         std::ranges::sort(sorted_clauses);
 
         if (auto it = std::ranges::adjacent_find(sorted_clauses); it != sorted_clauses.end()) {
-            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}", *it, literal);
+            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}, clauses: {}", *it, literal, sorted_clauses);
             return true;
         }
     }
