@@ -21,12 +21,14 @@ struct Clause {
     }
 
     [[nodiscard]] constexpr auto print() const {
-        std::string s;
+        std::string s{};
         for (const auto& literal : literals) {
             s.append(std::format("{} ∨ ", literal));
         }
 
-        s.resize(s.length() - 5);
+        if (s.length() > 5) {
+            s.resize(s.length() - 5);
+        }
 
         return s;
     }
@@ -53,7 +55,7 @@ struct std::formatter<Clause> : std::formatter<std::string> {
 };
 
 struct ClauseIndex {
-    std::size_t index;
+    std::size_t index{};
 
     [[nodiscard]] constexpr bool operator==(const ClauseIndex&) const = default;
 
@@ -76,4 +78,4 @@ struct std::formatter<ClauseIndex> : std::formatter<std::size_t> {
     }
 };
 
-constexpr auto INVALID_CLAUSE = ClauseIndex{std::numeric_limits<ClauseIndex>::max()};
+constexpr auto INVALID_CLAUSE = ClauseIndex{std::numeric_limits<std::size_t>::max()};

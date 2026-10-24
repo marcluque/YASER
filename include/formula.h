@@ -206,7 +206,7 @@ class Formula {
      * @return
      */
     explicit operator std::string() const {
-        std::string s;
+        std::string s{};
         for (const auto& literal_range : m_literal_ranges) {
             s.append("(");
             for (const auto clause = literal_range.clause(m_literals); const auto& literal : clause.literals) {

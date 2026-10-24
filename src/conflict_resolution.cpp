@@ -36,15 +36,15 @@ DecisionLevel analyze_conflict(Formula& formula) {
 
     do {
         VERIFY_NE(current_clause_index, INVALID_CLAUSE);
-        current_clause = formula.literal_range(current_clause_index.index).clause(formula.literals());
+        // Every clause has the last assigned literal at the 0th position
+        current_clause = Clause{formula.literal_range(current_clause_index.index).clause(formula.literals()) | std::views::drop(1)};
 
         // Reward learned clauses involved in conflict resolution
         if (current_clause_index >= ClauseIndex{formula.number_of_input_clauses()}) {
             VSIDS::update_clause_priority(formula, current_clause_index);
         }
 
-        // Every clause has the last assigned literal at the 0th position
-        for (const auto& literal : current_clause.literals | std::views::drop(1)) {
+        for (const auto& literal : current_clause.literals) {
             if (const auto index = literal.index();
                 !formula.variable_seen_in_conflict_analysis()[index] && formula.variable_decision_level()[index] > 0) {
                 // TODO: Make the priority update lazy (update all, then heapify)
