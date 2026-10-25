@@ -50,7 +50,7 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
     return {num_variables, num_clauses};
 }
 
-std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start,
+std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start, std::vector<bool>& seen_variables,
                          std::vector<std::size_t>& last_seen_clause, const std::size_t clause_id) {
     auto variable = INVALID_VARIABLE;
     auto is_negated = false;
@@ -66,7 +66,8 @@ std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_
             ++clause_start;
         }
 
-        if (!formula.next_variable().contains(variable)) {
+        if (!seen_variables[variable.index]) {
+            seen_variables[variable.index] = true;
             formula.next_variable().push({.activity = 0, .variable = variable});
         }
     }
@@ -116,6 +117,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 
     Formula formula{num_variables, num_clauses};
     std::vector<std::size_t> last_seen_clause(2 * num_variables, 0);
+    std::vector seen_variables(num_variables + 1, false);
 
     // Parse formula
     std::size_t clause_end = 0;
@@ -123,7 +125,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     // +1 on buffer_it to skip newline character
     for (std::size_t current_clause_index = 0; current_clause_index < num_clauses; ++current_clause_index, ++buffer_it) {
         const std::size_t clause_start = clause_end;
-        clause_end = parse_clause(formula, buffer_it, clause_start, last_seen_clause, current_clause_index + 1);
+        clause_end = parse_clause(formula, buffer_it, clause_start, seen_variables, last_seen_clause, current_clause_index + 1);
 
         auto& literal_range = formula.literal_range(current_clause_index);
         literal_range = {.start = clause_start, .end = clause_end};
