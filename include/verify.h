@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string_view>
 #include <format>
 #include "log.h"
 
@@ -64,7 +65,7 @@ constexpr void verify_compare(const char* file, int line, const char* lhs_string
     do {                                                                  \
         if (!(condition_)) {                                              \
             log("DEBUG", __FILE__, __LINE__,                              \
-                "ASSERT FAILED: {}", #condition_);                        \
+                "ASSERT FAILED: {}", std::string_view{#condition_});      \
             std::fflush(stdout);                                          \
             std::fflush(stderr);                                          \
             std::abort();                                                 \

@@ -23,21 +23,21 @@ bool bcp(Formula& formula) {
         const auto [clause_index, literal] = formula.unit_clauses().back();
         formula.unit_clauses().pop_back();
 
-        [[maybe_unused]] const auto clause = formula.literal_range(clause_index.index).clause(formula.literals());
+        [[maybe_unused]] const auto clause = formula.clause(clause_index);
         VERIFY_EQ(clause.literals[0], literal);
 
-        formula.unit_clause_map()[clause_index.index] = false;
+        formula.unit_clause(clause_index) = false;
 
         formula.number_of_propagations() += 1;
 
-        if (formula.assignment_map()[literal.index()] != Value::UNASSIGNED) {
+        if (formula.assignment(literal) != Value::UNASSIGNED) {
             // TODO: Investigate why this is happening
             continue;
         }
 
         DEBUG_LOG("c_{} ({}) is unit, implying {} @ DL {}", clause_index, clause, literal, formula.decision_level());
 
-        formula.assignment_map()[literal.index()] = literal.value();
+        formula.assignment(literal) = literal.value();
         formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
         formula.assignment_trail().emplace_back(formula.decision_level(), clause_index, literal.variable(),
                                                 formula.assignment_map()[literal.index()]);
@@ -72,7 +72,7 @@ bool decide(Formula& formula) {
 
     DEBUG_LOG("Deciding {} @ DL {}", literal, formula.decision_level());
 
-    formula.assignment_map()[literal.index()] = literal.value();
+    formula.assignment(literal) = literal.value();
     formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
     formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal.variable(),
                                             formula.assignment_map()[literal.index()]);
@@ -92,8 +92,8 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
             VERIFY_GT(formula.locked_clause_map()[assignment.antecedent->index], 0);
             formula.locked_clause_map()[assignment.antecedent->index] -= 1;
         }
-        formula.polarity()[assignment.variable.index] = formula.assignment_map()[assignment.variable.index] == Value::FALSE;
-        formula.assignment_map()[assignment.variable.index] = Value::UNASSIGNED;
+        formula.polarity()[assignment.variable.index] = formula.assignment(assignment.variable) == Value::FALSE;
+        formula.assignment(assignment.variable) = Value::UNASSIGNED;
         if (!formula.next_variable().contains(assignment.variable)) {
             formula.next_variable().push({.activity = 0, .variable = assignment.variable});
         }

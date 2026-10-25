@@ -24,7 +24,7 @@ void log(const char* log_level, const char* file, const int line, std::format_st
 #ifdef YASER_DEBUG
   #define DEBUG_LOG(format, ...) log("DEBUG", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)
 #else
-  #define DEBUG_LOG(format, ...) (void) 0;
+  #define DEBUG_LOG(format, ...)
 #endif
 
 #define INFO_LOG(format, ...) log("INFO", __FILE__, __LINE__, format __VA_OPT__(,) __VA_ARGS__)

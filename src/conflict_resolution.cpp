@@ -28,7 +28,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
     auto current_clause_index = formula.conflicting_clause().value();
     auto assignment_trail_index = formula.assignment_trail().size() - 1;
     auto remaining_variables_on_decision_level = 1;
-    auto current_clause = formula.literal_range(current_clause_index.index).clause(formula.literals());
+    auto current_clause = formula.clause(current_clause_index);
 
     auto last_implied_literal = current_clause.literals[0];
     formula.variable_seen_in_conflict_analysis()[last_implied_literal.index()] = true;
@@ -37,7 +37,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
     do {
         VERIFY_NE(current_clause_index, INVALID_CLAUSE);
         // Every clause has the last assigned literal at the 0th position
-        current_clause = Clause{formula.literal_range(current_clause_index.index).clause(formula.literals()) | std::views::drop(1)};
+        current_clause = Clause{formula.clause(current_clause_index) | std::views::drop(1)};
 
         // Reward learned clauses involved in conflict resolution
         if (current_clause_index >= ClauseIndex{formula.number_of_input_clauses()}) {
@@ -78,7 +78,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
     const auto learned_literal_range = LiteralRange{.start = asserting_literal_index, .end = formula.literals().size()};
     const auto learned_clause = learned_literal_range.clause(formula.literals());
 
-    formula.literals()[asserting_literal_index] = ~last_implied_literal;
+    formula.literal(asserting_literal_index) = ~last_implied_literal;
 
     formula.learn_clause(learned_literal_range);
 

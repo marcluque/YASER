@@ -16,7 +16,7 @@ Formula::Formula(const std::size_t num_variables, const std::size_t num_clauses,
     : m_number_of_variables(num_variables), m_number_of_input_clauses(num_clauses), m_conflicting_clause(std::nullopt),
       m_decision_level(0), m_literals(std::min(num_variables * num_clauses, 1'500'000'000UL)), m_literal_ranges(num_clauses), m_assignment_map(num_variables + 1),
       m_assignment_trail_index(num_variables + 1), m_variable_decision_level(num_variables + 1),
-      m_unit_clause_map(num_clauses), m_clause_priority(num_clauses), m_clause_watched_literals_map(num_clauses),
+      m_unit_clause_map(num_clauses), m_clause_watched_literals_map(num_clauses), m_watched_literal_clause_map(2 * (num_variables + 1)), m_clause_priority(num_clauses),
       m_learned_clause_limit(num_clauses * 100), m_next_variable(num_variables + 1),
       m_locked_clause_map(num_clauses), m_certificate_output_stream(certificate_path, std::ios::app), m_variable_decay_factor(0.95),
       m_variable_increment_factor(1), m_polarity(num_variables + 1), m_variable_seen_in_conflict_analysis(num_variables + 1) {
@@ -45,7 +45,7 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
 
     // Convert reverse_iterator to normal iterator for erase
     const auto forward_it = std::next(clause_activity_it).base();
-    ClauseIndex least_active_clause_index = forward_it->second;
+    auto least_active_clause_index = forward_it->second;
 
 #ifdef YASER_CERTIFICATE
     const auto clause_dimacs_format = f.literal_range(least_active_clause_index.index).clause(f.literals()).dimacs();
@@ -69,15 +69,18 @@ std::optional<ClauseIndex> Formula::impl::delete_clause(Formula& f) {
     VERIFY_NE(second_watched_literal, INVALID_LITERAL);
     f.m_clause_watched_literals_map[least_active_clause_index.index] = INVALID_LITERAL_PAIR;
 
-    // 2. Remove mapping of WatchedLiteral1 -> clause
-    const auto first_watched_literal_watched_clauses_it = f.m_watched_literal_clause_map.find(first_watched_literal);
-    auto first_watched_literal_watched_clause_it = std::ranges::remove(first_watched_literal_watched_clauses_it->second, least_active_clause_index);
-    first_watched_literal_watched_clauses_it->second.erase(first_watched_literal_watched_clause_it.begin(), first_watched_literal_watched_clause_it.end());
+    const auto remove_watched_clause = [&](const auto literal) {
+        auto& watched_clauses = f.watched_clauses(literal);
+        const auto it = std::ranges::find(watched_clauses, least_active_clause_index);
+        VERIFY_NE(it, watched_clauses.end());
+        *it = watched_clauses.back();
+        watched_clauses.pop_back();
+    };
 
+    // 2. Remove mapping of WatchedLiteral1 -> clause
+    remove_watched_clause(first_watched_literal);
     // 3. Remove mapping of WatchedLiteral2 -> clause
-    const auto second_watched_literal_clauses_it = f.m_watched_literal_clause_map.find(second_watched_literal);
-    auto second_watched_literal_watched_clause_it = std::ranges::remove(second_watched_literal_clauses_it->second, least_active_clause_index);
-    second_watched_literal_clauses_it->second.erase(second_watched_literal_watched_clause_it.begin(), second_watched_literal_watched_clause_it.end());
+    remove_watched_clause(second_watched_literal);
 
     // We don't need to wipe this clause from the set of unit clauses because we just resolved a conflict,
     // also the set of unit clauses should be empty now (see assert that len(unit_clauses) == 0)

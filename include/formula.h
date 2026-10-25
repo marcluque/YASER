@@ -63,7 +63,8 @@ using UnitClauseMapContainer = std::vector<bool>;
 using LiteralPair = std::pair<Literal, Literal>;
 constexpr auto INVALID_LITERAL_PAIR = LiteralPair{INVALID_LITERAL, INVALID_LITERAL};
 using ClauseWatchedLiteralsMapContainer = std::vector<LiteralPair, noinit_allocator<std::allocator<LiteralPair>>>;
-using WatchedLiteralClauseMapContainer = std::unordered_map<Literal, std::vector<ClauseIndex>>;
+using WatchList = std::vector<ClauseIndex>;
+using WatchedLiteralClauseMapContainer = std::vector<WatchList>;
 using ClausePriorityContainer = std::vector<int>;
 using LockedClauseMapContainer = std::vector<unsigned>;
 
@@ -159,6 +160,19 @@ class Formula {
 #endif
     }
 
+    [[nodiscard]] LiteralRange& literal_range(const ClauseIndex clause_index) {
+        #ifdef YASER_DEBUG
+        return m_literal_ranges.at(clause_index.index); // Allow range checks
+        #else
+        return m_literal_ranges[clause_index.index];
+        #endif
+    }
+
+    [[nodiscard]] Clause clause(const ClauseIndex clause_index) {
+        // const auto clause = formula.literal_range(clause_index).clause(formula.literals());
+        return literal_range(clause_index).clause(m_literals);
+    }
+
     void learn_clause(LiteralRange literal_range);
 
     bool is_assignment_trail_valid();
@@ -187,12 +201,44 @@ class Formula {
         return m_unit_clause_map;
     }
 
+    [[nodiscard]] auto unit_clause(const std::size_t clause_index) {
+        return m_unit_clause_map[clause_index];
+    }
+
+    [[nodiscard]] auto unit_clause(const ClauseIndex clause_index) {
+        return m_unit_clause_map[clause_index.index];
+    }
+
+    [[nodiscard]] bool is_unit(const ClauseIndex clause_index) {
+        return m_unit_clause_map[clause_index.index];
+    }
+
     [[nodiscard]] ClauseWatchedLiteralsMapContainer& clause_watched_literals_map() {
         return m_clause_watched_literals_map;
     }
 
+    [[nodiscard]] LiteralPair& watched_literals(const ClauseIndex clause_index) {
+        return m_clause_watched_literals_map[clause_index.index];
+    }
+
     [[nodiscard]] AssignmentMapContainer& assignment_map() {
         return m_assignment_map;
+    }
+
+    [[nodiscard]] const Value& assignment(const Variable variable) const {
+        return m_assignment_map[variable.index];
+    }
+
+    [[nodiscard]] Value& assignment(const Variable variable) {
+        return m_assignment_map[variable.index];
+    }
+
+    [[nodiscard]] const Value& assignment(const Literal literal) const {
+        return m_assignment_map[literal.index()];
+    }
+
+    [[nodiscard]] Value& assignment(const Literal literal) {
+        return m_assignment_map[literal.index()];
     }
 
     [[nodiscard]] VariableAssignmentIndexContainer& assignment_trail_index() {
@@ -217,6 +263,14 @@ class Formula {
 
     [[nodiscard]] WatchedLiteralClauseMapContainer& watched_literal_clause_map() {
         return m_watched_literal_clause_map;
+    }
+
+    [[nodiscard]] static constexpr std::size_t watched_literal_index(const Literal literal) noexcept {
+        return 2 * (literal.index() - 1) + (literal.positive() ? 0 : 1);
+    }
+
+    [[nodiscard]] WatchList& watched_clauses(const Literal literal) {
+        return m_watched_literal_clause_map[watched_literal_index(literal)];
     }
 
     [[nodiscard]] DecisionLevel& decision_level() {

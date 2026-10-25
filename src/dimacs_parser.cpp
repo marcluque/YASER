@@ -2,6 +2,7 @@
 #include <sstream>
 #include <span>
 #include <algorithm>
+#include <ranges>
 #include <cstring>
 
 #include "dimacs_parser.h"
@@ -67,7 +68,7 @@ std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_
 }
 
 bool watched_clauses_contains_duplicates(Formula& formula) {
-    for (const auto& [literal, clauses] : formula.watched_literal_clause_map()) {
+    for (const auto& [literal, clauses] : std::views::enumerate(formula.watched_literal_clause_map())) {
         auto sorted_clauses = clauses;
         std::ranges::sort(sorted_clauses);
 
@@ -115,7 +116,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
         // Collect unit clauses
         if (literal_range.size() == 1) {
             formula.unit_clauses().emplace_back(current_clause_index, literal_range.clause(formula.literals()).literals.front());
-            formula.unit_clause_map()[current_clause_index] = true;
+            formula.unit_clause(current_clause_index) = true;
             WatchedLiterals::add_clause_to_watch(formula, ClauseIndex{current_clause_index}, true);
         } else {
             WatchedLiterals::add_clause_to_watch(formula, ClauseIndex{current_clause_index}, false);
@@ -126,7 +127,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
 
     // Sanity checks after parsing
     VERIFY_EQ(formula.clause_watched_literals_map().size(), formula.number_of_input_clauses());
-    VERIFY_LE(formula.watched_literal_clause_map().size(), formula.number_of_variables() * 2);
+    VERIFY_EQ(formula.watched_literal_clause_map().size(), (formula.number_of_variables() + 1) * 2);
     VERIFY(!watched_clauses_contains_duplicates(formula));
 
     return formula;
