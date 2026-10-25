@@ -22,13 +22,11 @@ std::optional<Literal> find_new_partner_literal(Formula& formula, const ClauseIn
     for (const auto clauses = formula.clause(clause_index);
          const auto& literal : clauses.literals) {
         const auto value = formula.assignment(literal);
-        if (literal != old_partner_literal && literal != current_partner_literal && value == Value::UNASSIGNED) {
-            return literal;
-        }
-
-        // TODO: This might not be necessary since we do not expect to find a SAT value here
         if (literal.satisfied_by(value)) {
             return current_partner_literal;
+        }
+        if (literal != old_partner_literal && literal != current_partner_literal && value == Value::UNASSIGNED) {
+            return literal;
         }
     }
 
@@ -82,13 +80,14 @@ void add_learnt_conflict_clause_to_watch(Formula& formula, const ClauseIndex cla
 }
 
 void update(Formula& formula, const Literal negated_watched_literal) {
-    const auto affected_clause_indices = formula.watched_clauses(negated_watched_literal);
+    auto& affected_clause_indices = formula.watched_clauses(negated_watched_literal);
     if (affected_clause_indices.empty()) {
         return;
     }
 
-    // IMPORTANT: We have to copy the list of affected clauses to avoid changing it during the iteration
-    for (const auto affected_clause_index : affected_clause_indices) {
+    // Iterate by index so we can modify while iterating
+    for (std::size_t i = 0; i < affected_clause_indices.size();) {
+        const auto affected_clause_index = affected_clause_indices[i];
         // Find partner literal of `negated_watched_literal`
         const auto [first_watched_literal, second_watched_literal] = formula.watched_literals(affected_clause_index);
         VERIFY_NE(first_watched_literal, INVALID_LITERAL);
@@ -107,6 +106,7 @@ void update(Formula& formula, const Literal negated_watched_literal) {
         // TODO: Maybe this could start with a check whether clause is unit?
         const auto partner_assignment = formula.assignment(partner_literal);
         if (partner_literal.satisfied_by(partner_assignment)) {
+            ++i;
             continue;
         }
 
@@ -116,17 +116,18 @@ void update(Formula& formula, const Literal negated_watched_literal) {
 
             // If the new literal happens to be satisfied, we are done
             if (new_partner_literal == partner_literal) {
+                ++i;
                 continue;
             }
 
             // Remove mapping of negated_watched_literal -> clause
-            auto& watched_clauses = formula.watched_clauses(negated_watched_literal);
-            const auto result = std::erase(watched_clauses, affected_clause_index);
-            VERIFY_EQ(result, 1);
+            affected_clause_indices[i] = affected_clause_indices.back();
+            affected_clause_indices.pop_back();
 
             formula.watched_literals(affected_clause_index) = {*new_partner_literal, partner_literal};
             formula.watched_clauses(*new_partner_literal).push_back(affected_clause_index);
             VERIFY(!DimacsParser::impl::watched_clauses_contains_duplicates(formula));
+            continue;
         } else if (partner_assignment == Value::UNASSIGNED) {
             // Swap implied literal to 0th position in clause (assumption by conflict analysis)
             if (const auto clause_start_index = formula.literal_range(affected_clause_index).start;
@@ -162,6 +163,8 @@ void update(Formula& formula, const Literal negated_watched_literal) {
             // make the propagation invalid anyway
             return;
         }
+
+        ++i;
     }
 }
 } // namespace WatchedLiterals
