@@ -15,7 +15,7 @@ void update_variable_priorities(Formula& formula, const Clause literals_to_updat
 void update_variable_priority(Formula& formula, const Variable variable) {
     if (formula.next_variable().contains(variable)) {
         auto& [priority, _] = formula.next_variable().get(variable);
-        priority += formula.variable_decay_factor();
+        priority += formula.variable_increment_factor();
 
         // Rescale
         if (priority > 1e100) {
