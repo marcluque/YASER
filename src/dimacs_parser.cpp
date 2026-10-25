@@ -148,7 +148,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     // Sanity checks after parsing
     VERIFY_EQ(formula.clause_watched_literals_map().size(), formula.number_of_input_clauses());
     VERIFY_EQ(formula.watched_literal_clause_map().size(), (formula.number_of_variables() + 1) * 2);
-    VERIFY_LT(formula.next_variable().size(), formula.number_of_variables());
+    VERIFY_LE(formula.next_variable().size(), formula.number_of_variables());
     VERIFY(!watched_clauses_contains_duplicates(formula));
 
     return formula;
