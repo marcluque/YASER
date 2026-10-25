@@ -50,30 +50,49 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it) {
     return {num_variables, num_clauses};
 }
 
-std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start) {
-    Variable variable = INVALID_VARIABLE;
-    bool is_negated = false;
+std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start,
+                         std::vector<std::size_t>& last_seen_clause, const std::size_t clause_id) {
+    auto variable = INVALID_VARIABLE;
+    auto is_negated = false;
     while (parse_number(buffer_it, variable.index, is_negated)) {
         VERIFY_LE(variable.index, formula.number_of_variables());
         VERIFY_LE(variable.index, 1U << 31);
 
-        formula.literal(clause_start) = Literal{variable, is_negated};
+        const auto literal = Literal{variable, is_negated};
+        if (const auto literal_index = Formula::watched_literal_index(literal);
+            last_seen_clause[literal_index] != clause_id) {
+            last_seen_clause[literal_index] = clause_id;
+            formula.literal(clause_start) = literal;
+            ++clause_start;
+        }
+
         if (!formula.next_variable().contains(variable)) {
             formula.next_variable().push({.activity = 0, .variable = variable});
         }
-        ++clause_start;
     }
 
     return clause_start;
 }
 
-bool watched_clauses_contains_duplicates(Formula& formula) {
-    for (const auto& [literal, clauses] : std::views::enumerate(formula.watched_literal_clause_map())) {
+bool watched_clauses_contains_duplicates(const Formula& formula) {
+    const auto& watched_lists = formula.watched_literal_clause_map();
+
+    for (std::size_t i = 0; i < watched_lists.size(); ++i) {
+        const auto& clauses = watched_lists[i];
+        if (clauses.size() < 2) {
+            continue;
+        }
+
         auto sorted_clauses = clauses;
         std::ranges::sort(sorted_clauses);
 
-        if (auto it = std::ranges::adjacent_find(sorted_clauses); it != sorted_clauses.end()) {
-            ERROR_LOG("Duplicate ClauseIndex {} found for literal {}, clauses: {}", *it, literal, sorted_clauses);
+        if (const auto it = std::ranges::adjacent_find(sorted_clauses);
+            it != sorted_clauses.end()) {
+            ERROR_LOG(
+                "Duplicate ClauseIndex {} found for literal {}, clauses: {}",
+                *it,
+                Formula::literal_from_watch_list_index(i),
+                sorted_clauses);
             return true;
         }
     }
@@ -96,6 +115,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     auto [num_variables, num_clauses] = parse_header(buffer_it);
 
     Formula formula{num_variables, num_clauses};
+    std::vector<std::size_t> last_seen_clause(2 * num_variables, 0);
 
     // Parse formula
     std::size_t clause_end = 0;
@@ -103,7 +123,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     // +1 on buffer_it to skip newline character
     for (std::size_t current_clause_index = 0; current_clause_index < num_clauses; ++current_clause_index, ++buffer_it) {
         const std::size_t clause_start = clause_end;
-        clause_end                     = parse_clause(formula, buffer_it, clause_start);
+        clause_end = parse_clause(formula, buffer_it, clause_start, last_seen_clause, current_clause_index + 1);
 
         auto& literal_range = formula.literal_range(current_clause_index);
         literal_range = {.start = clause_start, .end = clause_end};
@@ -128,6 +148,7 @@ Formula parse_formula(std::istream& input_stream, const std::size_t size) {
     // Sanity checks after parsing
     VERIFY_EQ(formula.clause_watched_literals_map().size(), formula.number_of_input_clauses());
     VERIFY_EQ(formula.watched_literal_clause_map().size(), (formula.number_of_variables() + 1) * 2);
+    VERIFY_LT(formula.next_variable().size(), formula.number_of_variables());
     VERIFY(!watched_clauses_contains_duplicates(formula));
 
     return formula;

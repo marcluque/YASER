@@ -189,6 +189,14 @@ class Formula {
         return m_assignment_trail;
     }
 
+    [[nodiscard]] const Assignment& trail_assignment(const std::size_t index) const {
+        return m_assignment_trail[index];
+    }
+
+    [[nodiscard]] Assignment& trail_assignment(const std::size_t index) {
+        return m_assignment_trail[index];
+    }
+
     [[nodiscard]] LiteralsContainer& literals() {
         return m_literals;
     }
@@ -233,6 +241,10 @@ class Formula {
         return m_assignment_map[variable.index];
     }
 
+    void unassign(const Variable variable) {
+        m_assignment_map[variable.index] = Value::UNASSIGNED;
+    }
+
     [[nodiscard]] const Value& assignment(const Literal literal) const {
         return m_assignment_map[literal.index()];
     }
@@ -247,6 +259,10 @@ class Formula {
 
     [[nodiscard]] VariableDecisionLevelContainer& variable_decision_level() {
         return m_variable_decision_level;
+    }
+
+    void update_decision_level(const Literal literal, DecisionLevel decision_level) {
+        m_variable_decision_level[literal.index()] = decision_level;
     }
 
     [[nodiscard]] int& clause_priority(const ClauseIndex clause_index) {
@@ -265,8 +281,22 @@ class Formula {
         return m_watched_literal_clause_map;
     }
 
+    [[nodiscard]] const WatchedLiteralClauseMapContainer& watched_literal_clause_map() const {
+        return m_watched_literal_clause_map;
+    }
+
+    /**
+     *
+     */
     [[nodiscard]] static constexpr std::size_t watched_literal_index(const Literal literal) noexcept {
         return 2 * (literal.index() - 1) + (literal.positive() ? 0 : 1);
+    }
+
+    [[nodiscard]] static constexpr Literal literal_from_watch_list_index(const std::size_t index) noexcept {
+        return {
+            Variable{index / 2 + 1},
+            index % 2 == 0 ? Value::TRUE : Value::FALSE
+        };
     }
 
     [[nodiscard]] WatchList& watched_clauses(const Literal literal) {
@@ -300,6 +330,14 @@ class Formula {
 
     [[nodiscard]] LockedClauseMapContainer& locked_clause_map() {
         return m_locked_clause_map;
+    }
+
+    [[nodiscard]] unsigned& locked_clause(const ClauseIndex clause_index) {
+        return m_locked_clause_map[clause_index.index];
+    }
+
+    [[nodiscard]] const unsigned& locked_clause(const ClauseIndex clause_index) const {
+        return m_locked_clause_map[clause_index.index];
     }
 
     [[nodiscard]] LiteralRangeContainer& literal_ranges() {

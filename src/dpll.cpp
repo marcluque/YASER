@@ -56,19 +56,23 @@ bool decide(Formula& formula) {
         return false;
     }
 
-    formula.decision_level() += 1;
-    formula.number_of_decisions() += 1;
-
     auto variable = INVALID_VARIABLE;
     while (!formula.next_variable().empty()) {
-        variable = formula.next_variable().removeMax().variable;
-        if (formula.assignment_map()[variable.index] == Value::UNASSIGNED) {
+        if (const auto candidate = formula.next_variable().removeMax().variable;
+            formula.assignment(candidate) == Value::UNASSIGNED) {
+            variable = candidate;
             break;
         }
     }
-    VERIFY_NE(variable, INVALID_VARIABLE);
 
-    const auto literal = Literal{variable, formula.polarity()[variable.index]};;
+    if (variable == INVALID_VARIABLE) {
+        return false;
+    }
+
+    formula.decision_level() += 1;
+    formula.number_of_decisions() += 1;
+
+    const auto literal = Literal{variable, formula.polarity()[variable.index]};
 
     DEBUG_LOG("Deciding {} @ DL {}", literal, formula.decision_level());
 
@@ -76,7 +80,7 @@ bool decide(Formula& formula) {
     formula.assignment_trail_index()[literal.index()] = formula.assignment_trail().size();
     formula.assignment_trail().emplace_back(formula.decision_level(), std::nullopt, literal.variable(),
                                             formula.assignment_map()[literal.index()]);
-    formula.variable_decision_level()[literal.index()] = formula.decision_level();
+    formula.update_decision_level(literal, formula.decision_level());
     WatchedLiterals::update(formula, ~literal);
 
     return true;
@@ -89,11 +93,11 @@ void backtrack(Formula& formula, const DecisionLevel backtrack_level) {
         const auto assignment = formula.assignment_trail().back();
         formula.assignment_trail().pop_back();
         if (assignment.antecedent) {
-            VERIFY_GT(formula.locked_clause_map()[assignment.antecedent->index], 0);
-            formula.locked_clause_map()[assignment.antecedent->index] -= 1;
+            VERIFY_GT(formula.locked_clause(*assignment.antecedent), 0);
+            formula.locked_clause(*assignment.antecedent) -= 1;
         }
         formula.polarity()[assignment.variable.index] = formula.assignment(assignment.variable) == Value::FALSE;
-        formula.assignment(assignment.variable) = Value::UNASSIGNED;
+        formula.unassign(assignment.variable);
         if (!formula.next_variable().contains(assignment.variable)) {
             formula.next_variable().push({.activity = 0, .variable = assignment.variable});
         }
@@ -114,7 +118,7 @@ bool run(Formula& formula) {
     }
 
     while (true) {
-        (void) impl::bcp(formula);
+        std::ignore = impl::bcp(formula);
         if (formula.conflicting_clause()) {
             formula.number_of_conflicts() += 1;
 

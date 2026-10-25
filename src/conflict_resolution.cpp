@@ -25,7 +25,7 @@ DecisionLevel analyze_conflict(Formula& formula) {
     // Reserve space for the asserting literal
     formula.literals().push_back(INVALID_LITERAL);
 
-    auto current_clause_index = formula.conflicting_clause().value();
+    auto current_clause_index = *formula.conflicting_clause();
     auto assignment_trail_index = formula.assignment_trail().size() - 1;
     auto remaining_variables_on_decision_level = 1;
     auto current_clause = formula.clause(current_clause_index);
@@ -61,15 +61,15 @@ DecisionLevel analyze_conflict(Formula& formula) {
         }
 
         // Find next clause to resolve
-        while (!formula.variable_seen_in_conflict_analysis()[formula.assignment_trail()[assignment_trail_index].variable.index]) {
+        while (!formula.variable_seen_in_conflict_analysis()[formula.trail_assignment(assignment_trail_index).variable.index]) {
             --assignment_trail_index;
         }
 
-        last_implied_literal = formula.assignment_trail()[assignment_trail_index].literal();
+        last_implied_literal = formula.trail_assignment(assignment_trail_index).literal();
 
         //formula.variable_seen_in_conflict_analysis()[formula.assignment_trail()[assignment_trail_index].variable] = false;
 
-        current_clause_index = formula.assignment_trail()[assignment_trail_index].antecedent.value_or(INVALID_CLAUSE);
+        current_clause_index = formula.trail_assignment(assignment_trail_index).antecedent.value_or(INVALID_CLAUSE);
         // Subtract one for the last assigned literal that we are skipping
         --remaining_variables_on_decision_level;
         --assignment_trail_index;

@@ -153,7 +153,7 @@ bool Formula::is_assignment_trail_valid() {
         return false;
     }
 
-    if (m_assignment_trail.size() != m_number_of_variables) {
+    if (m_assignment_trail.size() > m_number_of_variables) {
         ERROR_LOG("Assignment trail size ({}) does not match number of variables ({})", m_assignment_trail.size(), m_number_of_variables);
         return false;
     }

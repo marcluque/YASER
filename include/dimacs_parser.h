@@ -35,9 +35,12 @@ std::tuple<std::size_t, std::size_t> parse_header(BufferIterator& buffer_it);
  * \param formula Reference to the formula being constructed.
  * \param buffer_it Iterator pointing to the current position in the buffer.
  * \param clause_start Index in the formula where the first literal of this clause should be written.
+ * \param last_seen_clause
+ * \param clause_id
  * \return Index immediately after the last literal of the parsed clause.
  */
-std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start);
+std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_t clause_start,
+                         std::vector<std::size_t>& last_seen_clause, std::size_t clause_id);
 
 /**
  * \brief Checks for duplicate clause indices in the watched literal map.
@@ -50,7 +53,7 @@ std::size_t parse_clause(Formula& formula, BufferIterator& buffer_it, std::size_
  * \param formula The formula whose watched literal mapping is checked.
  * \return True iff duplicates are found.
  */
-bool watched_clauses_contains_duplicates(Formula& formula);
+bool watched_clauses_contains_duplicates(const Formula& formula);
 
 } // namespace impl
 
