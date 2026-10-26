@@ -19,9 +19,10 @@ void update_variable_priority(Formula& formula, const Variable variable) {
 
         // Rescale
         if (priority > 1e100) {
-            for (auto i = 1; i < formula.number_of_variables(); i++) {
-                if (formula.next_variable().contains(variable)) {
-                    formula.next_variable().get(Variable{i}).activity *= 1e-100;
+            for (auto i = 1; i <= formula.number_of_variables(); i++) {
+                if (const auto current_variable = Variable{i};
+                    formula.next_variable().contains(current_variable)) {
+                    formula.next_variable().get(current_variable).activity *= 1e-100;
                 }
             }
 
